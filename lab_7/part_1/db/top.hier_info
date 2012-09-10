@@ -1,0 +1,79 @@
+|top
+clk => clk.IN9
+reset => reset.IN9
+w => f_d.IN1
+w => g_d.IN1
+w => h_d.IN1
+w => i_d.IN1
+w => i_d.IN1
+w => b_d.IN1
+w => c_d.IN1
+w => d_d.IN1
+w => e_d.IN1
+w => e_d.IN1
+z <= z.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|top|d_flop:a
+clk => q~reg0.CLK
+clr => q.OUTPUTSELECT
+d => q.DATAA
+q <= q~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|top|d_flop:b
+clk => q~reg0.CLK
+clr => q.OUTPUTSELECT
+d => q.DATAA
+q <= q~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|top|d_flop:c
+clk => q~reg0.CLK
+clr => q.OUTPUTSELECT
+d => q.DATAA
+q <= q~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|top|d_flop:d
+clk => q~reg0.CLK
+clr => q.OUTPUTSELECT
+d => q.DATAA
+q <= q~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|top|d_flop:e
+clk => q~reg0.CLK
+clr => q.OUTPUTSELECT
+d => q.DATAA
+q <= q~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|top|d_flop:f
+clk => q~reg0.CLK
+clr => q.OUTPUTSELECT
+d => q.DATAA
+q <= q~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|top|d_flop:g
+clk => q~reg0.CLK
+clr => q.OUTPUTSELECT
+d => q.DATAA
+q <= q~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|top|d_flop:h
+clk => q~reg0.CLK
+clr => q.OUTPUTSELECT
+d => q.DATAA
+q <= q~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+
+|top|d_flop:i
+clk => q~reg0.CLK
+clr => q.OUTPUTSELECT
+d => q.DATAA
+q <= q~reg0.DB_MAX_OUTPUT_PORT_TYPE
+
+

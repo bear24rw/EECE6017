@@ -1,0 +1,44 @@
+|top
+clk => cur_state~1.DATAIN
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.A.DATAIN
+w => Selector8.IN4
+w => Selector9.IN4
+w => Selector10.IN4
+w => Selector11.IN7
+w => Selector12.IN4
+w => Selector13.IN4
+w => Selector14.IN4
+w => Selector15.IN7
+w => Selector4.IN4
+w => Selector4.IN5
+w => Selector4.IN6
+w => Selector4.IN7
+w => Selector5.IN1
+w => Selector6.IN1
+w => Selector7.IN1
+w => Selector8.IN2
+w => Selector9.IN2
+w => Selector10.IN2
+w => Selector11.IN5
+w => Selector12.IN2
+w => Selector13.IN2
+w => Selector14.IN2
+w => Selector15.IN5
+w => Selector0.IN3
+w => Selector0.IN4
+w => Selector0.IN5
+w => Selector0.IN6
+w => Selector1.IN0
+w => Selector2.IN0
+w => Selector3.IN0
+z <= z.DB_MAX_OUTPUT_PORT_TYPE
+
+

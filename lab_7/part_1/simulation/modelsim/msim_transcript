@@ -1,0 +1,110 @@
+# do top_run_msim_rtl_verilog.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying /media/other/opt/altera/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied /media/other/opt/altera/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vlog -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_7/part_1 {/home/user/school/emb_sys/lab_7/part_1/top.v}
+# Model Technology ModelSim ALTERA vlog 10.0d Compiler 2012.01 Jan 18 2012
+# -- Compiling module top
+# 
+# Top level modules:
+# 	top
+# vlog -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_7/part_1 {/home/user/school/emb_sys/lab_7/part_1/d_flop.v}
+# Model Technology ModelSim ALTERA vlog 10.0d Compiler 2012.01 Jan 18 2012
+# -- Compiling module d_flop
+# 
+# Top level modules:
+# 	d_flop
+# 
+# vlog -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_7/part_1 {/home/user/school/emb_sys/lab_7/part_1/top_tb.v}
+# Model Technology ModelSim ALTERA vlog 10.0d Compiler 2012.01 Jan 18 2012
+# -- Compiling module top_tb
+# 
+# Top level modules:
+# 	top_tb
+# 
+# vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneii_ver -L rtl_work -L work -voptargs="+acc"  top_tb
+# vsim -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneii_ver -L rtl_work -L work -voptargs=\"+acc\" -t 1ps top_tb 
+# Loading work.top_tb
+# Loading work.top
+# Loading work.d_flop
+# ** Warning: (vsim-3015) /home/user/school/emb_sys/lab_7/part_1/top.v(32): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'clr'. The port definition is at: /home/user/school/emb_sys/lab_7/part_1/d_flop.v(2).
+#         Region: /top_tb/uut/y0
+# 
+# add wave *
+# view structure
+# .main_pane.structure.interior.cs.body.struct
+# view signals
+# .main_pane.objects.interior.cs.body.tree
+# run -all
+# w | z
+# --------
+# 0 | 0
+# 0 | 0
+# 1 | 0
+# 0 | 0
+# 0 | 0
+# 0 | 0
+# 0 | 0
+# 1 | 1
+# 1 | 0
+# 1 | 0
+# 1 | 0
+# 1 | 1
+# 0 | 1
+# 0 | 0
+# 0 | 0
+# 0 | 0
+# 0 | 1
+# 0 | 1
+# 0 | 1
+# 0 | 1
+# 0 | 1
+# 0 | 1
+# Break in Module top_tb at /home/user/school/emb_sys/lab_7/part_1/top_tb.v line 51
+# Simulation Breakpoint: Break in Module top_tb at /home/user/school/emb_sys/lab_7/part_1/top_tb.v line 51
+# MACRO ./top_run_msim_rtl_verilog.do PAUSED at line 18
+add wave -position end  sim:/top_tb/uut/y0_q
+add wave -position end  sim:/top_tb/uut/y1_q
+add wave -position end  sim:/top_tb/uut/y2_q
+add wave -position end  sim:/top_tb/uut/y3_q
+add wave -position end  sim:/top_tb/uut/y4_q
+add wave -position end  sim:/top_tb/uut/y5_q
+add wave -position end  sim:/top_tb/uut/y6_q
+add wave -position end  sim:/top_tb/uut/y7_q
+add wave -position end  sim:/top_tb/uut/y8_q
+restart
+# ** Warning: (vsim-3015) /home/user/school/emb_sys/lab_7/part_1/top.v(32): [PCDPC] - Port size (1 or 1) does not match connection size (32) for port 'clr'. The port definition is at: /home/user/school/emb_sys/lab_7/part_1/d_flop.v(2).
+#         Region: /top_tb/uut/y0
+run -all
+# w | z
+# --------
+# 0 | 0
+# 0 | 0
+# 1 | 0
+# 0 | 0
+# 0 | 0
+# 0 | 0
+# 0 | 0
+# 1 | 1
+# 1 | 0
+# 1 | 0
+# 1 | 0
+# 1 | 1
+# 0 | 1
+# 0 | 0
+# 0 | 0
+# 0 | 0
+# 0 | 1
+# 0 | 1
+# 0 | 1
+# 0 | 1
+# 0 | 1
+# 0 | 1
+# Break in Module top_tb at /home/user/school/emb_sys/lab_7/part_1/top_tb.v line 51

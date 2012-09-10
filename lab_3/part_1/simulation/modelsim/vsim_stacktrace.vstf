@@ -1,0 +1,48 @@
+# Current time Sun Sep  9 23:27:20 2012
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.0d"
+# Version = "2012.01"
+# Date = "Jan 18 2012"
+# Platform = linuxpe
+# 0    0xf76eb430: '<unknown (@0xf76eb430)>'
+# 1    0x0839af83: '<unknown (@0x839af83)>'
+# 2    0x0805e7c6: '<unknown (@0x805e7c6)>'
+# End of Stack Trace
+
+
+# Current time Sun Sep  9 23:27:20 2012
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.0d"
+# Version = "2012.01"
+# Date = "Jan 18 2012"
+# Platform = linuxpe
+# 0    0xf76eb430: '<unknown (@0xf76eb430)>'
+# End of Stack Trace
+
+
+# Current time Sun Sep  9 23:31:11 2012
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.0d"
+# Version = "2012.01"
+# Date = "Jan 18 2012"
+# Platform = linuxpe
+# 0    0xf77a5430: '<unknown (@0xf77a5430)>'
+# 1    0x0839af83: '<unknown (@0x839af83)>'
+# 2    0x0805e7c6: '<unknown (@0x805e7c6)>'
+# End of Stack Trace
+
+
+# Current time Sun Sep  9 23:31:11 2012
+# ModelSim Stack Trace
+# Program = vsim
+# Id = "10.0d"
+# Version = "2012.01"
+# Date = "Jan 18 2012"
+# Platform = linuxpe
+# 0    0xf77a5430: '<unknown (@0xf77a5430)>'
+# End of Stack Trace
+
+

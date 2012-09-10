@@ -1,0 +1,43 @@
+m255
+K3
+13
+cModel Technology
+Z0 d/home/user/school/emb_sys/lab_3/part_1/simulation/modelsim
+vrs_latch
+I[EeG4[5KGj[;fES3W9GI@0
+VjU>a_XLJT;XEUXL^YD:5W3
+Z1 d/home/user/school/emb_sys/lab_3/part_1/simulation/modelsim
+w1347247808
+8/home/user/school/emb_sys/lab_3/part_1/rs_latch.v
+F/home/user/school/emb_sys/lab_3/part_1/rs_latch.v
+L0 2
+Z2 OV;L;10.0d;49
+r1
+31
+Z3 o-vlog01compat -work work -O0
+!s100 a1L_a9>=KaSPi5X1HLNWT1
+!s85 0
+!s108 1347247836.055430
+!s107 /home/user/school/emb_sys/lab_3/part_1/rs_latch.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+/home/user/school/emb_sys/lab_3/part_1|/home/user/school/emb_sys/lab_3/part_1/rs_latch.v|
+!s101 -O0
+Z4 !s92 -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_3/part_1 -O0
+vrs_latch_tb
+!s100 h_>66cL^i]dV5OYHF^2<C2
+IDH`KXVbG=QN[]nQ?2Db]31
+VC54WLh:@=>odJ[`M@RTQN3
+R1
+w1347247589
+8/home/user/school/emb_sys/lab_3/part_1/rs_latch_tb.v
+F/home/user/school/emb_sys/lab_3/part_1/rs_latch_tb.v
+L0 3
+R2
+r1
+!s85 0
+31
+!s108 1347247836.060114
+!s107 /home/user/school/emb_sys/lab_3/part_1/rs_latch_tb.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+/home/user/school/emb_sys/lab_3/part_1|/home/user/school/emb_sys/lab_3/part_1/rs_latch_tb.v|
+!s101 -O0
+R3
+R4

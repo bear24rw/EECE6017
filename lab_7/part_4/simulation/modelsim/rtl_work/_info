@@ -1,0 +1,43 @@
+m255
+K3
+13
+cModel Technology
+Z0 d/home/user/school/emb_sys/lab_7/part_4/simulation/modelsim
+vtop
+IGh<K@0kIPPKcSafDa<A`C1
+V7bY^7^d@?[YPIddKd8ddN1
+Z1 d/home/user/school/emb_sys/lab_7/part_4/simulation/modelsim
+w1347312124
+8/home/user/school/emb_sys/lab_7/part_4/top.v
+F/home/user/school/emb_sys/lab_7/part_4/top.v
+L0 1
+Z2 OV;L;10.0d;49
+r1
+31
+Z3 o-vlog01compat -work work -O0
+!s100 2Nz0;OE4PYRi;>H1YbOSS0
+!s85 0
+!s108 1347312538.283397
+!s107 /home/user/school/emb_sys/lab_7/part_4/top.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+/home/user/school/emb_sys/lab_7/part_4|/home/user/school/emb_sys/lab_7/part_4/top.v|
+!s101 -O0
+Z4 !s92 -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_7/part_4 -O0
+vtop_tb
+!s100 GX88X[m9@]z:6f8kIAb=V2
+IF9CMHjR6T=@>o1Jf;IOV_0
+VfLzIKTHUMdW>A;j4Q^:m30
+R1
+w1347312125
+8/home/user/school/emb_sys/lab_7/part_4/top_tb.v
+F/home/user/school/emb_sys/lab_7/part_4/top_tb.v
+L0 3
+R2
+r1
+!s85 0
+31
+!s108 1347312538.289535
+!s107 /home/user/school/emb_sys/lab_7/part_4/top_tb.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+/home/user/school/emb_sys/lab_7/part_4|/home/user/school/emb_sys/lab_7/part_4/top_tb.v|
+!s101 -O0
+R3
+R4

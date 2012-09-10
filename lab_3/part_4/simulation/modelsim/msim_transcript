@@ -1,0 +1,89 @@
+# do top_run_msim_rtl_verilog.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying /media/other/opt/altera/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied /media/other/opt/altera/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vlog -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_3/part_4 {/home/user/school/emb_sys/lab_3/part_4/d_latch.v}
+# Model Technology ModelSim ALTERA vlog 10.0d Compiler 2012.01 Jan 18 2012
+# -- Compiling module d_latch
+# 
+# Top level modules:
+# 	d_latch
+# vlog -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_3/part_4 {/home/user/school/emb_sys/lab_3/part_4/d_flop.v}
+# Model Technology ModelSim ALTERA vlog 10.0d Compiler 2012.01 Jan 18 2012
+# -- Compiling module d_flop
+# 
+# Top level modules:
+# 	d_flop
+# vlog -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_3/part_4 {/home/user/school/emb_sys/lab_3/part_4/top.v}
+# Model Technology ModelSim ALTERA vlog 10.0d Compiler 2012.01 Jan 18 2012
+# -- Compiling module top
+# 
+# Top level modules:
+# 	top
+# 
+# vlog -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_3/part_4 {/home/user/school/emb_sys/lab_3/part_4/top_tb.v}
+# Model Technology ModelSim ALTERA vlog 10.0d Compiler 2012.01 Jan 18 2012
+# -- Compiling module top_tb
+# 
+# Top level modules:
+# 	top_tb
+# 
+# vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneii_ver -L rtl_work -L work -voptargs="+acc"  top_tb
+# vsim -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneii_ver -L rtl_work -L work -voptargs=\"+acc\" -t 1ps top_tb 
+# Loading work.top_tb
+# Loading work.top
+# Loading work.d_latch
+# Loading work.d_flop
+# 
+# add wave *
+# view structure
+# .main_pane.structure.interior.cs.body.struct
+# view signals
+# .main_pane.objects.interior.cs.body.tree
+# run -all
+# d  |  qa  qb  qc
+# -------
+# 0  |  x  x  0
+# 1  |  x  x  0
+# 1  |  1  1  0
+# 0  |  0  1  0
+# 1  |  1  1  0
+# 0  |  0  1  0
+# 1  |  0  1  0
+# 0  |  0  1  0
+# 1  |  0  1  0
+# 0  |  0  1  0
+# 0  |  0  0  0
+# 1  |  1  0  0
+# 0  |  0  0  0
+# 1  |  1  0  0
+# 1  |  1  0  1
+# 0  |  1  0  1
+#  
+restart
+run -all
+# d  |  qa  qb  qc
+# -------
+# 0  |  x  x  0
+# 1  |  x  x  0
+# 1  |  1  1  0
+# 0  |  0  1  0
+# 1  |  1  1  0
+# 0  |  0  1  0
+# 1  |  0  1  0
+# 0  |  0  1  0
+# 1  |  0  1  0
+# 0  |  0  1  0
+# 0  |  0  0  0
+# 1  |  1  0  0
+# 0  |  0  0  0
+# 1  |  1  0  0
+# 1  |  1  0  1
+# 0  |  1  0  1

@@ -1,0 +1,47 @@
+# do d_latch_run_msim_rtl_verilog.do 
+# if {[file exists rtl_work]} {
+# 	vdel -lib rtl_work -all
+# }
+# vlib rtl_work
+# vmap work rtl_work
+# Copying /media/other/opt/altera/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini
+# Modifying modelsim.ini
+# ** Warning: Copied /media/other/opt/altera/modelsim_ase/linuxaloem/../modelsim.ini to modelsim.ini.
+#          Updated modelsim.ini.
+# 
+# vlog -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_3/part_2 {/home/user/school/emb_sys/lab_3/part_2/d_latch.v}
+# Model Technology ModelSim ALTERA vlog 10.0d Compiler 2012.01 Jan 18 2012
+# -- Compiling module d_latch
+# 
+# Top level modules:
+# 	d_latch
+# 
+# vlog -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_3/part_2 {/home/user/school/emb_sys/lab_3/part_2/d_latch_tb.v}
+# Model Technology ModelSim ALTERA vlog 10.0d Compiler 2012.01 Jan 18 2012
+# -- Compiling module d_latch_tb
+# 
+# Top level modules:
+# 	d_latch_tb
+# 
+# vsim -t 1ps -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneii_ver -L rtl_work -L work -voptargs="+acc"  d_latch_tb
+# vsim -L altera_ver -L lpm_ver -L sgate_ver -L altera_mf_ver -L altera_lnsim_ver -L cycloneii_ver -L rtl_work -L work -voptargs=\"+acc\" -t 1ps d_latch_tb 
+# Loading work.d_latch_tb
+# Loading work.d_latch
+# 
+# add wave *
+# view structure
+# .main_pane.structure.interior.cs.body.struct
+# view signals
+# .main_pane.objects.interior.cs.body.tree
+# run -all
+# d  |  q
+# -------
+# 0  |  x
+# 0  |  0
+# 1  |  0
+# 1  |  1
+# 0  |  1
+# 0  |  0
+# Break in Module d_latch_tb at /home/user/school/emb_sys/lab_3/part_2/d_latch_tb.v line 46
+# Simulation Breakpoint: Break in Module d_latch_tb at /home/user/school/emb_sys/lab_3/part_2/d_latch_tb.v line 46
+# MACRO ./d_latch_run_msim_rtl_verilog.do PAUSED at line 17

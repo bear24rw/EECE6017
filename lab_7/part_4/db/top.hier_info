@@ -1,0 +1,19 @@
+|top
+clk => cur_state~1.DATAIN
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+reset => cur_state.OUTPUTSELECT
+send => bit_pos.OUTPUTSELECT
+send => bit_pos.OUTPUTSELECT
+send => bit_pos.OUTPUTSELECT
+send => bit_pos.OUTPUTSELECT
+send => bit_pos[1].IN1
+letter[0] => Add0.IN8
+letter[1] => Add0.IN7
+letter[2] => Add0.IN6
+letter[3] => Add0.IN5
+led <= led$latch.DB_MAX_OUTPUT_PORT_TYPE
+
+

@@ -1,0 +1,62 @@
+m255
+K3
+13
+cModel Technology
+Z0 d/home/user/school/emb_sys/lab_3/part_3/simulation/modelsim
+vd_latch
+IOF2jD0J;RbXhB90M=k@_z2
+VP^lM_FL8N52SKTdT?jCeK3
+Z1 d/home/user/school/emb_sys/lab_3/part_3/simulation/modelsim
+w1347250405
+8/home/user/school/emb_sys/lab_3/part_3/d_latch.v
+F/home/user/school/emb_sys/lab_3/part_3/d_latch.v
+L0 1
+Z2 OV;L;10.0d;49
+r1
+31
+Z3 o-vlog01compat -work work -O0
+Z4 !s92 -vlog01compat -work work +incdir+/home/user/school/emb_sys/lab_3/part_3 -O0
+!s100 TN[^]FJM=7]K;dEbH8?[L1
+!s85 0
+!s108 1347251358.990875
+!s107 /home/user/school/emb_sys/lab_3/part_3/d_latch.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+/home/user/school/emb_sys/lab_3/part_3|/home/user/school/emb_sys/lab_3/part_3/d_latch.v|
+!s101 -O0
+vtop
+I7hSfc:oQNEY5TN9>BaE<T1
+V@mZ>I4bMbB]::2i4HU5a=2
+R1
+w1347250834
+8/home/user/school/emb_sys/lab_3/part_3/top.v
+F/home/user/school/emb_sys/lab_3/part_3/top.v
+L0 1
+R2
+r1
+31
+R3
+R4
+!s100 OjRQcS4j5?STXS1O44jC81
+!s85 0
+!s108 1347251358.996096
+!s107 /home/user/school/emb_sys/lab_3/part_3/top.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+/home/user/school/emb_sys/lab_3/part_3|/home/user/school/emb_sys/lab_3/part_3/top.v|
+!s101 -O0
+vtop_tb
+!s100 :6cQhUGUBYDU;^iHSI2CS1
+ICNd3D8472SN`U?E3QgOb_1
+VN7^ihbmI9enFg9D=Qco243
+R1
+w1347251349
+8/home/user/school/emb_sys/lab_3/part_3/top_tb.v
+F/home/user/school/emb_sys/lab_3/part_3/top_tb.v
+L0 3
+R2
+r1
+!s85 0
+31
+!s108 1347251359.000521
+!s107 /home/user/school/emb_sys/lab_3/part_3/top_tb.v|
+!s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+/home/user/school/emb_sys/lab_3/part_3|/home/user/school/emb_sys/lab_3/part_3/top_tb.v|
+!s101 -O0
+R3
+R4

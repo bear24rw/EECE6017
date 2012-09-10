@@ -1,0 +1,8 @@
+|d_latch
+clk => comb.IN0
+clk => comb.IN0
+d => comb.IN1
+d => r.DATAIN
+q <= q.DB_MAX_OUTPUT_PORT_TYPE
+
+

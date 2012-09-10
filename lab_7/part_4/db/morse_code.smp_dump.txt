@@ -1,0 +1,8 @@
+
+State Machine - |top|cur_state
+Name cur_state.STATE_DASH_2 cur_state.STATE_DASH_1 cur_state.STATE_DOT cur_state.STATE_IDLE cur_state.STATE_DASH_3 
+cur_state.STATE_IDLE 0 0 0 0 0 
+cur_state.STATE_DOT 0 0 1 1 0 
+cur_state.STATE_DASH_1 0 1 0 1 0 
+cur_state.STATE_DASH_2 1 0 0 1 0 
+cur_state.STATE_DASH_3 0 0 0 1 1 

@@ -1,0 +1,12 @@
+
+State Machine - |top|cur_state
+Name cur_state.H cur_state.G cur_state.F cur_state.E cur_state.D cur_state.C cur_state.B cur_state.A cur_state.I 
+cur_state.A 0 0 0 0 0 0 0 0 0 
+cur_state.B 0 0 0 0 0 0 1 1 0 
+cur_state.C 0 0 0 0 0 1 0 1 0 
+cur_state.D 0 0 0 0 1 0 0 1 0 
+cur_state.E 0 0 0 1 0 0 0 1 0 
+cur_state.F 0 0 1 0 0 0 0 1 0 
+cur_state.G 0 1 0 0 0 0 0 1 0 
+cur_state.H 1 0 0 0 0 0 0 1 0 
+cur_state.I 0 0 0 0 0 0 0 1 1 
