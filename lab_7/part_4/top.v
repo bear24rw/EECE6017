@@ -4,6 +4,12 @@
  *                                                                         *
  *   Lab 7 Part 4                                                          *
  *                                                                         *
+ *   This module implements are morse code transmitter. A letter index is  *
+ *   placed on the 'letter' input and when 'xmit' is pulsed the pulses     *
+ *   coresponding to the letter selected will be outputed on the 'led'     *
+ *   output. To achive the timing requirements of the lab it is assumed    *
+ *   that the input clock to this module will be 0.5Hz                     *
+ *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
  *   the Free Software Foundation; either version 2 of the License, or     *
@@ -21,11 +27,10 @@
  ***************************************************************************/
 
 module top (
-    input clk, reset, send,
+    input clk, reset, xmit,
     input [3:0] letter,
     output reg led
 );
-
 
     // FSM states
     parameter STATE_IDLE = 0;
@@ -47,8 +52,8 @@ module top (
     parameter G = 4'b0110;
     parameter H = 4'b0111;
 
-    // which bit of the letter code we are currently sending
-    // initialize as 4 because we aren't sending anything intially
+    // which bit of the letter code we are currently xmiting
+    // initialize as 4 because we aren't xmiting anything intially
     reg [3:0] bit_pos = 4;
 
     // morse code lookup table
@@ -72,7 +77,7 @@ module top (
     end
 
     // FSM state table
-    always @(cur_state, send)
+    always @(cur_state, xmit)
     begin: state_table
 
         // jump to the current state
@@ -90,19 +95,24 @@ module top (
                 next_state <= STATE_DASH_2;
             end
 
+            // dash delay 1
             STATE_DASH_2:
                 next_state <= STATE_DASH_3;
 
+            // dash delay 2
             STATE_DASH_3:
                 next_state <= STATE_IDLE;
 
+            // turn off led
+            // check for transmit
+            // keep track of which bit of the code we are on
             STATE_IDLE: begin
                 led <= 0;
 
                 // if restarting start at the LSB
-                if (send) bit_pos = 0;
+                if (xmit) bit_pos = 0;
 
-                // if we haven't finished sending all the bits
+                // if we haven't finished xmiting all the bits
                 if (bit_pos < 4) begin
 
                     // lookup if this bit is a dash or a dot

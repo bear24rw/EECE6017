@@ -2,6 +2,7 @@
 
 module top_tb;
 
+    // letter indexes
     parameter A = 4'b0000;
     parameter B = 4'b0001;
     parameter C = 4'b0010;
@@ -14,69 +15,81 @@ module top_tb;
     // inputs
     reg clk;
     reg reset;
+    reg xmit;
     reg [3:0] letter;
-    reg send;
 
     // outputs
     wire led;
 
-    // instantiate the top level d flip flop
+    // instantiate the mores code module
     top uut(
         .clk(clk),
         .reset(reset),
         .letter(letter),
-        .send(send),
+        .xmit(xmit),
         .led(led)
     );
 
+    // continuous clock
+    // we do not care about actual frequency for simulation
     always
         #1 clk = ~clk;
 
+    // function to toggle the xmit line
+    task pulse_xmit;
+        begin
+            xmit = 1;
+            #2 xmit = 0;
+        end
+    endtask
+
+    // run through all the tests
     initial begin
 
         // reset inputs
         clk = 0;
-        send = 0;
+        xmit = 0;
 
+        // pulse the reset line
         reset = 1;
         #50;
         reset = 0;
         #50
 
+        // run through all the letters
         letter = A;
-        send = 1; #2 send = 0;
+        pulse_xmit;
         #50;
 
         letter = B;
-        send = 1; #2 send = 0;
+        pulse_xmit;
         #50;
 
         letter = C;
-        send = 1; #2 send = 0;
+        pulse_xmit;
         #50;
 
         letter = D;
-        send = 1; #2 send = 0;
+        pulse_xmit;
         #50;
 
         letter = E;
-        send = 1; #2 send = 0;
+        pulse_xmit;
         #50;
 
         letter = F;
-        send = 1; #2 send = 0;
+        pulse_xmit;
         #50;
 
         letter = G;
-        send = 1; #2 send = 0;
+        pulse_xmit;
         #50;
 
         letter = H;
-        send = 1; #2 send = 0;
+        pulse_xmit;
         #50;
 
         $stop;
-
     end
 
 endmodule
