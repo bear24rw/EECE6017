@@ -112,6 +112,12 @@ module top(
         .bcd_2(state_bcd_2),
         .bcd_3(state_bcd_3)
     );
+    // -------------------------------------------------
+    //              TEMP MODE TO BCD
+    // -------------------------------------------------
+
+    wire [4:0] temp_mode_bcd;
+    assign temp_mode_bcd = temp_mode ? `BCD_NEG : `BCD_BLANK;
 
     // -------------------------------------------------
     //                  7 SEGS
@@ -126,18 +132,12 @@ module top(
     assign seg_0 = disp_mode ? temp_bcd_frac : state_bcd_0;
     assign seg_1 = disp_mode ? temp_bcd_ones : state_bcd_1;
     assign seg_2 = disp_mode ? temp_bcd_tens : state_bcd_2;
-    assign seg_3 = disp_mode ? 0 : state_bcd_3;
+    assign seg_3 = disp_mode ? temp_mode_bcd : state_bcd_3;
 
     seven_seg s0(seg_0, HEX0);
     seven_seg s1(seg_1, HEX1);
     seven_seg s2(seg_2, HEX2);
     seven_seg s3(seg_3, HEX3);
-
-    // if we are displaying the temperature and
-    // if we are in temp_mode 1 (displaying negative)
-    //assign HEX3 = (disp_mode & temp_mode) ? 7'b0111111: 7'b1111111;
-    //assign HEX3 = SW;
-
 
     // -------------------------------------------------
     //                  ALARM
@@ -150,10 +150,8 @@ module top(
     pulse_led #(.step_size(60000)) pulse_fast (CLOCK_50, pulse_led_fast);
 
     assign LEDR[9:0] = 
-        (state == STATE_ATTENTION) ? {5 {1'b0,pulse_led_slow}} :
-        (state == STATE_EMERGENCY) ? {10{pulse_led_fast}} :
+        (state == `STATE_ATTENTION) ? {5 {1'b0,pulse_led_slow}} :
+        (state == `STATE_EMERGENCY) ? {10{pulse_led_fast}} :
         {10{1'b0}};
             
-
-
 endmodule

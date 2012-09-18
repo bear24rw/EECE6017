@@ -495,6 +495,8 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to I2C_SDA
 set_global_assignment -name EDA_SIMULATION_TOOL "<None>"
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name LAST_QUARTUS_VERSION 12.0
+set_global_assignment -name SOURCE_FILE verilog/constants.h
+set_global_assignment -name VERILOG_FILE verilog/state_2_bcd.v
 set_global_assignment -name VERILOG_FILE verilog/top.v
 set_global_assignment -name VERILOG_FILE verilog/seven_seg.v
 set_global_assignment -name VERILOG_FILE verilog/pulse_led.v

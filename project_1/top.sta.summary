@@ -3,32 +3,32 @@ TimeQuest Timing Analyzer Summary
 ------------------------------------------------------------
 
 Type  : Slow Model Setup 'CLOCK_50'
-Slack : -6.566
-TNS   : -403.110
+Slack : -6.205
+TNS   : -389.081
 
 Type  : Slow Model Setup 'clk_div:clk_div|clk_1hz'
-Slack : -4.053
-TNS   : -8.137
+Slack : -3.981
+TNS   : -9.035
 
 Type  : Slow Model Setup 'KEY[0]'
-Slack : -1.010
-TNS   : -1.010
+Slack : -2.077
+TNS   : -3.136
 
 Type  : Slow Model Hold 'CLOCK_50'
-Slack : -2.694
-TNS   : -2.694
-
-Type  : Slow Model Hold 'KEY[0]'
-Slack : 0.445
-TNS   : 0.000
+Slack : -2.701
+TNS   : -2.701
 
 Type  : Slow Model Hold 'clk_div:clk_div|clk_1hz'
 Slack : 0.445
 TNS   : 0.000
 
+Type  : Slow Model Hold 'KEY[0]'
+Slack : 1.811
+TNS   : 0.000
+
 Type  : Slow Model Minimum Pulse Width 'CLOCK_50'
 Slack : -1.631
-TNS   : -111.611
+TNS   : -110.389
 
 Type  : Slow Model Minimum Pulse Width 'KEY[0]'
 Slack : -1.469
@@ -36,35 +36,35 @@ TNS   : -3.913
 
 Type  : Slow Model Minimum Pulse Width 'clk_div:clk_div|clk_1hz'
 Slack : -0.611
-TNS   : -17.108
+TNS   : -18.330
 
 Type  : Fast Model Setup 'CLOCK_50'
-Slack : -2.059
-TNS   : -110.092
+Slack : -1.967
+TNS   : -108.015
 
 Type  : Fast Model Setup 'clk_div:clk_div|clk_1hz'
-Slack : -0.929
-TNS   : -1.858
+Slack : -0.872
+TNS   : -1.744
 
 Type  : Fast Model Setup 'KEY[0]'
-Slack : 0.003
-TNS   : 0.000
+Slack : -0.410
+TNS   : -0.410
 
 Type  : Fast Model Hold 'CLOCK_50'
-Slack : -1.724
-TNS   : -1.724
+Slack : -1.728
+TNS   : -1.728
 
 Type  : Fast Model Hold 'clk_div:clk_div|clk_1hz'
-Slack : 0.008
+Slack : 0.215
 TNS   : 0.000
 
 Type  : Fast Model Hold 'KEY[0]'
-Slack : 0.215
+Slack : 0.708
 TNS   : 0.000
 
 Type  : Fast Model Minimum Pulse Width 'CLOCK_50'
 Slack : -1.380
-TNS   : -91.380
+TNS   : -90.380
 
 Type  : Fast Model Minimum Pulse Width 'KEY[0]'
 Slack : -1.222
@@ -72,6 +72,6 @@ TNS   : -3.222
 
 Type  : Fast Model Minimum Pulse Width 'clk_div:clk_div|clk_1hz'
 Slack : -0.500
-TNS   : -14.000
+TNS   : -15.000
 
 ------------------------------------------------------------
