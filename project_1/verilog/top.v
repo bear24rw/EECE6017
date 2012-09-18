@@ -1,3 +1,5 @@
+`include "constants.h"
+
 module top(
     input CLOCK_50,
     input [3:0] KEY,
@@ -9,11 +11,6 @@ module top(
     output [6:0] HEX2,
     output [6:0] HEX3
 );
-
-    parameter STATE_NORMAL      = 0;
-    parameter STATE_BORDERLINE  = 1;
-    parameter STATE_ATTENTION   = 2;
-    parameter STATE_EMERGENCY   = 3;
 
     // -------------------------------------------------
     //              1 HZ CLOCK
@@ -40,12 +37,12 @@ module top(
 
     // toggle the mode we're in (pos or neg temps)
     // display it on LEDG0
-    // mode = 1 : negative temps
-    // mode = 0 : positive temps
-    reg mode = 0;
+    // temp_mode = 1 : negative temps
+    // temp_mode = 0 : positive temps
+    reg temp_mode = 0;
     always @(posedge KEY[0])
-        mode <= ~mode;
-    assign LEDG[0] = mode;
+        temp_mode <= ~temp_mode;
+    assign LEDG[0] = temp_mode;
 
     // -------------------------------------------------
     //              TEMP VALUE
@@ -70,14 +67,14 @@ module top(
 
     monitor monitor(
         .clk(clk_1hz),
-        .mode(mode),
+        .mode(temp_mode),
         .temp(temp),
         .temp_frac(temp_frac),
         .state(state)
     );
 
     // -------------------------------------------------
-    //                  7 SEGS
+    //              TEMP TO BCD
     // -------------------------------------------------
 
     // convert the temperature into BCD
@@ -99,20 +96,47 @@ module top(
         .hundreds()
     );
 
-    // mux the seven segs depending on what display mode were in
-    wire [3:0] seg_0;
-    wire [3:0] seg_1;
-    wire [3:0] seg_2;
+    // -------------------------------------------------
+    //              STATE TO BCD
+    // -------------------------------------------------
 
-    assign seg_0 = disp_mode ? temp_bcd_frac : 0;
-    assign seg_1 = disp_mode ? temp_bcd_ones : 0;
-    assign seg_2 = disp_mode ? temp_bcd_tens : 0;
+    wire [4:0] state_bcd_0;
+    wire [4:0] state_bcd_1;
+    wire [4:0] state_bcd_2;
+    wire [4:0] state_bcd_3;
+
+    state_2_bcd s2b(
+        .state(state),
+        .bcd_0(state_bcd_0),
+        .bcd_1(state_bcd_1),
+        .bcd_2(state_bcd_2),
+        .bcd_3(state_bcd_3)
+    );
+
+    // -------------------------------------------------
+    //                  7 SEGS
+    // -------------------------------------------------
+
+    // mux the seven segs depending on what display mode were in
+    wire [4:0] seg_0;
+    wire [4:0] seg_1;
+    wire [4:0] seg_2;
+    wire [4:0] seg_3;
+
+    assign seg_0 = disp_mode ? temp_bcd_frac : state_bcd_0;
+    assign seg_1 = disp_mode ? temp_bcd_ones : state_bcd_1;
+    assign seg_2 = disp_mode ? temp_bcd_tens : state_bcd_2;
+    assign seg_3 = disp_mode ? 0 : state_bcd_3;
 
     seven_seg s0(seg_0, HEX0);
     seven_seg s1(seg_1, HEX1);
     seven_seg s2(seg_2, HEX2);
+    seven_seg s3(seg_3, HEX3);
 
-    assign HEX3 = (mode & disp_mode) ? 7'b0111111: 7'b1111111;
+    // if we are displaying the temperature and
+    // if we are in temp_mode 1 (displaying negative)
+    //assign HEX3 = (disp_mode & temp_mode) ? 7'b0111111: 7'b1111111;
+    //assign HEX3 = SW;
 
 
     // -------------------------------------------------
@@ -122,13 +146,13 @@ module top(
     wire pulse_led_slow;
     wire pulse_led_fast;
 
-    pulse_led #(.step_size(1000)) pulse_slow (CLOCK_50, pulse_led_slow);
+    pulse_led #(.step_size(10000)) pulse_slow (CLOCK_50, pulse_led_slow);
     pulse_led #(.step_size(60000)) pulse_fast (CLOCK_50, pulse_led_fast);
 
     assign LEDR[9:0] = 
-        (state == STATE_ATTENTION) ? {9{pulse_led_slow}} :
-        (state == STATE_EMERGENCY) ? {9{pulse_led_fast}} :
-        {9{1'b0}};
+        (state == STATE_ATTENTION) ? {5 {1'b0,pulse_led_slow}} :
+        (state == STATE_EMERGENCY) ? {10{pulse_led_fast}} :
+        {10{1'b0}};
             
 
 
