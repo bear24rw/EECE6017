@@ -1,0 +1,488 @@
+Analysis & Synthesis report for top
+Tue Sep 18 02:15:31 2012
+Quartus II 32-bit Version 12.0 Build 178 05/31/2012 SJ Web Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. Registers Removed During Synthesis
+  9. Removed Registers Triggering Further Register Optimizations
+ 10. General Register Statistics
+ 11. Inverted Register Statistics
+ 12. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 13. Parameter Settings for User Entity Instance: Top-level Entity: |top
+ 14. Parameter Settings for User Entity Instance: monitor:monitor
+ 15. Parameter Settings for User Entity Instance: pulse_led:pulse_slow
+ 16. Parameter Settings for User Entity Instance: pulse_led:pulse_fast
+ 17. Port Connectivity Checks: "bin_2_bcd:bcd_frac"
+ 18. Port Connectivity Checks: "bin_2_bcd:bcd"
+ 19. Elapsed Time Per Partition
+ 20. Analysis & Synthesis Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2012 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++-------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                  ;
++------------------------------------+------------------------------------------+
+; Analysis & Synthesis Status        ; Successful - Tue Sep 18 02:15:31 2012    ;
+; Quartus II 32-bit Version          ; 12.0 Build 178 05/31/2012 SJ Web Edition ;
+; Revision Name                      ; top                                      ;
+; Top-level Entity Name              ; top                                      ;
+; Family                             ; Cyclone II                               ;
+; Total logic elements               ; 319                                      ;
+;     Total combinational functions  ; 311                                      ;
+;     Dedicated logic registers      ; 105                                      ;
+; Total registers                    ; 105                                      ;
+; Total pins                         ; 61                                       ;
+; Total virtual pins                 ; 0                                        ;
+; Total memory bits                  ; 0                                        ;
+; Embedded Multiplier 9-bit elements ; 0                                        ;
+; Total PLLs                         ; 0                                        ;
++------------------------------------+------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                        ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Option                                                                     ; Setting            ; Default Value      ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Device                                                                     ; EP2C20F484C7       ;                    ;
+; Top-level entity name                                                      ; top                ; top                ;
+; Family name                                                                ; Cyclone II         ; Cyclone IV GX      ;
+; Use smart compilation                                                      ; Off                ; Off                ;
+; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation ; On                 ; On                 ;
+; Enable compact report table                                                ; Off                ; Off                ;
+; Restructure Multiplexers                                                   ; Auto               ; Auto               ;
+; Create Debugging Nodes for IP Cores                                        ; Off                ; Off                ;
+; Preserve fewer node names                                                  ; On                 ; On                 ;
+; Disable OpenCore Plus hardware evaluation                                  ; Off                ; Off                ;
+; Verilog Version                                                            ; Verilog_2001       ; Verilog_2001       ;
+; VHDL Version                                                               ; VHDL_1993          ; VHDL_1993          ;
+; State Machine Processing                                                   ; Auto               ; Auto               ;
+; Safe State Machine                                                         ; Off                ; Off                ;
+; Extract Verilog State Machines                                             ; On                 ; On                 ;
+; Extract VHDL State Machines                                                ; On                 ; On                 ;
+; Ignore Verilog initial constructs                                          ; Off                ; Off                ;
+; Iteration limit for constant Verilog loops                                 ; 5000               ; 5000               ;
+; Iteration limit for non-constant Verilog loops                             ; 250                ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                                    ; On                 ; On                 ;
+; Infer RAMs from Raw Logic                                                  ; On                 ; On                 ;
+; Parallel Synthesis                                                         ; On                 ; On                 ;
+; DSP Block Balancing                                                        ; Auto               ; Auto               ;
+; NOT Gate Push-Back                                                         ; On                 ; On                 ;
+; Power-Up Don't Care                                                        ; On                 ; On                 ;
+; Remove Redundant Logic Cells                                               ; Off                ; Off                ;
+; Remove Duplicate Registers                                                 ; On                 ; On                 ;
+; Ignore CARRY Buffers                                                       ; Off                ; Off                ;
+; Ignore CASCADE Buffers                                                     ; Off                ; Off                ;
+; Ignore GLOBAL Buffers                                                      ; Off                ; Off                ;
+; Ignore ROW GLOBAL Buffers                                                  ; Off                ; Off                ;
+; Ignore LCELL Buffers                                                       ; Off                ; Off                ;
+; Ignore SOFT Buffers                                                        ; On                 ; On                 ;
+; Limit AHDL Integers to 32 Bits                                             ; Off                ; Off                ;
+; Optimization Technique                                                     ; Balanced           ; Balanced           ;
+; Carry Chain Length                                                         ; 70                 ; 70                 ;
+; Auto Carry Chains                                                          ; On                 ; On                 ;
+; Auto Open-Drain Pins                                                       ; On                 ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                                      ; Off                ; Off                ;
+; Auto ROM Replacement                                                       ; On                 ; On                 ;
+; Auto RAM Replacement                                                       ; On                 ; On                 ;
+; Auto Shift Register Replacement                                            ; Auto               ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                            ; Auto               ; Auto               ;
+; Auto Clock Enable Replacement                                              ; On                 ; On                 ;
+; Strict RAM Replacement                                                     ; Off                ; Off                ;
+; Allow Synchronous Control Signals                                          ; On                 ; On                 ;
+; Force Use of Synchronous Clear Signals                                     ; Off                ; Off                ;
+; Auto RAM to Logic Cell Conversion                                          ; Off                ; Off                ;
+; Auto Resource Sharing                                                      ; Off                ; Off                ;
+; Allow Any RAM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any ROM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any Shift Register Size For Recognition                              ; Off                ; Off                ;
+; Use LogicLock Constraints during Resource Balancing                        ; On                 ; On                 ;
+; Ignore translate_off and synthesis_off directives                          ; Off                ; Off                ;
+; Timing-Driven Synthesis                                                    ; Off                ; Off                ;
+; Report Parameter Settings                                                  ; On                 ; On                 ;
+; Report Source Assignments                                                  ; On                 ; On                 ;
+; Report Connectivity Checks                                                 ; On                 ; On                 ;
+; Ignore Maximum Fan-Out Assignments                                         ; Off                ; Off                ;
+; Synchronization Register Chain Length                                      ; 2                  ; 2                  ;
+; PowerPlay Power Optimization                                               ; Normal compilation ; Normal compilation ;
+; HDL message level                                                          ; Level2             ; Level2             ;
+; Suppress Register Optimization Related Messages                            ; Off                ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report                   ; 5000               ; 5000               ;
+; Number of Swept Nodes Reported in Synthesis Report                         ; 5000               ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report                  ; 100                ; 100                ;
+; Clock MUX Protection                                                       ; On                 ; On                 ;
+; Auto Gated Clock Conversion                                                ; Off                ; Off                ;
+; Block Design Naming                                                        ; Auto               ; Auto               ;
+; SDC constraint protection                                                  ; Off                ; Off                ;
+; Synthesis Effort                                                           ; Auto               ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal               ; On                 ; On                 ;
+; Analysis & Synthesis Message Level                                         ; Medium             ; Medium             ;
+; Disable Register Merging Across Hierarchies                                ; Auto               ; Auto               ;
+; Resource Aware Inference For Block RAM                                     ; On                 ; On                 ;
+; Synthesis Seed                                                             ; 1                  ; 1                  ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+
+
+Parallel compilation was disabled, but you have multiple processors available. Enable parallel compilation to reduce compilation time.
++-------------------------------------+
+; Parallel Compilation                ;
++----------------------------+--------+
+; Processors                 ; Number ;
++----------------------------+--------+
+; Number detected on machine ; 8      ;
+; Maximum allowed            ; 1      ;
++----------------------------+--------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                          ;
++----------------------------------+-----------------+------------------------+---------------------------------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type              ; File Name with Absolute Path                            ; Library ;
++----------------------------------+-----------------+------------------------+---------------------------------------------------------+---------+
+; verilog/top.v                    ; yes             ; User Verilog HDL File  ; /home/user/school/emb_sys/project_1/verilog/top.v       ;         ;
+; verilog/seven_seg.v              ; yes             ; User Verilog HDL File  ; /home/user/school/emb_sys/project_1/verilog/seven_seg.v ;         ;
+; verilog/pulse_led.v              ; yes             ; User Verilog HDL File  ; /home/user/school/emb_sys/project_1/verilog/pulse_led.v ;         ;
+; verilog/monitor.v                ; yes             ; User Verilog HDL File  ; /home/user/school/emb_sys/project_1/verilog/monitor.v   ;         ;
+; verilog/clk_div.v                ; yes             ; User Verilog HDL File  ; /home/user/school/emb_sys/project_1/verilog/clk_div.v   ;         ;
+; verilog/bin_2_bcd.v              ; yes             ; User Verilog HDL File  ; /home/user/school/emb_sys/project_1/verilog/bin_2_bcd.v ;         ;
++----------------------------------+-----------------+------------------------+---------------------------------------------------------+---------+
+
+
++--------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary            ;
++---------------------------------------------+----------+
+; Resource                                    ; Usage    ;
++---------------------------------------------+----------+
+; Estimated Total logic elements              ; 319      ;
+;                                             ;          ;
+; Total combinational functions               ; 311      ;
+; Logic element usage by number of LUT inputs ;          ;
+;     -- 4 input functions                    ; 81       ;
+;     -- 3 input functions                    ; 78       ;
+;     -- <=2 input functions                  ; 152      ;
+;                                             ;          ;
+; Logic elements by mode                      ;          ;
+;     -- normal mode                          ; 163      ;
+;     -- arithmetic mode                      ; 148      ;
+;                                             ;          ;
+; Total registers                             ; 105      ;
+;     -- Dedicated logic registers            ; 105      ;
+;     -- I/O registers                        ; 0        ;
+;                                             ;          ;
+; I/O pins                                    ; 61       ;
+; Maximum fan-out node                        ; CLOCK_50 ;
+; Maximum fan-out                             ; 90       ;
+; Total fan-out                               ; 1120     ;
+; Average fan-out                             ; 2.35     ;
++---------------------------------------------+----------+
+
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                               ;
++----------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+---------------------------+--------------+
+; Compilation Hierarchy Node ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name       ; Library Name ;
++----------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+---------------------------+--------------+
+; |top                       ; 311 (12)          ; 105 (2)      ; 0           ; 0            ; 0       ; 0         ; 61   ; 0            ; |top                      ;              ;
+;    |bin_2_bcd:bcd|         ; 7 (7)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|bin_2_bcd:bcd        ;              ;
+;    |clk_div:clk_div|       ; 50 (50)           ; 27 (27)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|clk_div:clk_div      ;              ;
+;    |monitor:monitor|       ; 49 (49)           ; 13 (13)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|monitor:monitor      ;              ;
+;    |pulse_led:pulse_fast|  ; 102 (102)         ; 45 (45)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|pulse_led:pulse_fast ;              ;
+;    |pulse_led:pulse_slow|  ; 61 (61)           ; 18 (18)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|pulse_led:pulse_slow ;              ;
+;    |seven_seg:s0|          ; 12 (12)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|seven_seg:s0         ;              ;
+;    |seven_seg:s1|          ; 7 (7)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|seven_seg:s1         ;              ;
+;    |seven_seg:s2|          ; 11 (11)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|seven_seg:s2         ;              ;
++----------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+---------------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
++---------------------------------------------------------------------------------------+
+; Registers Removed During Synthesis                                                    ;
++----------------------------------------+----------------------------------------------+
+; Register name                          ; Reason for Removal                           ;
++----------------------------------------+----------------------------------------------+
+; pulse_led:pulse_fast|ccr[0..4]         ; Stuck at GND due to stuck port data_in       ;
+; pulse_led:pulse_slow|ccr[0..2]         ; Stuck at GND due to stuck port data_in       ;
+; monitor:monitor|state[3]               ; Merged with monitor:monitor|state[2]         ;
+; pulse_led:pulse_slow|counter[0]        ; Merged with pulse_led:pulse_fast|counter[0]  ;
+; pulse_led:pulse_slow|counter[1]        ; Merged with pulse_led:pulse_fast|counter[1]  ;
+; pulse_led:pulse_slow|counter[2]        ; Merged with pulse_led:pulse_fast|counter[2]  ;
+; pulse_led:pulse_slow|counter[3]        ; Merged with pulse_led:pulse_fast|counter[3]  ;
+; pulse_led:pulse_slow|counter[4]        ; Merged with pulse_led:pulse_fast|counter[4]  ;
+; pulse_led:pulse_slow|counter[5]        ; Merged with pulse_led:pulse_fast|counter[5]  ;
+; pulse_led:pulse_slow|counter[6]        ; Merged with pulse_led:pulse_fast|counter[6]  ;
+; pulse_led:pulse_slow|counter[7]        ; Merged with pulse_led:pulse_fast|counter[7]  ;
+; pulse_led:pulse_slow|counter[8]        ; Merged with pulse_led:pulse_fast|counter[8]  ;
+; pulse_led:pulse_slow|counter[9]        ; Merged with pulse_led:pulse_fast|counter[9]  ;
+; pulse_led:pulse_slow|counter[10]       ; Merged with pulse_led:pulse_fast|counter[10] ;
+; pulse_led:pulse_slow|counter[11]       ; Merged with pulse_led:pulse_fast|counter[11] ;
+; pulse_led:pulse_slow|counter[12]       ; Merged with pulse_led:pulse_fast|counter[12] ;
+; pulse_led:pulse_slow|counter[13]       ; Merged with pulse_led:pulse_fast|counter[13] ;
+; pulse_led:pulse_slow|counter[14]       ; Merged with pulse_led:pulse_fast|counter[14] ;
+; pulse_led:pulse_slow|counter[15]       ; Merged with pulse_led:pulse_fast|counter[15] ;
+; pulse_led:pulse_slow|counter[16]       ; Merged with pulse_led:pulse_fast|counter[16] ;
+; pulse_led:pulse_slow|counter[17]       ; Merged with pulse_led:pulse_fast|counter[17] ;
+; pulse_led:pulse_slow|counter[18]       ; Merged with pulse_led:pulse_fast|counter[18] ;
+; pulse_led:pulse_slow|counter[19]       ; Merged with pulse_led:pulse_fast|counter[19] ;
+; pulse_led:pulse_slow|counter[20]       ; Merged with pulse_led:pulse_fast|counter[20] ;
+; pulse_led:pulse_slow|counter[21]       ; Merged with pulse_led:pulse_fast|counter[21] ;
+; pulse_led:pulse_slow|counter[22]       ; Merged with pulse_led:pulse_fast|counter[22] ;
+; pulse_led:pulse_slow|counter[23]       ; Merged with pulse_led:pulse_fast|counter[23] ;
+; pulse_led:pulse_slow|counter[24]       ; Merged with pulse_led:pulse_fast|counter[24] ;
+; pulse_led:pulse_slow|counter[25]       ; Merged with pulse_led:pulse_fast|counter[25] ;
+; pulse_led:pulse_slow|counter[26]       ; Merged with pulse_led:pulse_fast|counter[26] ;
+; pulse_led:pulse_slow|counter[27]       ; Merged with pulse_led:pulse_fast|counter[27] ;
+; pulse_led:pulse_slow|counter[28]       ; Merged with pulse_led:pulse_fast|counter[28] ;
+; monitor:monitor|state[2]               ; Stuck at GND due to stuck port data_in       ;
+; pulse_led:pulse_fast|ccr[25..28]       ; Stuck at GND due to stuck port data_in       ;
+; pulse_led:pulse_slow|ccr[25..28]       ; Stuck at GND due to stuck port data_in       ;
+; pulse_led:pulse_fast|ccr[22..24]       ; Stuck at GND due to stuck port data_in       ;
+; pulse_led:pulse_slow|ccr[22..24]       ; Stuck at GND due to stuck port data_in       ;
+; clk_div:clk_div|counter[0]             ; Merged with pulse_led:pulse_fast|counter[0]  ;
+; clk_div:clk_div|counter[1]             ; Merged with pulse_led:pulse_fast|counter[1]  ;
+; pulse_led:pulse_slow|ccr[19..21]       ; Stuck at GND due to stuck port data_in       ;
+; pulse_led:pulse_fast|ccr[19..21]       ; Stuck at GND due to stuck port data_in       ;
+; Total Number of Removed Registers = 61 ;                                              ;
++----------------------------------------+----------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------------------+
+; Removed Registers Triggering Further Register Optimizations                                                            ;
++------------------------------+---------------------------+-------------------------------------------------------------+
+; Register name                ; Reason for Removal        ; Registers Removed due to This Register                      ;
++------------------------------+---------------------------+-------------------------------------------------------------+
+; pulse_led:pulse_fast|ccr[25] ; Stuck at GND              ; pulse_led:pulse_fast|ccr[22], pulse_led:pulse_fast|ccr[23], ;
+;                              ; due to stuck port data_in ; pulse_led:pulse_fast|ccr[24], pulse_led:pulse_fast|ccr[21], ;
+;                              ;                           ; pulse_led:pulse_fast|ccr[20], pulse_led:pulse_fast|ccr[19]  ;
+; pulse_led:pulse_slow|ccr[25] ; Stuck at GND              ; pulse_led:pulse_slow|ccr[22], pulse_led:pulse_slow|ccr[23], ;
+;                              ; due to stuck port data_in ; pulse_led:pulse_slow|ccr[24], pulse_led:pulse_slow|ccr[21], ;
+;                              ;                           ; pulse_led:pulse_slow|ccr[20], pulse_led:pulse_slow|ccr[19]  ;
++------------------------------+---------------------------+-------------------------------------------------------------+
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 105   ;
+; Number of registers using Synchronous Clear  ; 0     ;
+; Number of registers using Synchronous Load   ; 0     ;
+; Number of registers using Asynchronous Clear ; 0     ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 30    ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++--------------------------------------------------+
+; Inverted Register Statistics                     ;
++----------------------------------------+---------+
+; Inverted Register                      ; Fan out ;
++----------------------------------------+---------+
+; disp_mode                              ; 21      ;
+; Total number of inverted registers = 1 ;         ;
++----------------------------------------+---------+
+
+
++-------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                                              ;
++--------------------+-----------+---------------+----------------------+------------------------+-------------------------------+----------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered                    ; Example Multiplexer Output ;
++--------------------+-----------+---------------+----------------------+------------------------+-------------------------------+----------------------------+
+; 8:1                ; 3 bits    ; 15 LEs        ; 12 LEs               ; 3 LEs                  ; |top|monitor:monitor|state[2] ;                            ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; |top|seg_1[1]                 ;                            ;
+; 3:1                ; 3 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; |top|seg_0[1]                 ;                            ;
++--------------------+-----------+---------------+----------------------+------------------------+-------------------------------+----------------------------+
+
+
++---------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Top-level Entity: |top ;
++------------------+-------+------------------------------------------+
+; Parameter Name   ; Value ; Type                                     ;
++------------------+-------+------------------------------------------+
+; STATE_NORMAL     ; 0     ; Signed Integer                           ;
+; STATE_BORDERLINE ; 1     ; Signed Integer                           ;
+; STATE_ATTENTION  ; 2     ; Signed Integer                           ;
+; STATE_EMERGENCY  ; 3     ; Signed Integer                           ;
++------------------+-------+------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++--------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: monitor:monitor ;
++------------------+-------+-----------------------------------+
+; Parameter Name   ; Value ; Type                              ;
++------------------+-------+-----------------------------------+
+; STATE_NORMAL     ; 0     ; Signed Integer                    ;
+; STATE_BORDERLINE ; 1     ; Signed Integer                    ;
+; STATE_ATTENTION  ; 2     ; Signed Integer                    ;
+; STATE_EMERGENCY  ; 3     ; Signed Integer                    ;
++------------------+-------+-----------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: pulse_led:pulse_slow ;
++----------------+--------+-----------------------------------------+
+; Parameter Name ; Value  ; Type                                    ;
++----------------+--------+-----------------------------------------+
+; period         ; 500000 ; Signed Integer                          ;
+; step_size      ; 1000   ; Signed Integer                          ;
++----------------+--------+-----------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++-------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: pulse_led:pulse_fast ;
++----------------+--------+-----------------------------------------+
+; Parameter Name ; Value  ; Type                                    ;
++----------------+--------+-----------------------------------------+
+; period         ; 500000 ; Signed Integer                          ;
+; step_size      ; 60000  ; Signed Integer                          ;
++----------------+--------+-----------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "bin_2_bcd:bcd_frac"                                                                                                                             ;
++----------+--------+----------+---------------------------------------------------------------------------------------------------------------------------------------------+
+; Port     ; Type   ; Severity ; Details                                                                                                                                     ;
++----------+--------+----------+---------------------------------------------------------------------------------------------------------------------------------------------+
+; bin      ; Input  ; Warning  ; Input port expression (4 bits) is smaller than the input port (8 bits) it drives.  Extra input bit(s) "bin[7..4]" will be connected to GND. ;
+; tens     ; Output ; Info     ; Explicitly unconnected                                                                                                                      ;
+; hundreds ; Output ; Info     ; Explicitly unconnected                                                                                                                      ;
++----------+--------+----------+---------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "bin_2_bcd:bcd"                                                                                                                                  ;
++----------+--------+----------+---------------------------------------------------------------------------------------------------------------------------------------------+
+; Port     ; Type   ; Severity ; Details                                                                                                                                     ;
++----------+--------+----------+---------------------------------------------------------------------------------------------------------------------------------------------+
+; bin      ; Input  ; Warning  ; Input port expression (6 bits) is smaller than the input port (8 bits) it drives.  Extra input bit(s) "bin[7..6]" will be connected to GND. ;
+; hundreds ; Output ; Info     ; Explicitly unconnected                                                                                                                      ;
++----------+--------+----------+---------------------------------------------------------------------------------------------------------------------------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:01     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus II 32-bit Analysis & Synthesis
+    Info: Version 12.0 Build 178 05/31/2012 SJ Web Edition
+    Info: Processing started: Tue Sep 18 02:15:28 2012
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off monitor -c top
+Warning (20028): Parallel compilation is not licensed and has been disabled
+Info (12021): Found 1 design units, including 1 entities, in source file verilog/top.v
+    Info (12023): Found entity 1: top
+Info (12021): Found 1 design units, including 1 entities, in source file verilog/seven_seg.v
+    Info (12023): Found entity 1: seven_seg
+Info (12021): Found 1 design units, including 1 entities, in source file verilog/pulse_led.v
+    Info (12023): Found entity 1: pulse_led
+Info (12021): Found 1 design units, including 1 entities, in source file verilog/monitor.v
+    Info (12023): Found entity 1: monitor
+Info (12021): Found 1 design units, including 1 entities, in source file verilog/clk_div.v
+    Info (12023): Found entity 1: clk_div
+Info (12021): Found 1 design units, including 1 entities, in source file verilog/bin_2_bcd.v
+    Info (12023): Found entity 1: bin_2_bcd
+Info (12127): Elaborating entity "top" for the top level hierarchy
+Warning (10230): Verilog HDL assignment warning at top.v(107): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at top.v(108): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at top.v(109): truncated value with size 32 to match size of target (4)
+Warning (10034): Output port "LEDG[7..1]" at top.v(5) has no driver
+Info (12128): Elaborating entity "clk_div" for hierarchy "clk_div:clk_div"
+Warning (10230): Verilog HDL assignment warning at clk_div.v(11): truncated value with size 32 to match size of target (28)
+Info (12128): Elaborating entity "monitor" for hierarchy "monitor:monitor"
+Warning (10230): Verilog HDL assignment warning at monitor.v(21): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(22): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(23): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(24): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(26): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(29): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(31): truncated value with size 32 to match size of target (4)
+Info (12128): Elaborating entity "bin_2_bcd" for hierarchy "bin_2_bcd:bcd"
+Warning (10230): Verilog HDL assignment warning at bin_2_bcd.v(40): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at bin_2_bcd.v(27): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at bin_2_bcd.v(25): truncated value with size 32 to match size of target (4)
+Info (12128): Elaborating entity "seven_seg" for hierarchy "seven_seg:s0"
+Info (12128): Elaborating entity "pulse_led" for hierarchy "pulse_led:pulse_slow"
+Warning (10230): Verilog HDL assignment warning at pulse_led.v(14): truncated value with size 32 to match size of target (29)
+Warning (10230): Verilog HDL assignment warning at pulse_led.v(17): truncated value with size 32 to match size of target (1)
+Warning (10230): Verilog HDL assignment warning at pulse_led.v(19): truncated value with size 32 to match size of target (1)
+Warning (10230): Verilog HDL assignment warning at pulse_led.v(24): truncated value with size 32 to match size of target (29)
+Info (12128): Elaborating entity "pulse_led" for hierarchy "pulse_led:pulse_fast"
+Warning (10230): Verilog HDL assignment warning at pulse_led.v(14): truncated value with size 32 to match size of target (29)
+Warning (10230): Verilog HDL assignment warning at pulse_led.v(17): truncated value with size 32 to match size of target (1)
+Warning (10230): Verilog HDL assignment warning at pulse_led.v(19): truncated value with size 32 to match size of target (1)
+Warning (10230): Verilog HDL assignment warning at pulse_led.v(24): truncated value with size 32 to match size of target (29)
+Warning (12241): 2 hierarchies have connectivity warnings - see the Connectivity Checks report folder
+Warning (13024): Output pins are stuck at VCC or GND
+    Warning (13410): Pin "LEDG[1]" is stuck at GND
+    Warning (13410): Pin "LEDG[2]" is stuck at GND
+    Warning (13410): Pin "LEDG[3]" is stuck at GND
+    Warning (13410): Pin "LEDG[4]" is stuck at GND
+    Warning (13410): Pin "LEDG[5]" is stuck at GND
+    Warning (13410): Pin "LEDG[6]" is stuck at GND
+    Warning (13410): Pin "LEDG[7]" is stuck at GND
+    Warning (13410): Pin "LEDR[9]" is stuck at GND
+    Warning (13410): Pin "HEX3[0]" is stuck at VCC
+    Warning (13410): Pin "HEX3[1]" is stuck at VCC
+    Warning (13410): Pin "HEX3[2]" is stuck at VCC
+    Warning (13410): Pin "HEX3[3]" is stuck at VCC
+    Warning (13410): Pin "HEX3[4]" is stuck at VCC
+    Warning (13410): Pin "HEX3[5]" is stuck at VCC
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Warning (21074): Design contains 3 input pin(s) that do not drive logic
+    Warning (15610): No output dependent on input pin "KEY[1]"
+    Warning (15610): No output dependent on input pin "KEY[2]"
+    Warning (15610): No output dependent on input pin "KEY[3]"
+Info (21057): Implemented 419 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 15 input pins
+    Info (21059): Implemented 46 output pins
+    Info (21061): Implemented 358 logic cells
+Info: Quartus II 32-bit Analysis & Synthesis was successful. 0 errors, 44 warnings
+    Info: Peak virtual memory: 351 megabytes
+    Info: Processing ended: Tue Sep 18 02:15:31 2012
+    Info: Elapsed time: 00:00:03
+    Info: Total CPU time (on all processors): 00:00:02
+
+
