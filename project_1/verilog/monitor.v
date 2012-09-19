@@ -3,6 +3,9 @@ module monitor(
     input mode,
     input [5:0] temp,
     input [3:0] temp_frac,
+    output reg temp_delta_sign,
+    output reg [5:0] temp_delta,
+    output reg [3:0] temp_delta_frac,
     output reg [3:0] state
 );
 
@@ -14,6 +17,7 @@ module monitor(
     reg old_mode = 0;
     reg [9:0] temp_comb;
     reg [9:0] old_temp_comb;
+    reg [9:0] temp_comb_delta;
 
     always @(posedge clk) begin
         temp_comb = (temp << 4) | temp_frac;
@@ -24,12 +28,25 @@ module monitor(
         if (temp_comb >= (50 << 4)) state = STATE_EMERGENCY;
 
         if (mode != old_mode) state = STATE_EMERGENCY;
-        
-        if (temp_comb > old_temp_comb)
-            if (temp_comb - old_temp_comb > (5 << 4)) state = STATE_EMERGENCY;
-        else
-            if (old_temp_comb - temp_comb > (5 << 4)) state = STATE_EMERGENCY;
+       
+        // compute the change in temp from the last reading
+        if (temp_comb > old_temp_comb) begin
+            temp_comb_delta = temp_comb - old_temp_comb;
+            temp_delta_sign = 0;
+        end else begin
+            temp_comb_delta = old_temp_comb - temp_comb;
+            temp_delta_sign = 1;
+        end
 
+        // if the new temp is more than 5 away from current temp
+        if (temp_comb_delta > (5 << 4)) 
+            state = STATE_EMERGENCY;
+
+        // split temp delta into units and fraction
+        temp_delta = temp_comb_delta[9:4];
+        temp_delta_frac = temp_comb_delta[3:0];
+
+        // current temp is now the old temp
         old_temp_comb = temp_comb;
         old_mode = mode;
     end

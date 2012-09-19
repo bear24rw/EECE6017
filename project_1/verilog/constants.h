@@ -1,10 +1,14 @@
 `ifndef _constants_h_
 `define _constants_h_
 
-`define STATE_NORMAL      0
-`define STATE_BORDERLINE  1
-`define STATE_ATTENTION   2
-`define STATE_EMERGENCY   3
+`define STATE_NORMAL        0
+`define STATE_BORDERLINE    1
+`define STATE_ATTENTION     2
+`define STATE_EMERGENCY     3
+
+`define DISP_MODE_TEMP      0
+`define DISP_MODE_DELTA     1
+`define DISP_MODE_STATE     2
 
 `define BCD_0       5'h0
 `define BCD_1       5'h1

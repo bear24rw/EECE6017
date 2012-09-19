@@ -21,28 +21,30 @@ module top(
     clk_div clk_div(CLOCK_50, clk_1hz);
 
     // -------------------------------------------------
-    //              DISPLAY TOGGLE
+    //              DISPLAY MODE
     // -------------------------------------------------
 
-    // toggle the 7 seg display mode every second
-    // disp_mode = 1 : showing temp
-    // disp_mode = 0 : showing state
-    reg disp_mode = 1;
+    reg [2:0] disp_mode = 1;
     always @(posedge clk_1hz)
-        disp_mode <= ~disp_mode;
+        case (disp_mode)
+            `DISP_MODE_TEMP:  disp_mode = `DISP_MODE_DELTA;
+            `DISP_MODE_DELTA: disp_mode = `DISP_MODE_STATE;
+            `DISP_MODE_STATE: disp_mode = `DISP_MODE_TEMP;
+        endcase
 
     // -------------------------------------------------
     //              TEMP MODE
     // -------------------------------------------------
 
     // toggle the mode we're in (pos or neg temps)
-    // display it on LEDG0
-    // temp_mode = 1 : negative temps
-    // temp_mode = 0 : positive temps
-    reg temp_mode = 0;
+    // temp_value_sign = 1 : negative temps
+    // temp_value_sign = 0 : positive temps
+    reg temp_value_sign = 0;
     always @(posedge KEY[0])
-        temp_mode <= ~temp_mode;
-    assign LEDG[0] = temp_mode;
+        temp_value_sign <= ~temp_value_sign;
+
+    // display it on LEDG0
+    assign LEDG[0] = temp_value_sign;
 
     // -------------------------------------------------
     //              TEMP VALUE
@@ -64,12 +66,18 @@ module top(
     // -------------------------------------------------
 
     wire [3:0] state;
+    wire [5:0] temp_delta;
+    wire [3:0] temp_delta_frac;
+    wire temp_delta_sign;
 
     monitor monitor(
         .clk(clk_1hz),
-        .mode(temp_mode),
+        .mode(temp_value_sign),
         .temp(temp),
         .temp_frac(temp_frac),
+        .temp_delta(temp_delta),
+        .temp_delta_frac(temp_delta_frac),
+        .temp_delta_sign(temp_delta_sign),
         .state(state)
     );
 
@@ -78,20 +86,43 @@ module top(
     // -------------------------------------------------
 
     // convert the temperature into BCD
-    wire [3:0] temp_bcd_tens;
-    wire [3:0] temp_bcd_ones;
-    wire [3:0] temp_bcd_frac;
+    wire [3:0] temp_value_bcd_tens;
+    wire [3:0] temp_value_bcd_ones;
+    wire [3:0] temp_value_bcd_frac;
 
     bin_2_bcd bcd(
         .bin(temp),
-        .ones(temp_bcd_ones),
-        .tens(temp_bcd_tens),
+        .ones(temp_value_bcd_ones),
+        .tens(temp_value_bcd_tens),
         .hundreds()
     );
 
     bin_2_bcd bcd_frac(
         .bin(temp_frac),
-        .ones(temp_bcd_frac),
+        .ones(temp_value_bcd_frac),
+        .tens(),
+        .hundreds()
+    );
+    
+    // -------------------------------------------------
+    //              TEMP DELTA TO BCD
+    // -------------------------------------------------
+
+    // convert the temperature into BCD
+    wire [3:0] temp_delta_bcd_tens;
+    wire [3:0] temp_delta_bcd_ones;
+    wire [3:0] temp_delta_bcd_frac;
+
+    bin_2_bcd delta_bcd(
+        .bin(temp_delta),
+        .ones(temp_delta_bcd_ones),
+        .tens(temp_delta_bcd_tens),
+        .hundreds()
+    );
+
+    bin_2_bcd delta_bcd_frac(
+        .bin(temp_delta_frac),
+        .ones(temp_delta_bcd_frac),
         .tens(),
         .hundreds()
     );
@@ -112,27 +143,43 @@ module top(
         .bcd_2(state_bcd_2),
         .bcd_3(state_bcd_3)
     );
+
     // -------------------------------------------------
-    //              TEMP MODE TO BCD
+    //              TEMP SIGN TO BCD
     // -------------------------------------------------
 
-    wire [4:0] temp_mode_bcd;
-    assign temp_mode_bcd = temp_mode ? `BCD_NEG : `BCD_BLANK;
+    wire [4:0] temp_value_sign_bcd;
+    wire [4:0] temp_delta_bcd_sign;
+    assign temp_value_sign_bcd = temp_value_sign ? `BCD_NEG : `BCD_BLANK;
+    assign temp_delta_bcd_sign = temp_delta_sign ? `BCD_NEG : `BCD_BLANK;
+
 
     // -------------------------------------------------
     //                  7 SEGS
     // -------------------------------------------------
 
-    // mux the seven segs depending on what display mode were in
     wire [4:0] seg_0;
     wire [4:0] seg_1;
     wire [4:0] seg_2;
     wire [4:0] seg_3;
 
-    assign seg_0 = disp_mode ? temp_bcd_frac : state_bcd_0;
-    assign seg_1 = disp_mode ? temp_bcd_ones : state_bcd_1;
-    assign seg_2 = disp_mode ? temp_bcd_tens : state_bcd_2;
-    assign seg_3 = disp_mode ? temp_mode_bcd : state_bcd_3;
+    // mux the displays depending on what display mode were in
+    assign seg_0 = 
+        (disp_mode == `DISP_MODE_TEMP)  ? temp_value_bcd_frac :
+        (disp_mode == `DISP_MODE_DELTA) ? temp_delta_bcd_frac :
+        (disp_mode == `DISP_MODE_STATE) ? state_bcd_0 : 0;
+    assign seg_1 = 
+        (disp_mode == `DISP_MODE_TEMP)  ? temp_value_bcd_ones :
+        (disp_mode == `DISP_MODE_DELTA) ? temp_delta_bcd_ones :
+        (disp_mode == `DISP_MODE_STATE) ? state_bcd_1 : 0;
+    assign seg_2 = 
+        (disp_mode == `DISP_MODE_TEMP)  ? temp_value_bcd_tens :
+        (disp_mode == `DISP_MODE_DELTA) ? temp_delta_bcd_tens :
+        (disp_mode == `DISP_MODE_STATE) ? state_bcd_2 : 0;
+    assign seg_3 = 
+        (disp_mode == `DISP_MODE_TEMP)  ? temp_value_sign_bcd :
+        (disp_mode == `DISP_MODE_DELTA) ? temp_delta_bcd_sign :
+        (disp_mode == `DISP_MODE_STATE) ? state_bcd_3 : 0;
 
     seven_seg s0(seg_0, HEX0);
     seven_seg s1(seg_1, HEX1);
