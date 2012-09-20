@@ -1,5 +1,5 @@
 Flow report for top
-Mon Sep 10 17:27:28 2012
+Tue Sep 11 21:46:29 2012
 Quartus II 32-bit Version 12.0 Build 178 05/31/2012 SJ Web Edition
 
 
@@ -38,22 +38,22 @@ applicable agreement for further details.
 +-------------------------------------------------------------------------------+
 ; Flow Summary                                                                  ;
 +------------------------------------+------------------------------------------+
-; Flow Status                        ; Successful - Mon Sep 10 17:27:26 2012    ;
+; Flow Status                        ; Successful - Tue Sep 11 21:46:29 2012    ;
 ; Quartus II 32-bit Version          ; 12.0 Build 178 05/31/2012 SJ Web Edition ;
 ; Revision Name                      ; top                                      ;
 ; Top-level Entity Name              ; top                                      ;
 ; Family                             ; Cyclone II                               ;
 ; Device                             ; EP2C20F484C7                             ;
 ; Timing Models                      ; Final                                    ;
-; Total logic elements               ; 29 / 18,752 ( < 1 % )                    ;
-;     Total combinational functions  ; 29 / 18,752 ( < 1 % )                    ;
-;     Dedicated logic registers      ; 9 / 18,752 ( < 1 % )                     ;
-; Total registers                    ; 9                                        ;
-; Total pins                         ; 4 / 315 ( 1 % )                          ;
-; Total virtual pins                 ; 0                                        ;
-; Total memory bits                  ; 0 / 239,616 ( 0 % )                      ;
-; Embedded Multiplier 9-bit elements ; 0 / 52 ( 0 % )                           ;
-; Total PLLs                         ; 0 / 4 ( 0 % )                            ;
+; Total logic elements               ; N/A until Partition Merge                ;
+;     Total combinational functions  ; N/A until Partition Merge                ;
+;     Dedicated logic registers      ; N/A until Partition Merge                ;
+; Total registers                    ; N/A until Partition Merge                ;
+; Total pins                         ; N/A until Partition Merge                ;
+; Total virtual pins                 ; N/A until Partition Merge                ;
+; Total memory bits                  ; N/A until Partition Merge                ;
+; Embedded Multiplier 9-bit elements ; N/A until Partition Merge                ;
+; Total PLLs                         ; N/A until Partition Merge                ;
 +------------------------------------+------------------------------------------+
 
 
@@ -62,7 +62,7 @@ applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 09/10/2012 15:51:03 ;
+; Start date & time ; 09/11/2012 21:46:29 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; top                 ;
 +-------------------+---------------------+
@@ -73,7 +73,7 @@ applicable agreement for further details.
 +--------------------------------------+---------------------------------------+---------------+-------------+----------------+
 ; Assignment Name                      ; Value                                 ; Default Value ; Entity Name ; Section Id     ;
 +--------------------------------------+---------------------------------------+---------------+-------------+----------------+
-; COMPILER_SIGNATURE_ID                ; 136298639247.134730666302656          ; --            ; --          ; --             ;
+; COMPILER_SIGNATURE_ID                ; 136298639247.134741438912130          ; --            ; --          ; --             ;
 ; EDA_DESIGN_INSTANCE_NAME             ; NA                                    ; --            ; --          ; top_tb         ;
 ; EDA_NATIVELINK_SIMULATION_TEST_BENCH ; top_tb                                ; --            ; --          ; eda_simulation ;
 ; EDA_OUTPUT_DATA_FORMAT               ; Verilog Hdl                           ; --            ; --          ; eda_simulation ;
@@ -94,35 +94,29 @@ applicable agreement for further details.
 +--------------------------------------+---------------------------------------+---------------+-------------+----------------+
 
 
-+-------------------------------------------------------------------------------------------------------------------------------+
-; Flow Elapsed Time                                                                                                             ;
-+---------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Module Name               ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
-+---------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis      ; 00:00:01     ; 1.0                     ; --                  ; 00:00:01                           ;
-; Fitter                    ; 00:00:06     ; 1.0                     ; --                  ; 00:00:06                           ;
-; TimeQuest Timing Analyzer ; 00:00:01     ; 1.0                     ; --                  ; 00:00:01                           ;
-; Total                     ; 00:00:08     ; --                      ; --                  ; 00:00:08                           ;
-+---------------------------+--------------+-------------------------+---------------------+------------------------------------+
++----------------------------------------------------------------------------------------------------------------------------+
+; Flow Elapsed Time                                                                                                          ;
++------------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Module Name            ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
++------------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Analysis & Elaboration ; 00:00:00     ; 1.0                     ; --                  ; 00:00:01                           ;
+; Total                  ; 00:00:00     ; --                      ; --                  ; 00:00:01                           ;
++------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
-+--------------------------------------------------------------------------------------+
-; Flow OS Summary                                                                      ;
-+---------------------------+------------------+---------+------------+----------------+
-; Module Name               ; Machine Hostname ; OS Name ; OS Version ; Processor type ;
-+---------------------------+------------------+---------+------------+----------------+
-; Analysis & Synthesis      ; user-desktop     ; This is ; This is    ; x86_64         ;
-; Fitter                    ; user-desktop     ; This is ; This is    ; x86_64         ;
-; TimeQuest Timing Analyzer ; user-desktop     ; This is ; This is    ; x86_64         ;
-+---------------------------+------------------+---------+------------+----------------+
++-----------------------------------------------------------------------------------+
+; Flow OS Summary                                                                   ;
++------------------------+------------------+---------+------------+----------------+
+; Module Name            ; Machine Hostname ; OS Name ; OS Version ; Processor type ;
++------------------------+------------------+---------+------------+----------------+
+; Analysis & Elaboration ; user-desktop     ; This is ; This is    ; x86_64         ;
++------------------------+------------------+---------+------------+----------------+
 
 
 ------------
 ; Flow Log ;
 ------------
-quartus_map --read_settings_files=on --write_settings_files=off fsm -c top
-quartus_fit --read_settings_files=on --write_settings_files=off fsm -c top
-quartus_sta fsm -c top
+quartus_map --read_settings_files=on --write_settings_files=off fsm -c top --analysis_and_elaboration
 
 
 

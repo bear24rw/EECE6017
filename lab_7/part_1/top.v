@@ -17,11 +17,11 @@ module top (
 
     assign b_d = (~w) & (i_q | h_q | g_q | f_q | a_q) & (~b_q);
     assign f_d = (w) & (e_q | d_q | c_q | b_q | a_q) & (~f_q);
-    
+
     assign c_d = b_q & (~w) & ~c_q;
     assign d_d = c_q & (~w) & ~d_q;
     assign e_d = (d_q & (~w)) | (e_q & ~w);
-    
+
     assign g_d = f_q & w & ~g_q;
     assign h_d = g_q & w & ~h_q;
     assign i_d = (h_q & w) | (i_q & w);

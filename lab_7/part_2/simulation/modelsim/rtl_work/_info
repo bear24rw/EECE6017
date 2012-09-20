@@ -7,7 +7,7 @@ vtop
 IlgN3kB9X?78HzbzgGmUYX2
 V@X?DmJa_1S<OMFIe@e^eW3
 Z1 d/home/user/school/emb_sys/lab_7/part_2/simulation/modelsim
-w1347305955
+w1347306400
 8/home/user/school/emb_sys/lab_7/part_2/top.v
 F/home/user/school/emb_sys/lab_7/part_2/top.v
 L0 1
@@ -17,7 +17,7 @@ r1
 Z3 o-vlog01compat -work work -O0
 !s100 ^ICY0Vg@zNo5`Khf`=3NR1
 !s85 0
-!s108 1347305979.720373
+!s108 1347414392.946987
 !s107 /home/user/school/emb_sys/lab_7/part_2/top.v|
 !s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+/home/user/school/emb_sys/lab_7/part_2|/home/user/school/emb_sys/lab_7/part_2/top.v|
 !s101 -O0
@@ -35,7 +35,7 @@ R2
 r1
 !s85 0
 31
-!s108 1347305979.726238
+!s108 1347414392.975354
 !s107 /home/user/school/emb_sys/lab_7/part_2/top_tb.v|
 !s90 -reportprogress|300|-vlog01compat|-work|work|+incdir+/home/user/school/emb_sys/lab_7/part_2|/home/user/school/emb_sys/lab_7/part_2/top_tb.v|
 !s101 -O0

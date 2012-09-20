@@ -61,13 +61,11 @@
 # Break in Module top_tb at /home/user/school/emb_sys/lab_7/part_2/top_tb.v line 51
 # Simulation Breakpoint: Break in Module top_tb at /home/user/school/emb_sys/lab_7/part_2/top_tb.v line 51
 # MACRO ./top_run_msim_rtl_verilog.do PAUSED at line 17
-# A time value could not be extracted from the current line
 add wave -position end  sim:/top_tb/uut/cur_state
 restart
-run
+run -all
 # w | z
 # --------
-run -all
 # 0 | 0
 # 0 | 0
 # 1 | 0
