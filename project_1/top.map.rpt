@@ -1,5 +1,5 @@
 Analysis & Synthesis report for top
-Wed Sep 19 13:42:59 2012
+Wed Sep 19 14:41:54 2012
 Quartus II 32-bit Version 12.0 Build 178 05/31/2012 SJ Web Edition
 
 
@@ -17,16 +17,17 @@ Quartus II 32-bit Version 12.0 Build 178 05/31/2012 SJ Web Edition
   9. Registers Removed During Synthesis
  10. Removed Registers Triggering Further Register Optimizations
  11. General Register Statistics
- 12. Multiplexer Restructuring Statistics (Restructuring Performed)
- 13. Parameter Settings for User Entity Instance: monitor:monitor
- 14. Parameter Settings for User Entity Instance: pulse_led:pulse_slow
- 15. Parameter Settings for User Entity Instance: pulse_led:pulse_fast
- 16. Port Connectivity Checks: "bin_2_bcd:delta_bcd_frac"
- 17. Port Connectivity Checks: "bin_2_bcd:delta_bcd"
- 18. Port Connectivity Checks: "bin_2_bcd:bcd_frac"
- 19. Port Connectivity Checks: "bin_2_bcd:bcd"
- 20. Elapsed Time Per Partition
- 21. Analysis & Synthesis Messages
+ 12. Inverted Register Statistics
+ 13. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 14. Parameter Settings for User Entity Instance: monitor:monitor
+ 15. Parameter Settings for User Entity Instance: pulse_led:pulse_slow
+ 16. Parameter Settings for User Entity Instance: pulse_led:pulse_fast
+ 17. Port Connectivity Checks: "bin_2_bcd:delta_bcd_frac"
+ 18. Port Connectivity Checks: "bin_2_bcd:delta_bcd"
+ 19. Port Connectivity Checks: "bin_2_bcd:bcd_frac"
+ 20. Port Connectivity Checks: "bin_2_bcd:bcd"
+ 21. Elapsed Time Per Partition
+ 22. Analysis & Synthesis Messages
 
 
 
@@ -52,15 +53,15 @@ applicable agreement for further details.
 +-------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                  ;
 +------------------------------------+------------------------------------------+
-; Analysis & Synthesis Status        ; Successful - Wed Sep 19 13:42:59 2012    ;
+; Analysis & Synthesis Status        ; Successful - Wed Sep 19 14:41:54 2012    ;
 ; Quartus II 32-bit Version          ; 12.0 Build 178 05/31/2012 SJ Web Edition ;
 ; Revision Name                      ; top                                      ;
 ; Top-level Entity Name              ; top                                      ;
 ; Family                             ; Cyclone II                               ;
-; Total logic elements               ; 395                                      ;
-;     Total combinational functions  ; 386                                      ;
-;     Dedicated logic registers      ; 117                                      ;
-; Total registers                    ; 117                                      ;
+; Total logic elements               ; 389                                      ;
+;     Total combinational functions  ; 380                                      ;
+;     Dedicated logic registers      ; 118                                      ;
+; Total registers                    ; 118                                      ;
 ; Total pins                         ; 61                                       ;
 ; Total virtual pins                 ; 0                                        ;
 ; Total memory bits                  ; 0                                        ;
@@ -185,27 +186,27 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +---------------------------------------------+----------+
 ; Resource                                    ; Usage    ;
 +---------------------------------------------+----------+
-; Estimated Total logic elements              ; 395      ;
+; Estimated Total logic elements              ; 389      ;
 ;                                             ;          ;
-; Total combinational functions               ; 386      ;
+; Total combinational functions               ; 380      ;
 ; Logic element usage by number of LUT inputs ;          ;
-;     -- 4 input functions                    ; 147      ;
-;     -- 3 input functions                    ; 98       ;
+;     -- 4 input functions                    ; 137      ;
+;     -- 3 input functions                    ; 102      ;
 ;     -- <=2 input functions                  ; 141      ;
 ;                                             ;          ;
 ; Logic elements by mode                      ;          ;
-;     -- normal mode                          ; 242      ;
+;     -- normal mode                          ; 236      ;
 ;     -- arithmetic mode                      ; 144      ;
 ;                                             ;          ;
-; Total registers                             ; 117      ;
-;     -- Dedicated logic registers            ; 117      ;
+; Total registers                             ; 118      ;
+;     -- Dedicated logic registers            ; 118      ;
 ;     -- I/O registers                        ; 0        ;
 ;                                             ;          ;
 ; I/O pins                                    ; 61       ;
 ; Maximum fan-out node                        ; CLOCK_50 ;
 ; Maximum fan-out                             ; 89       ;
-; Total fan-out                               ; 1454     ;
-; Average fan-out                             ; 2.58     ;
+; Total fan-out                               ; 1475     ;
+; Average fan-out                             ; 2.64     ;
 +---------------------------------------------+----------+
 
 
@@ -214,16 +215,16 @@ Parallel compilation was disabled, but you have multiple processors available. E
 +-------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------+--------------+
 ; Compilation Hierarchy Node    ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name           ; Library Name ;
 +-------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------+--------------+
-; |top                          ; 386 (57)          ; 117 (4)      ; 0           ; 0            ; 0       ; 0         ; 61   ; 0            ; |top                          ;              ;
+; |top                          ; 380 (53)          ; 118 (4)      ; 0           ; 0            ; 0       ; 0         ; 61   ; 0            ; |top                          ;              ;
 ;    |bin_2_bcd:bcd|            ; 5 (5)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|bin_2_bcd:bcd            ;              ;
 ;    |bin_2_bcd:delta_bcd_frac| ; 1 (1)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|bin_2_bcd:delta_bcd_frac ;              ;
 ;    |bin_2_bcd:delta_bcd|      ; 5 (5)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|bin_2_bcd:delta_bcd      ;              ;
 ;    |clk_div:clk_div|          ; 50 (50)           ; 27 (27)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|clk_div:clk_div          ;              ;
-;    |monitor:monitor|          ; 52 (52)           ; 24 (24)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|monitor:monitor          ;              ;
+;    |monitor:monitor|          ; 52 (52)           ; 25 (25)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|monitor:monitor          ;              ;
 ;    |pulse_led:pulse_fast|     ; 100 (100)         ; 45 (45)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|pulse_led:pulse_fast     ;              ;
-;    |pulse_led:pulse_slow|     ; 57 (57)           ; 17 (17)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|pulse_led:pulse_slow     ;              ;
+;    |pulse_led:pulse_slow|     ; 56 (56)           ; 17 (17)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|pulse_led:pulse_slow     ;              ;
 ;    |seven_seg:s0|             ; 21 (21)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|seven_seg:s0             ;              ;
-;    |seven_seg:s1|             ; 20 (20)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|seven_seg:s1             ;              ;
+;    |seven_seg:s1|             ; 19 (19)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|seven_seg:s1             ;              ;
 ;    |seven_seg:s2|             ; 14 (14)           ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|seven_seg:s2             ;              ;
 ;    |seven_seg:s3|             ; 4 (4)             ; 0 (0)        ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |top|seven_seg:s3             ;              ;
 +-------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+-------------------------------+--------------+
@@ -249,7 +250,7 @@ Encoding Type:  One-Hot
 +----------------------------------------+----------------------------------------------+
 ; pulse_led:pulse_fast|ccr[0..4]         ; Stuck at GND due to stuck port data_in       ;
 ; pulse_led:pulse_slow|ccr[0..3]         ; Stuck at GND due to stuck port data_in       ;
-; monitor:monitor|state[3]               ; Merged with monitor:monitor|state[2]         ;
+; monitor:monitor|state[2]               ; Merged with monitor:monitor|state[3]         ;
 ; pulse_led:pulse_slow|counter[0]        ; Merged with pulse_led:pulse_fast|counter[0]  ;
 ; pulse_led:pulse_slow|counter[1]        ; Merged with pulse_led:pulse_fast|counter[1]  ;
 ; pulse_led:pulse_slow|counter[2]        ; Merged with pulse_led:pulse_fast|counter[2]  ;
@@ -279,7 +280,7 @@ Encoding Type:  One-Hot
 ; pulse_led:pulse_slow|counter[26]       ; Merged with pulse_led:pulse_fast|counter[26] ;
 ; pulse_led:pulse_slow|counter[27]       ; Merged with pulse_led:pulse_fast|counter[27] ;
 ; pulse_led:pulse_slow|counter[28]       ; Merged with pulse_led:pulse_fast|counter[28] ;
-; monitor:monitor|state[2]               ; Stuck at GND due to stuck port data_in       ;
+; monitor:monitor|state[3]               ; Stuck at GND due to stuck port data_in       ;
 ; pulse_led:pulse_fast|ccr[25..28]       ; Stuck at GND due to stuck port data_in       ;
 ; pulse_led:pulse_slow|ccr[25..28]       ; Stuck at GND due to stuck port data_in       ;
 ; pulse_led:pulse_fast|ccr[22..24]       ; Stuck at GND due to stuck port data_in       ;
@@ -312,14 +313,24 @@ Encoding Type:  One-Hot
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 117   ;
+; Total registers                              ; 118   ;
 ; Number of registers using Synchronous Clear  ; 0     ;
 ; Number of registers using Synchronous Load   ; 0     ;
-; Number of registers using Asynchronous Clear ; 0     ;
+; Number of registers using Asynchronous Clear ; 24    ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 29    ;
+; Number of registers using Clock Enable       ; 53    ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
+
+
++--------------------------------------------------+
+; Inverted Register Statistics                     ;
++----------------------------------------+---------+
+; Inverted Register                      ; Fan out ;
++----------------------------------------+---------+
+; monitor:monitor|first_run              ; 2       ;
+; Total number of inverted registers = 1 ;         ;
++----------------------------------------+---------+
 
 
 +-------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -327,11 +338,13 @@ Encoding Type:  One-Hot
 +--------------------+-----------+---------------+----------------------+------------------------+-------------------------------+----------------------------+
 ; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered                    ; Example Multiplexer Output ;
 +--------------------+-----------+---------------+----------------------+------------------------+-------------------------------+----------------------------+
-; 7:1                ; 2 bits    ; 8 LEs         ; 8 LEs                ; 0 LEs                  ; |top|monitor:monitor|state[0] ;                            ;
-; 3:1                ; 6 bits    ; 12 LEs        ; 6 LEs                ; 6 LEs                  ; |top|seg_1[4]                 ;                            ;
+; 7:1                ; 3 bits    ; 12 LEs        ; 9 LEs                ; 3 LEs                  ; |top|monitor:monitor|state[0] ;                            ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; |top|seg_2[3]                 ;                            ;
+; 4:1                ; 3 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; |top|seg_1[4]                 ;                            ;
 ; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; |top|seg_1[0]                 ;                            ;
-; 5:1                ; 2 bits    ; 6 LEs         ; 6 LEs                ; 0 LEs                  ; |top|seg_1[1]                 ;                            ;
-; 5:1                ; 3 bits    ; 9 LEs         ; 9 LEs                ; 0 LEs                  ; |top|seg_0[2]                 ;                            ;
+; 5:1                ; 3 bits    ; 9 LEs         ; 9 LEs                ; 0 LEs                  ; |top|seg_0[3]                 ;                            ;
+; 6:1                ; 2 bits    ; 8 LEs         ; 6 LEs                ; 2 LEs                  ; |top|seg_1[3]                 ;                            ;
+; 13:1               ; 2 bits    ; 16 LEs        ; 12 LEs               ; 4 LEs                  ; |top|seg_1[2]                 ;                            ;
 +--------------------+-----------+---------------+----------------------+------------------------+-------------------------------+----------------------------+
 
 
@@ -417,7 +430,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 +----------------+--------------+
 ; Partition Name ; Elapsed Time ;
 +----------------+--------------+
-; Top            ; 00:00:02     ;
+; Top            ; 00:00:01     ;
 +----------------+--------------+
 
 
@@ -427,7 +440,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus II 32-bit Analysis & Synthesis
     Info: Version 12.0 Build 178 05/31/2012 SJ Web Edition
-    Info: Processing started: Wed Sep 19 13:42:55 2012
+    Info: Processing started: Wed Sep 19 14:41:51 2012
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off monitor -c top
 Warning (20028): Parallel compilation is not licensed and has been disabled
 Info (12021): Found 1 design units, including 1 entities, in source file verilog/state_2_bcd.v
@@ -444,21 +457,23 @@ Info (12021): Found 1 design units, including 1 entities, in source file verilog
     Info (12023): Found entity 1: clk_div
 Info (12021): Found 1 design units, including 1 entities, in source file verilog/bin_2_bcd.v
     Info (12023): Found entity 1: bin_2_bcd
+Warning (10236): Verilog HDL Implicit Net warning at top.v(19): created implicit net for "rst"
 Info (12127): Elaborating entity "top" for the top level hierarchy
-Warning (10230): Verilog HDL assignment warning at top.v(167): truncated value with size 32 to match size of target (5)
-Warning (10230): Verilog HDL assignment warning at top.v(171): truncated value with size 32 to match size of target (5)
-Warning (10230): Verilog HDL assignment warning at top.v(175): truncated value with size 32 to match size of target (5)
-Warning (10230): Verilog HDL assignment warning at top.v(179): truncated value with size 32 to match size of target (5)
+Warning (10230): Verilog HDL assignment warning at top.v(174): truncated value with size 32 to match size of target (5)
+Warning (10230): Verilog HDL assignment warning at top.v(178): truncated value with size 32 to match size of target (5)
+Warning (10230): Verilog HDL assignment warning at top.v(182): truncated value with size 32 to match size of target (5)
+Warning (10230): Verilog HDL assignment warning at top.v(186): truncated value with size 32 to match size of target (5)
 Warning (10034): Output port "LEDG[7..1]" at top.v(7) has no driver
 Info (12128): Elaborating entity "clk_div" for hierarchy "clk_div:clk_div"
 Warning (10230): Verilog HDL assignment warning at clk_div.v(11): truncated value with size 32 to match size of target (28)
 Info (12128): Elaborating entity "monitor" for hierarchy "monitor:monitor"
-Warning (10230): Verilog HDL assignment warning at monitor.v(25): truncated value with size 32 to match size of target (4)
-Warning (10230): Verilog HDL assignment warning at monitor.v(26): truncated value with size 32 to match size of target (4)
-Warning (10230): Verilog HDL assignment warning at monitor.v(27): truncated value with size 32 to match size of target (4)
-Warning (10230): Verilog HDL assignment warning at monitor.v(28): truncated value with size 32 to match size of target (4)
-Warning (10230): Verilog HDL assignment warning at monitor.v(30): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(32): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(40): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(41): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(42): truncated value with size 32 to match size of target (4)
 Warning (10230): Verilog HDL assignment warning at monitor.v(43): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(57): truncated value with size 32 to match size of target (4)
+Warning (10230): Verilog HDL assignment warning at monitor.v(60): truncated value with size 32 to match size of target (4)
 Info (12128): Elaborating entity "bin_2_bcd" for hierarchy "bin_2_bcd:bcd"
 Warning (10230): Verilog HDL assignment warning at bin_2_bcd.v(40): truncated value with size 32 to match size of target (4)
 Warning (10230): Verilog HDL assignment warning at bin_2_bcd.v(27): truncated value with size 32 to match size of target (4)
@@ -476,6 +491,8 @@ Warning (10230): Verilog HDL assignment warning at pulse_led.v(17): truncated va
 Warning (10230): Verilog HDL assignment warning at pulse_led.v(19): truncated value with size 32 to match size of target (1)
 Warning (10230): Verilog HDL assignment warning at pulse_led.v(24): truncated value with size 32 to match size of target (29)
 Warning (12241): 4 hierarchies have connectivity warnings - see the Connectivity Checks report folder
+Info (13000): Registers with preset signals will power-up high
+Info (13003): DEV_CLRn pin will set, and not reset, register with preset signal due to NOT Gate Push-Back
 Warning (13024): Output pins are stuck at VCC or GND
     Warning (13410): Pin "LEDG[1]" is stuck at GND
     Warning (13410): Pin "LEDG[2]" is stuck at GND
@@ -487,18 +504,17 @@ Warning (13024): Output pins are stuck at VCC or GND
 Info (17049): 1 registers lost all their fanouts during netlist optimizations.
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Warning (21074): Design contains 3 input pin(s) that do not drive logic
-    Warning (15610): No output dependent on input pin "KEY[1]"
+Warning (21074): Design contains 2 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "KEY[2]"
     Warning (15610): No output dependent on input pin "KEY[3]"
-Info (21057): Implemented 503 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 499 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 15 input pins
     Info (21059): Implemented 46 output pins
-    Info (21061): Implemented 442 logic cells
-Info: Quartus II 32-bit Analysis & Synthesis was successful. 0 errors, 37 warnings
+    Info (21061): Implemented 438 logic cells
+Info: Quartus II 32-bit Analysis & Synthesis was successful. 0 errors, 38 warnings
     Info: Peak virtual memory: 351 megabytes
-    Info: Processing ended: Wed Sep 19 13:42:59 2012
-    Info: Elapsed time: 00:00:04
+    Info: Processing ended: Wed Sep 19 14:41:54 2012
+    Info: Elapsed time: 00:00:03
     Info: Total CPU time (on all processors): 00:00:03
 
 
