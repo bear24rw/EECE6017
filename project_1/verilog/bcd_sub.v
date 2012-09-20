@@ -17,6 +17,7 @@ module bcd_sub(
     reg [11:0] out;
 
     always @(*) begin
+
         if ({a_huns,a_tens,a_ones} > {b_huns,b_tens,b_ones}) begin
 
             out = {(a_huns+4'd3), (a_tens+4'd3), (a_ones+4'd3)} -
@@ -29,14 +30,6 @@ module bcd_sub(
             if (b_huns > a_huns) out_huns = out_huns - 6;
             if (b_tens > a_tens) out_tens = out_tens - 6;
             if (b_ones > a_ones) out_ones = out_ones - 6;
-
-             /*
-            $display("A: %b", {a_huns,a_tens,a_ones});
-            $display("B: %b", {b_huns,b_tens,b_ones});
-            $display("3: %b", {(a_huns+4'd3), (a_tens+4'd3), (a_ones+4'd3)});
-            $display("4: %b", {(b_huns+4'd3), (b_tens+4'd3), (b_ones+4'd3)});
-            $display("O: %b", out);
-            */
 
             negative = 0;
 
@@ -60,7 +53,7 @@ module bcd_sub(
         if (out_ones > 9) out_ones = out_ones - 6;
         if (out_tens > 9) out_tens = out_tens - 6;
         if (out_huns > 9) out_huns = out_huns - 6;
-        
+
     end
 
 endmodule
