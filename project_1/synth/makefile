@@ -6,7 +6,6 @@
 ###################################################################
 
 PROJECT = top
-TOP_LEVEL_ENTITY = top
 ASSIGNMENT_FILES = top.qpf top.qsf
 
 SRC = \
