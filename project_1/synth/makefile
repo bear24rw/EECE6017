@@ -7,7 +7,7 @@
 
 PROJECT = top
 ASSIGNMENT_FILES = top.qpf top.qsf
-SIM_TB = bin_2_bcd_tb
+SIM_TB = bcd_sub_tb
 
 SRC = \
 	../rtl/top.v \

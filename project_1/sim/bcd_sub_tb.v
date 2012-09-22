@@ -39,12 +39,12 @@ module bcd_sub_tb();
 
     initial begin
 
-        for (a_ones = 0; a_ones < 10; a_ones=a_ones+1)
-        for (a_tens = 0; a_tens < 10; a_tens=a_tens+1)
         for (a_huns = 0; a_huns < 10; a_huns=a_huns+1)
-        for (b_ones = 0; b_ones < 10; b_ones=b_ones+1)
-        for (b_tens = 0; b_tens < 10; b_tens=b_tens+1)
+        for (a_tens = 0; a_tens < 10; a_tens=a_tens+1)
+        for (a_ones = 0; a_ones < 10; a_ones=a_ones+1)
         for (b_huns = 0; b_huns < 10; b_huns=b_huns+1)
+        for (b_tens = 0; b_tens < 10; b_tens=b_tens+1)
+        for (b_ones = 0; b_ones < 10; b_ones=b_ones+1)
         begin
 
             #10;
