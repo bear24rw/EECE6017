@@ -24,6 +24,11 @@ module bin_2_bcd_tb();
     reg [3:0] a_huns;
 
     initial begin
+        $dumpfile("bin_2_bcd_tb.vcd");
+        $dumpvars(0, bin_2_bcd_tb);
+    end
+
+    initial begin
 /*
         for (a_huns = 0; a_huns < 10; a_huns=a_huns+1)
         for (a_tens = 0; a_tens < 10; a_tens=a_tens+1)

@@ -36,6 +36,11 @@ module monitor_tb();
         .state(state)
     );
 
+    initial begin
+        $dumpfile("monitor_tb");
+        $dumpvars(0, monitor_tb);
+    end
+
     always
         #1 clk = ~clk;
 

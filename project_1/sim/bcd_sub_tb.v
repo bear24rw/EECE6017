@@ -31,6 +31,11 @@ module bcd_sub_tb();
 
         .negative(negative)
     );
+    
+    initial begin
+        $dumpfile("bcd_sub_tb.vcd");
+        $dumpvars(0, bcd_sub_tb);
+    end
 
     initial begin
 

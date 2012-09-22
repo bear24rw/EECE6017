@@ -7,17 +7,26 @@
 
 PROJECT = top
 ASSIGNMENT_FILES = top.qpf top.qsf
+SIM_TB = bin_2_bcd_tb
 
 SRC = \
 	../rtl/top.v \
-	../rtl/timp_input.v \
+	../rtl/temp_input.v \
 	../rtl/state_2_bcd.v \
 	../rtl/seven_seg.v \
 	../rtl/pulse_led.v \
 	../rtl/monitor.v \
 	../rtl/clk_div.v \
 	../rtl/bin_2_bcd.v \
-	../rtl/bin_sub.v
+	../rtl/bcd_sub.v
+
+SIM_SRC = \
+	../sim/monitor_tb.v \
+	../sim/bcd_sub_tb.v \
+	../sim/bin_2_bcd_tb.v
+
+VINCDIR = \
+	-I../rtl/
 
 ###################################################################
 # Main Targets
@@ -29,8 +38,12 @@ SRC = \
 
 all: smart.log $(PROJECT).asm.rpt $(PROJECT).sta.rpt 
 
+sim: $(SIM_TB).vcd
+view: $(SIM_TB).view
+
 clean:
-	rm -rf *.rpt *.chg smart.log *.htm *.eqn *.pin *.sof *.pof *.done *.jdi db incremental_db
+	rm -rf *.rpt *.chg smart.log *.htm *.eqn *.pin *.sof *.pof *.done *.jdi db incremental_db \
+		*.vvp *.vcd *.log *.list
 
 map: smart.log $(PROJECT).map.rpt
 fit: smart.log $(PROJECT).fit.rpt
@@ -46,6 +59,28 @@ MAP_ARGS = --family="Cyclone II"
 FIT_ARGS = --part=EP2C20F484C7
 ASM_ARGS =
 STA_ARGS =
+
+CVER=cver
+GTKWAVE=gtkwave
+IVERILOG=iverilog
+VVP=vvp
+
+###################################################################
+# Simulation
+###################################################################
+
+$(SIM_TB).vvp: $(SRC) $(SIM_SRC)
+	rm -f $@.list
+	@for i in `echo $^`; do \
+	    echo $$i >> $@.list; \
+	done
+	$(IVERILOG) -o $@ $(VINCDIR) -c $@.list -s $(@:.vvp=)
+
+%.vcd: %.vvp
+	$(VVP) $<
+
+%.view: %.vcd
+	$(GTKWAVE) $< $<.save
 
 ###################################################################
 # Target implementations
