@@ -6,6 +6,11 @@
 `define STATE_ATTENTION     2
 `define STATE_EMERGENCY     3
 
+`define INPUT_STATE_ONES    0
+`define INPUT_STATE_TENS    1
+`define INPUT_STATE_HUNS    2
+`define INPUT_STATE_DONE    3
+
 `define DISP_MODE_TEMP      0
 `define DISP_MODE_DELTA     1
 `define DISP_MODE_STATE     2
