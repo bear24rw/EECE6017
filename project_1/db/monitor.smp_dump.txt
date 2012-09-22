@@ -1,6 +1,0 @@
-
-State Machine - |top|disp_mode
-Name disp_mode.00 disp_mode.10 disp_mode.01 
-disp_mode.00 0 0 0 
-disp_mode.01 1 0 1 
-disp_mode.10 1 1 0 
