@@ -1,3 +1,4 @@
+set_global_assignment -name TOP_LEVEL_ENTITY top
 # Copyright (C) 1991-2010 Altera Corporation
 # Your use of Altera Corporation's design tools, logic functions 
 # and other software and tools, and its AMPP partner logic 
@@ -490,4 +491,18 @@ set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to I2C_SCL
 set_instance_assignment -name CURRENT_STRENGTH_NEW "MAXIMUM CURRENT" -to I2C_SDAT
 
 
+
+set_global_assignment -name EDA_SIMULATION_TOOL "<None>"
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name VERILOG_FILE ../rtl/top.v
+set_global_assignment -name VERILOG_FILE ../rtl/temp_input.v
+set_global_assignment -name VERILOG_FILE ../rtl/state_2_bcd.v
+set_global_assignment -name VERILOG_FILE ../rtl/seven_seg.v
+set_global_assignment -name VERILOG_FILE ../rtl/pulse_led.v
+set_global_assignment -name VERILOG_FILE ../rtl/monitor.v
+set_global_assignment -name SOURCE_FILE ../rtl/constants.h
+set_global_assignment -name VERILOG_FILE ../rtl/clk_div.v
+set_global_assignment -name VERILOG_FILE ../rtl/bin_2_bcd.v
+set_global_assignment -name VERILOG_FILE ../rtl/bcd_sub.v
+set_global_assignment -name LAST_QUARTUS_VERSION 12.0
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

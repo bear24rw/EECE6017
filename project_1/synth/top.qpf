@@ -18,12 +18,12 @@
 #
 # Quartus II 32-bit
 # Version 12.0 Build 178 05/31/2012 SJ Web Edition
-# Date created = 15:56:12  September 22, 2012
+# Date created = 16:29:37  September 22, 2012
 #
 # -------------------------------------------------------------------------- #
 
 QUARTUS_VERSION = "12.0"
-DATE = "15:56:12  September 22, 2012"
+DATE = "16:29:37  September 22, 2012"
 
 # Revisions
 
