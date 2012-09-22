@@ -1,73 +1,99 @@
+`include "constants.h"
+
 module monitor(
     input clk,
     input rst,
+    input en,
     input mode,
-    input [5:0] temp,
-    input [3:0] temp_frac,
-    output reg temp_delta_sign,
-    output reg [5:0] temp_delta,
-    output reg [3:0] temp_delta_frac,
+
+    input [3:0] temp_value_ones,
+    input [3:0] temp_value_tens,
+    input [3:0] temp_value_huns,
+    output reg temp_value_sign,
+
+    output [3:0] temp_delta_ones,
+    output [3:0] temp_delta_tens,
+    output [3:0] temp_delta_huns,
+    output  temp_delta_sign,
+
     output reg [3:0] state
 );
 
-    parameter STATE_NORMAL      = 0;
-    parameter STATE_BORDERLINE  = 1;
-    parameter STATE_ATTENTION   = 2;
-    parameter STATE_EMERGENCY   = 3;
+    `define T5      12'h050
+    `define T40     12'h400
+    `define T47     12'h470
+    `define T50     12'h500
 
-    reg old_mode = 0;
     reg first_run = 1;
-    reg [9:0] temp_comb;
-    reg [9:0] old_temp_comb;
-    reg [9:0] temp_comb_delta;
+
+    wire [11:0] temp_value_bcd;
+    wire [11:0] temp_delta_bcd;
+    assign temp_value_bcd ={temp_value_huns, temp_value_tens, temp_value_ones};
+    assign temp_delta_bcd = {temp_delta_huns, temp_delta_tens, temp_delta_ones};
+
+    reg [3:0] temp_value_huns_old = 0;
+    reg [3:0] temp_value_tens_old = 0;
+    reg [3:0] temp_value_ones_old = 0;
+    reg       temp_value_sign_old = 0;
+
+    bcd_sub bs(
+        .a_huns(temp_value_huns),
+        .a_tens(temp_value_tens),
+        .a_ones(temp_value_ones),
+
+        .b_huns(temp_value_huns_old),
+        .b_tens(temp_value_tens_old),
+        .b_ones(temp_value_ones_old),
+
+        .out_huns(temp_delta_huns),
+        .out_tens(temp_delta_tens),
+        .out_ones(temp_delta_ones),
+
+        .negative(temp_delta_sign)
+    );
+
+    initial temp_value_sign = 0;
+    always @(posedge mode)
+        temp_value_sign = ~temp_value_sign;
 
     always @(posedge clk, posedge rst) begin
 
         if (rst) begin
             first_run = 1;
-            temp_delta = 0;
-            temp_delta_frac = 0;
-            temp_delta_sign = 0;
-            old_temp_comb = 0;
-            state = STATE_NORMAL;
-        end else begin
+            state = `STATE_NORMAL;
+        end 
+        else if (en) begin
 
             // if we are in an emergency state do not continue calculating new states
             // stay in the emergency state until the system is reset
-            if (state != STATE_EMERGENCY) begin
-                temp_comb = (temp << 4) | temp_frac;
+            if (state != `STATE_EMERGENCY) begin
 
-                if (temp_comb < (40 << 4)) state = STATE_NORMAL;
-                if ((temp_comb >= (40 << 4)) && (temp_comb < (47 << 4))) state = STATE_BORDERLINE;
-                if ((temp_comb >= (47 << 4)) && (temp_comb < (50 << 4))) state = STATE_ATTENTION;
-                if (temp_comb >= (50 << 4)) state = STATE_EMERGENCY;
+                state = (temp_value_bcd <  `T40)                          ? `STATE_NORMAL :
+                        (temp_value_bcd >= `T40 && temp_value_bcd < `T47) ? `STATE_BORDERLINE :
+                        (temp_value_bcd >= `T47 && temp_value_bcd < `T50) ? `STATE_ATTENTION :
+                        (temp_value_bcd >= `T50)                          ? `STATE_EMERGENCY :
+                        `STATE_EMERGENCY;
 
-                // compute the change in temp from the last reading
-                if (temp_comb > old_temp_comb) begin
-                    temp_comb_delta = temp_comb - old_temp_comb;
-                    temp_delta_sign = 0;
-                end else begin
-                    temp_comb_delta = old_temp_comb - temp_comb;
-                    temp_delta_sign = 1;
-                end
 
-                if (first_run == 0) begin
+                if (!first_run) begin
+
                     // if the new temp is more than 5 away from current temp
-                    if (temp_comb_delta > (5 << 4)) state = STATE_EMERGENCY;
-
+                    if (temp_delta_bcd > `T5)
+                        state = `STATE_EMERGENCY;
+                    
                     // if the mode changes during operation it's an emergency
-                    if (mode != old_mode) state = STATE_EMERGENCY;
+                    if (temp_value_sign != temp_value_sign_old)
+                        state = `STATE_EMERGENCY;
+
                 end else begin
                     first_run = 0;
                 end
 
-                // split temp delta into units and fraction
-                temp_delta = temp_comb_delta[9:4];
-                temp_delta_frac = temp_comb_delta[3:0];
-
                 // current temp is now the old temp
-                old_temp_comb = temp_comb;
-                old_mode = mode;
+                temp_value_huns_old = temp_value_huns;
+                temp_value_tens_old = temp_value_tens;
+                temp_value_ones_old = temp_value_ones;
+                temp_value_sign_old = temp_value_sign;
             end
         end
 

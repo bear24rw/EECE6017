@@ -13,10 +13,15 @@ module top(
 );
 
     // -------------------------------------------------
-    //              RESET
+    //              KEY & SW ASSIGNMENTS
     // -------------------------------------------------
     
     assign rst = ~KEY[1];
+    assign mode_key = ~KEY[0];
+    assign enter_key = ~KEY[3];
+
+    wire [3:0] temp_sw;
+    assign temp_sw = SW[3:0];
 
     // -------------------------------------------------
     //              1 HZ CLOCK
@@ -30,7 +35,7 @@ module top(
     //              DISPLAY MODE
     // -------------------------------------------------
 
-    reg [2:0] disp_mode = 1;
+    reg [1:0] disp_mode = `DISP_MODE_TEMP;
     always @(posedge clk_1hz)
         case (disp_mode)
             `DISP_MODE_TEMP:  disp_mode = `DISP_MODE_DELTA;
@@ -39,100 +44,64 @@ module top(
         endcase
 
     // -------------------------------------------------
-    //              TEMP MODE
+    //              TEMP INPUT
     // -------------------------------------------------
 
-    // toggle the mode we're in (pos or neg temps)
-    // temp_value_sign = 1 : negative temps
-    // temp_value_sign = 0 : positive temps
-    reg temp_value_sign = 0;
-    always @(posedge KEY[0])
-        temp_value_sign <= ~temp_value_sign;
+    wire [1:0] input_state;
+    wire [3:0] current_input_value;
 
-    // display it on LEDG0
-    assign LEDG[0] = temp_value_sign;
+    wire [3:0] temp_value_ones;
+    wire [3:0] temp_value_tens;
+    wire [3:0] temp_value_huns;
 
-    // -------------------------------------------------
-    //              TEMP VALUE
-    // -------------------------------------------------
+    temp_input ti(
+        .rst(rst),
+        .value(temp_sw),
+        .enter(enter_key),
+        .current_value(current_input_value),
+        .state(input_state),
 
-    reg [5:0] temp;
-    reg [3:0] temp_frac;
-
-    always @(SW) begin
-        temp <= SW[9:4];
-        if (SW[3:0] < 9)
-            temp_frac <= SW[3:0];
-        else
-            temp_frac <= 9;
-    end
+        .temp_value_ones(temp_value_ones),
+        .temp_value_tens(temp_value_tens),
+        .temp_value_huns(temp_value_huns)
+    );
 
     // -------------------------------------------------
     //              TEMP MONITOR
     // -------------------------------------------------
 
     wire [3:0] state;
-    wire [5:0] temp_delta;
-    wire [3:0] temp_delta_frac;
+    wire temp_value_sign;
     wire temp_delta_sign;
+
+    wire [3:0] temp_delta_ones;
+    wire [3:0] temp_delta_tens;
+    wire [3:0] temp_delta_huns;
+
+    // monitor is only enabled when we are done inputting the value
+    assign monitor_en = (input_state == `INPUT_STATE_DONE);
 
     monitor monitor(
         .clk(clk_1hz),
         .rst(rst),
-        .mode(temp_value_sign),
-        .temp(temp),
-        .temp_frac(temp_frac),
-        .temp_delta(temp_delta),
-        .temp_delta_frac(temp_delta_frac),
+        .en(monitor_en),
+
+        .mode(mode_key),
+    
+        .temp_value_ones(temp_value_ones),
+        .temp_value_tens(temp_value_tens),
+        .temp_value_huns(temp_value_huns),
+        .temp_value_sign(temp_value_sign),
+
+        .temp_delta_ones(temp_delta_ones),
+        .temp_delta_tens(temp_delta_tens),
+        .temp_delta_huns(temp_delta_huns),
         .temp_delta_sign(temp_delta_sign),
+
         .state(state)
     );
 
-    // -------------------------------------------------
-    //              TEMP TO BCD
-    // -------------------------------------------------
-
-    // convert the temperature into BCD
-    wire [3:0] temp_value_bcd_tens;
-    wire [3:0] temp_value_bcd_ones;
-    wire [3:0] temp_value_bcd_frac;
-
-    bin_2_bcd bcd(
-        .bin(temp),
-        .ones(temp_value_bcd_ones),
-        .tens(temp_value_bcd_tens),
-        .hundreds()
-    );
-
-    bin_2_bcd bcd_frac(
-        .bin(temp_frac),
-        .ones(temp_value_bcd_frac),
-        .tens(),
-        .hundreds()
-    );
-    
-    // -------------------------------------------------
-    //              TEMP DELTA TO BCD
-    // -------------------------------------------------
-
-    // convert the temperature into BCD
-    wire [3:0] temp_delta_bcd_tens;
-    wire [3:0] temp_delta_bcd_ones;
-    wire [3:0] temp_delta_bcd_frac;
-
-    bin_2_bcd delta_bcd(
-        .bin(temp_delta),
-        .ones(temp_delta_bcd_ones),
-        .tens(temp_delta_bcd_tens),
-        .hundreds()
-    );
-
-    bin_2_bcd delta_bcd_frac(
-        .bin(temp_delta_frac),
-        .ones(temp_delta_bcd_frac),
-        .tens(),
-        .hundreds()
-    );
+    assign LEDG[0] = temp_value_sign;
 
     // -------------------------------------------------
     //              STATE TO BCD
@@ -156,42 +125,9 @@ module top(
     // -------------------------------------------------
 
     wire [4:0] temp_value_sign_bcd;
-    wire [4:0] temp_delta_bcd_sign;
+    wire [4:0] temp_delta_sign_bcd;
     assign temp_value_sign_bcd = temp_value_sign ? `BCD_NEG : `BCD_BLANK;
-    assign temp_delta_bcd_sign = temp_delta_sign ? `BCD_NEG : `BCD_BLANK;
-
-
-    // -------------------------------------------------
-    //                  7 SEGS
-    // -------------------------------------------------
-
-    wire [4:0] seg_0;
-    wire [4:0] seg_1;
-    wire [4:0] seg_2;
-    wire [4:0] seg_3;
-
-    // mux the displays depending on what display mode were in
-    assign seg_0 = 
-        (disp_mode == `DISP_MODE_TEMP)  ? temp_value_bcd_frac :
-        (disp_mode == `DISP_MODE_DELTA) ? temp_delta_bcd_frac :
-        (disp_mode == `DISP_MODE_STATE) ? state_bcd_0 : 0;
-    assign seg_1 = 
-        (disp_mode == `DISP_MODE_TEMP)  ? temp_value_bcd_ones :
-        (disp_mode == `DISP_MODE_DELTA) ? temp_delta_bcd_ones :
-        (disp_mode == `DISP_MODE_STATE) ? state_bcd_1 : 0;
-    assign seg_2 = 
-        (disp_mode == `DISP_MODE_TEMP)  ? temp_value_bcd_tens :
-        (disp_mode == `DISP_MODE_DELTA) ? temp_delta_bcd_tens :
-        (disp_mode == `DISP_MODE_STATE) ? state_bcd_2 : 0;
-    assign seg_3 = 
-        (disp_mode == `DISP_MODE_TEMP)  ? temp_value_sign_bcd :
-        (disp_mode == `DISP_MODE_DELTA) ? temp_delta_bcd_sign :
-        (disp_mode == `DISP_MODE_STATE) ? state_bcd_3 : 0;
-
-    seven_seg s0(seg_0, HEX0);
-    seven_seg s1(seg_1, HEX1);
-    seven_seg s2(seg_2, HEX2);
-    seven_seg s3(seg_3, HEX3);
+    assign temp_delta_sign_bcd = temp_delta_sign ? `BCD_NEG : `BCD_BLANK;
 
     // -------------------------------------------------
     //                  ALARM
@@ -207,5 +143,54 @@ module top(
         (state == `STATE_ATTENTION) ? {5 {1'b0,pulse_led_slow}} :
         (state == `STATE_EMERGENCY) ? {10{pulse_led_fast}} :
         {10{1'b0}};
+
+    // -------------------------------------------------
+    //                  7 SEGS
+    // -------------------------------------------------
+
+    wire [4:0] seg_0;
+    wire [4:0] seg_1;
+    wire [4:0] seg_2;
+    wire [4:0] seg_3;
+
+    // mux the displays depending on what display mode were in
+    assign seg_0 = 
+        (input_state == `INPUT_STATE_ONES) ? current_input_value :
+        (input_state == `INPUT_STATE_TENS) ? temp_value_ones :  
+        (input_state == `INPUT_STATE_HUNS) ? temp_value_ones :
+        (disp_mode == `DISP_MODE_TEMP)     ? temp_value_ones :
+        (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_ones :
+        (disp_mode == `DISP_MODE_STATE)    ? state_bcd_0 : 0;
+    assign seg_1 = 
+        (input_state == `INPUT_STATE_ONES) ? `BCD_BLANK :
+        (input_state == `INPUT_STATE_TENS) ? current_input_value :  
+        (input_state == `INPUT_STATE_HUNS) ? temp_value_tens :
+        (disp_mode == `DISP_MODE_TEMP)     ? temp_value_tens :
+        (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_tens :
+        (disp_mode == `DISP_MODE_STATE)    ? state_bcd_1 : 0;
+    assign seg_2 = 
+        (input_state == `INPUT_STATE_ONES) ? `BCD_BLANK :
+        (input_state == `INPUT_STATE_TENS) ? `BCD_BLANK :  
+        (input_state == `INPUT_STATE_HUNS) ? current_input_value :
+        (disp_mode == `DISP_MODE_TEMP)     ? temp_value_huns :
+        (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_huns :
+        (disp_mode == `DISP_MODE_STATE)    ? state_bcd_2 : 0;
+    assign seg_3 = 
+        (input_state == `INPUT_STATE_ONES) ? temp_value_sign_bcd :
+        (input_state == `INPUT_STATE_TENS) ? temp_value_sign_bcd :  
+        (input_state == `INPUT_STATE_HUNS) ? temp_value_sign_bcd :
+        (disp_mode == `DISP_MODE_TEMP)     ? temp_value_sign_bcd :
+        (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_sign_bcd :
+        (disp_mode == `DISP_MODE_STATE)    ? state_bcd_3 : 0;
+    
+    assign seg_0_en = (input_state == `INPUT_STATE_ONES) ? pulse_led_fast : 1;
+    assign seg_1_en = (input_state == `INPUT_STATE_TENS) ? pulse_led_fast : 1;
+    assign seg_2_en = (input_state == `INPUT_STATE_HUNS) ? pulse_led_fast : 1;
+    assign seg_3_en = 1;
+
+    seven_seg s0(seg_0_en, seg_0, HEX0);
+    seven_seg s1(seg_1_en, seg_1, HEX1);
+    seven_seg s2(seg_2_en, seg_2, HEX2);
+    seven_seg s3(seg_3_en, seg_3, HEX3);
             
 endmodule
