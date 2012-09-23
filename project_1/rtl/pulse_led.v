@@ -1,6 +1,6 @@
 module pulse_led(
     input clk,
-    output reg led
+    output reg led = 0
 );
 
     parameter period    = 500000;

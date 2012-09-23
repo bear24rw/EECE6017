@@ -1,19 +1,21 @@
 `ifndef _constants_h_
 `define _constants_h_
 
-`define STATE_NORMAL        0
-`define STATE_BORDERLINE    1
-`define STATE_ATTENTION     2
-`define STATE_EMERGENCY     3
+//`define SIMULATION 1
 
-`define INPUT_STATE_ONES    0
-`define INPUT_STATE_TENS    1
-`define INPUT_STATE_HUNS    2
-`define INPUT_STATE_DONE    3
+`define STATE_NORMAL        2'd0
+`define STATE_BORDERLINE    2'd1
+`define STATE_ATTENTION     2'd2
+`define STATE_EMERGENCY     2'd3
 
-`define DISP_MODE_TEMP      0
-`define DISP_MODE_DELTA     1
-`define DISP_MODE_STATE     2
+`define INPUT_STATE_DONE    2'd0
+`define INPUT_STATE_ONES    2'd1
+`define INPUT_STATE_TENS    2'd2
+`define INPUT_STATE_HUNS    2'd3
+
+`define DISP_MODE_TEMP      2'd0
+`define DISP_MODE_DELTA     2'd1
+`define DISP_MODE_STATE     2'd2
 
 `define BCD_0       5'h0
 `define BCD_1       5'h1

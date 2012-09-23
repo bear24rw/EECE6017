@@ -1,11 +1,11 @@
 `include "constants.h"
 
 module state_2_bcd(
-    input [3:0] state,
-    output reg [4:0] bcd_0,
-    output reg [4:0] bcd_1,
-    output reg [4:0] bcd_2,
-    output reg [4:0] bcd_3
+    input [1:0] state,
+    output reg [4:0] bcd_0 = 0,
+    output reg [4:0] bcd_1 = 0,
+    output reg [4:0] bcd_2 = 0,
+    output reg [4:0] bcd_3 = 0
 );
 
     always @(state) begin

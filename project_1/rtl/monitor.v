@@ -4,20 +4,25 @@ module monitor(
     input clk,
     input rst,
     input en,
-    input mode,
 
     input [3:0] temp_value_ones,
     input [3:0] temp_value_tens,
     input [3:0] temp_value_huns,
-    output reg temp_value_sign,
+    input temp_value_sign,
+
+    input [3:0] temp_value_ones_old,
+    input [3:0] temp_value_tens_old,
+    input [3:0] temp_value_huns_old,
 
     output [3:0] temp_delta_ones,
     output [3:0] temp_delta_tens,
     output [3:0] temp_delta_huns,
-    output  temp_delta_sign,
+    output temp_delta_sign,
 
-    output reg [3:0] state
+    output reg [1:0] state = `STATE_NORMAL
 );
+
+    initial state = `STATE_NORMAL;
 
     `define T5      12'h050
     `define T40     12'h400
@@ -26,15 +31,15 @@ module monitor(
 
     reg first_run = 1;
 
-    wire [11:0] temp_value_bcd;
-    wire [11:0] temp_delta_bcd;
-    assign temp_value_bcd ={temp_value_huns, temp_value_tens, temp_value_ones};
-    assign temp_delta_bcd = {temp_delta_huns, temp_delta_tens, temp_delta_ones};
+    reg [11:0] temp_delta_bcd = 0;
+    reg [11:0] temp_value_bcd = 0;
+    reg [11:0] temp_value_bcd_old = 0;
+    reg        temp_value_sign_old = 0;
 
-    reg [3:0] temp_value_huns_old = 0;
-    reg [3:0] temp_value_tens_old = 0;
-    reg [3:0] temp_value_ones_old = 0;
-    reg       temp_value_sign_old = 0;
+    wire [3:0] current_delta_huns;
+    wire [3:0] current_delta_tens;
+    wire [3:0] current_delta_ones;
+    wire       current_delta_sign;
 
     bcd_sub bs(
         .a_huns(temp_value_huns),
@@ -52,51 +57,54 @@ module monitor(
         .negative(temp_delta_sign)
     );
 
-    initial temp_value_sign = 0;
-    always @(posedge mode)
-        temp_value_sign = ~temp_value_sign;
-
-    always @(posedge clk, posedge rst) begin
+    always @(temp_value_huns, temp_value_tens, temp_value_ones, rst) begin
 
         if (rst) begin
-            first_run = 1;
-            state = `STATE_NORMAL;
+            first_run <= 1;
+            state <= `STATE_NORMAL;
+            temp_delta_bcd <= 0;
+            temp_value_bcd <= 0;
+            temp_value_bcd_old <= 0;
         end 
         else if (en) begin
 
+
+            temp_value_bcd <= {temp_value_huns, temp_value_tens, temp_value_ones};
+
             // if we are in an emergency state do not continue calculating new states
             // stay in the emergency state until the system is reset
-            if (state != `STATE_EMERGENCY) begin
+            //if (state != `STATE_EMERGENCY) begin
 
                 state = (temp_value_bcd <  `T40)                          ? `STATE_NORMAL :
                         (temp_value_bcd >= `T40 && temp_value_bcd < `T47) ? `STATE_BORDERLINE :
                         (temp_value_bcd >= `T47 && temp_value_bcd < `T50) ? `STATE_ATTENTION :
                         (temp_value_bcd >= `T50)                          ? `STATE_EMERGENCY :
-                        `STATE_EMERGENCY;
+                        0;//`STATE_EMERGENCY;
 
 
                 if (!first_run) begin
 
                     // if the new temp is more than 5 away from current temp
+                        /*
                     if (temp_delta_bcd > `T5)
                         state = `STATE_EMERGENCY;
+                    */
                     
                     // if the mode changes during operation it's an emergency
+                        /*
                     if (temp_value_sign != temp_value_sign_old)
                         state = `STATE_EMERGENCY;
+                    */
 
                 end else begin
-                    first_run = 0;
+                    first_run <= 0;
                 end
 
-                // current temp is now the old temp
-                temp_value_huns_old = temp_value_huns;
-                temp_value_tens_old = temp_value_tens;
-                temp_value_ones_old = temp_value_ones;
-                temp_value_sign_old = temp_value_sign;
-            end
+            //end
         end
 
     end
+
+
 
 endmodule

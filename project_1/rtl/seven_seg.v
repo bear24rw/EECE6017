@@ -3,7 +3,7 @@
 module seven_seg(
     input en,
     input [4:0] value,
-    output reg [6:0] seg
+    output reg [6:0] seg = 0
 );
 
     always @(value, en)

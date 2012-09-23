@@ -17,11 +17,15 @@ module top(
     // -------------------------------------------------
     
     assign rst = ~KEY[1];
-    assign mode_key = ~KEY[0];
     assign enter_key = ~KEY[3];
 
-    wire [3:0] temp_sw;
-    assign temp_sw = SW[3:0];
+    wire [3:0] temp_sw = SW[3:0];
+
+    assign temp_value_sign = SW[9];
+
+    assign LEDG[7:6] = input_state;
+    assign LEDG[5:4] = disp_mode;
+    assign LEDG[3:2] = state;
 
     // -------------------------------------------------
     //              1 HZ CLOCK
@@ -29,7 +33,11 @@ module top(
 
     // divide the 50MHz clock down to 1Hz
     wire clk_1hz;
-    clk_div clk_div(CLOCK_50, clk_1hz);
+    `ifdef SIMULATION
+        clk_div #(.COUNT(5)) clk_div(CLOCK_50, clk_1hz);
+    `else
+        clk_div clk_div(CLOCK_50, clk_1hz);
+    `endif
 
     // -------------------------------------------------
     //              DISPLAY MODE
@@ -54,24 +62,31 @@ module top(
     wire [3:0] temp_value_tens;
     wire [3:0] temp_value_huns;
 
+    wire [3:0] temp_value_ones_old;
+    wire [3:0] temp_value_tens_old;
+    wire [3:0] temp_value_huns_old;
+
     temp_input ti(
         .rst(rst),
         .value(temp_sw),
         .enter(enter_key),
         .current_value(current_input_value),
-        .state(input_state),
+        .input_state(input_state),
 
         .temp_value_ones(temp_value_ones),
         .temp_value_tens(temp_value_tens),
-        .temp_value_huns(temp_value_huns)
+        .temp_value_huns(temp_value_huns),
+
+        .temp_value_ones_old(temp_value_ones_old),
+        .temp_value_tens_old(temp_value_tens_old),
+        .temp_value_huns_old(temp_value_huns_old)
     );
 
     // -------------------------------------------------
     //              TEMP MONITOR
     // -------------------------------------------------
 
-    wire [3:0] state;
-    wire temp_value_sign;
+    wire [1:0] state;
     wire temp_delta_sign;
 
     wire [3:0] temp_delta_ones;
@@ -86,12 +101,14 @@ module top(
         .rst(rst),
         .en(monitor_en),
 
-        .mode(mode_key),
-    
         .temp_value_ones(temp_value_ones),
         .temp_value_tens(temp_value_tens),
         .temp_value_huns(temp_value_huns),
         .temp_value_sign(temp_value_sign),
+
+        .temp_value_ones_old(temp_value_ones_old),
+        .temp_value_tens_old(temp_value_tens_old),
+        .temp_value_huns_old(temp_value_huns_old),
 
         .temp_delta_ones(temp_delta_ones),
         .temp_delta_tens(temp_delta_tens),
@@ -183,9 +200,9 @@ module top(
         (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_sign_bcd :
         (disp_mode == `DISP_MODE_STATE)    ? state_bcd_3 : 0;
     
-    assign seg_0_en = (input_state == `INPUT_STATE_ONES) ? pulse_led_fast : 1;
-    assign seg_1_en = (input_state == `INPUT_STATE_TENS) ? pulse_led_fast : 1;
-    assign seg_2_en = (input_state == `INPUT_STATE_HUNS) ? pulse_led_fast : 1;
+    assign seg_0_en = (input_state == `INPUT_STATE_ONES) ? pulse_led_slow : 1;
+    assign seg_1_en = (input_state == `INPUT_STATE_TENS) ? pulse_led_slow : 1;
+    assign seg_2_en = (input_state == `INPUT_STATE_HUNS) ? pulse_led_slow : 1;
     assign seg_3_en = 1;
 
     seven_seg s0(seg_0_en, seg_0, HEX0);

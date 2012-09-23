@@ -7,7 +7,7 @@
 
 PROJECT = top
 ASSIGNMENT_FILES = top.qpf top.qsf
-SIM_TB = bcd_sub_tb
+SIM_TB = temp_input_tb
 
 SRC = \
 	../rtl/top.v \
@@ -23,7 +23,9 @@ SRC = \
 SIM_SRC = \
 	../sim/monitor_tb.v \
 	../sim/bcd_sub_tb.v \
-	../sim/bin_2_bcd_tb.v
+	../sim/bin_2_bcd_tb.v \
+	../sim/temp_input_tb.v \
+	../sim/top_tb.v
 
 VINCDIR = \
 	-I../rtl/
@@ -128,3 +130,6 @@ asm.chg:
 
 program: $(PROJECT).sof
 	quartus_pgm --no_banner --mode=jtag -o "P;$(PROJECT).sof"
+
+program_prom: $(PROJECT).pof
+	quartus_pgm --no_banner --mode=AS -o "p;${PROJECT}.pof"

@@ -7,14 +7,14 @@ module bcd_sub(
     input [3:0] b_tens,
     input [3:0] b_huns,
 
-    output reg [3:0] out_ones,
-    output reg [3:0] out_tens,
-    output reg [3:0] out_huns,
+    output reg [3:0] out_ones = 0,
+    output reg [3:0] out_tens = 0,
+    output reg [3:0] out_huns = 0,
 
-    output reg negative
+    output reg negative = 0
 );
 
-    reg [11:0] out;
+    reg [11:0] out = 0;
 
     always @(*) begin
 
