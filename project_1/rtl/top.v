@@ -149,17 +149,12 @@ module top(
     // -------------------------------------------------
     //                  ALARM
     // -------------------------------------------------
-    
-    wire pulse_led_slow;
-    wire pulse_led_fast;
 
-    pulse_led #(.step_size(10000)) pulse_slow (CLOCK_50, pulse_led_slow);
-    pulse_led #(.step_size(60000)) pulse_fast (CLOCK_50, pulse_led_fast);
-
-    assign LEDR[9:0] = 
-        (state == `STATE_ATTENTION) ? {5 {1'b0,pulse_led_slow}} :
-        (state == `STATE_EMERGENCY) ? {10{pulse_led_fast}} :
-        {10{1'b0}};
+    alarm alarm(
+        .clk(CLOCK_50),
+        .state(state),
+        .leds(LEDR)
+    );
 
     // -------------------------------------------------
     //                  7 SEGS
@@ -169,41 +164,44 @@ module top(
     wire [4:0] seg_1;
     wire [4:0] seg_2;
     wire [4:0] seg_3;
+    wire seg_0_en;
+    wire seg_1_en;
+    wire seg_2_en;
+    wire seg_3_en;
 
-    // mux the displays depending on what display mode were in
-    assign seg_0 = 
-        (input_state == `INPUT_STATE_ONES) ? current_input_value :
-        (input_state == `INPUT_STATE_TENS) ? temp_value_ones :  
-        (input_state == `INPUT_STATE_HUNS) ? temp_value_ones :
-        (disp_mode == `DISP_MODE_TEMP)     ? temp_value_ones :
-        (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_ones :
-        (disp_mode == `DISP_MODE_STATE)    ? state_bcd_0 : 0;
-    assign seg_1 = 
-        (input_state == `INPUT_STATE_ONES) ? `BCD_BLANK :
-        (input_state == `INPUT_STATE_TENS) ? current_input_value :  
-        (input_state == `INPUT_STATE_HUNS) ? temp_value_tens :
-        (disp_mode == `DISP_MODE_TEMP)     ? temp_value_tens :
-        (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_tens :
-        (disp_mode == `DISP_MODE_STATE)    ? state_bcd_1 : 0;
-    assign seg_2 = 
-        (input_state == `INPUT_STATE_ONES) ? `BCD_BLANK :
-        (input_state == `INPUT_STATE_TENS) ? `BCD_BLANK :  
-        (input_state == `INPUT_STATE_HUNS) ? current_input_value :
-        (disp_mode == `DISP_MODE_TEMP)     ? temp_value_huns :
-        (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_huns :
-        (disp_mode == `DISP_MODE_STATE)    ? state_bcd_2 : 0;
-    assign seg_3 = 
-        (input_state == `INPUT_STATE_ONES) ? temp_value_sign_bcd :
-        (input_state == `INPUT_STATE_TENS) ? temp_value_sign_bcd :  
-        (input_state == `INPUT_STATE_HUNS) ? temp_value_sign_bcd :
-        (disp_mode == `DISP_MODE_TEMP)     ? temp_value_sign_bcd :
-        (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_sign_bcd :
-        (disp_mode == `DISP_MODE_STATE)    ? state_bcd_3 : 0;
-    
-    assign seg_0_en = (input_state == `INPUT_STATE_ONES) ? pulse_led_slow : 1;
-    assign seg_1_en = (input_state == `INPUT_STATE_TENS) ? pulse_led_slow : 1;
-    assign seg_2_en = (input_state == `INPUT_STATE_HUNS) ? pulse_led_slow : 1;
-    assign seg_3_en = 1;
+    disp_mux dm(
+        .clk(CLOCK_50),
+
+        .input_state(input_state),
+        .disp_mode(disp_mode),
+
+        .current_input_value(current_input_value),
+
+        .temp_value_ones(temp_value_ones),
+        .temp_value_tens(temp_value_tens),
+        .temp_value_huns(temp_value_huns),
+        .temp_value_sign_bcd(temp_value_sign_bcd),
+
+        .temp_delta_ones(temp_delta_ones),
+        .temp_delta_tens(temp_delta_tens),
+        .temp_delta_huns(temp_delta_huns),
+        .temp_delta_sign_bcd(temp_delta_sign_bcd),
+
+        .state_bcd_0(state_bcd_0),
+        .state_bcd_1(state_bcd_1),
+        .state_bcd_2(state_bcd_2),
+        .state_bcd_3(state_bcd_3),
+
+        .seg_0(seg_0),
+        .seg_1(seg_1),
+        .seg_2(seg_2),
+        .seg_3(seg_3),
+
+        .seg_0_en(seg_0_en),
+        .seg_1_en(seg_1_en),
+        .seg_2_en(seg_2_en),
+        .seg_3_en(seg_3_en)
+    );
 
     seven_seg s0(seg_0_en, seg_0, HEX0);
     seven_seg s1(seg_1_en, seg_1, HEX1);
