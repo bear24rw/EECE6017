@@ -33,7 +33,6 @@ module monitor(
 
     reg [11:0] temp_delta_bcd = 0;
     reg [11:0] temp_value_bcd = 0;
-    reg [11:0] temp_value_bcd_old = 0;
     reg        temp_value_sign_old = 0;
 
     wire [3:0] current_delta_huns;
@@ -64,7 +63,6 @@ module monitor(
             state <= `STATE_NORMAL;
             temp_delta_bcd <= 0;
             temp_value_bcd <= 0;
-            temp_value_bcd_old <= 0;
         end 
         else if (en) begin
 
