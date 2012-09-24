@@ -7,7 +7,7 @@
 
 PROJECT = top
 ASSIGNMENT_FILES = top.qpf top.qsf
-SIM_TB = top_tb
+SIM_TB = monitor_tb
 
 SRC = \
 	../rtl/top.v \

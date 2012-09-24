@@ -218,7 +218,7 @@ module top(
     //              TEMP SIGN TO BCD
     // -------------------------------------------------
 
-    // converts the negative sings to their proper bcd
+    // converts the negative signs to their proper bcd
     // lookup value
 
     wire [4:0] temp_value_sign_bcd;

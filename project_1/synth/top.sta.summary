@@ -3,99 +3,107 @@ TimeQuest Timing Analyzer Summary
 ------------------------------------------------------------
 
 Type  : Slow Model Setup 'CLOCK_50'
-Slack : -6.169
-TNS   : -383.461
-
-Type  : Slow Model Setup 'temp_input:ti|state.00'
-Slack : -2.345
-TNS   : -5.098
+Slack : -6.332
+TNS   : -374.636
 
 Type  : Slow Model Setup 'KEY[3]'
-Slack : -0.892
-TNS   : -10.898
+Slack : -1.258
+TNS   : -28.223
 
 Type  : Slow Model Setup 'clk_div:clk_div|clk_out'
-Slack : -0.449
-TNS   : -1.414
+Slack : -1.072
+TNS   : -2.743
+
+Type  : Slow Model Setup 'temp_input:temp_input|new_number~_Duplicate_1'
+Slack : 0.131
+TNS   : 0.000
 
 Type  : Slow Model Hold 'CLOCK_50'
-Slack : -2.683
-TNS   : -2.683
+Slack : -2.684
+TNS   : -2.684
 
 Type  : Slow Model Hold 'KEY[3]'
-Slack : -2.645
-TNS   : -31.728
+Slack : -1.013
+TNS   : -1.789
 
-Type  : Slow Model Hold 'temp_input:ti|state.00'
-Slack : -0.475
-TNS   : -2.288
+Type  : Slow Model Hold 'temp_input:temp_input|new_number~_Duplicate_1'
+Slack : 0.445
+TNS   : 0.000
 
 Type  : Slow Model Hold 'clk_div:clk_div|clk_out'
-Slack : 0.775
+Slack : 1.017
 TNS   : 0.000
 
 Type  : Slow Model Minimum Pulse Width 'CLOCK_50'
 Slack : -1.631
-TNS   : -110.389
+TNS   : -106.723
+
+Type  : Slow Model Minimum Pulse Width 'SW[9]'
+Slack : -1.631
+TNS   : -4.075
 
 Type  : Slow Model Minimum Pulse Width 'KEY[3]'
 Slack : -1.469
-TNS   : -35.685
+TNS   : -38.129
 
 Type  : Slow Model Minimum Pulse Width 'clk_div:clk_div|clk_out'
 Slack : -0.611
-TNS   : -6.110
+TNS   : -4.888
 
-Type  : Slow Model Minimum Pulse Width 'temp_input:ti|state.00'
-Slack : 0.500
-TNS   : 0.000
+Type  : Slow Model Minimum Pulse Width 'temp_input:temp_input|new_number~_Duplicate_1'
+Slack : -0.611
+TNS   : -2.444
 
 Type  : Fast Model Setup 'CLOCK_50'
-Slack : -1.954
-TNS   : -105.830
-
-Type  : Fast Model Setup 'temp_input:ti|state.00'
-Slack : -0.182
-TNS   : -0.352
+Slack : -2.015
+TNS   : -102.413
 
 Type  : Fast Model Setup 'KEY[3]'
-Slack : 0.159
+Slack : 0.015
 TNS   : 0.000
 
 Type  : Fast Model Setup 'clk_div:clk_div|clk_out'
-Slack : 0.270
+Slack : 0.049
+TNS   : 0.000
+
+Type  : Fast Model Setup 'temp_input:temp_input|new_number~_Duplicate_1'
+Slack : 0.639
 TNS   : 0.000
 
 Type  : Fast Model Hold 'CLOCK_50'
-Slack : -1.714
-TNS   : -1.714
+Slack : -1.712
+TNS   : -1.712
 
 Type  : Fast Model Hold 'KEY[3]'
-Slack : -1.275
-TNS   : -11.148
+Slack : -0.720
+TNS   : -1.265
 
-Type  : Fast Model Hold 'temp_input:ti|state.00'
-Slack : -0.010
-TNS   : -0.020
+Type  : Fast Model Hold 'temp_input:temp_input|new_number~_Duplicate_1'
+Slack : 0.215
+TNS   : 0.000
 
 Type  : Fast Model Hold 'clk_div:clk_div|clk_out'
-Slack : 0.291
+Slack : 0.418
 TNS   : 0.000
 
 Type  : Fast Model Minimum Pulse Width 'CLOCK_50'
 Slack : -1.380
-TNS   : -90.380
+TNS   : -87.380
+
+Type  : Fast Model Minimum Pulse Width 'SW[9]'
+Slack : -1.380
+TNS   : -3.380
 
 Type  : Fast Model Minimum Pulse Width 'KEY[3]'
 Slack : -1.222
-TNS   : -29.222
+TNS   : -31.222
 
 Type  : Fast Model Minimum Pulse Width 'clk_div:clk_div|clk_out'
 Slack : -0.500
-TNS   : -5.000
+TNS   : -4.000
 
-Type  : Fast Model Minimum Pulse Width 'temp_input:ti|state.00'
-Slack : 0.500
-TNS   : 0.000
+Type  : Fast Model Minimum Pulse Width 'temp_input:temp_input|new_number~_Duplicate_1'
+Slack : -0.500
+TNS   : -2.000
 
 ------------------------------------------------------------
