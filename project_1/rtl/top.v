@@ -66,7 +66,7 @@ module top(
     wire [3:0] temp_value_tens_old;
     wire [3:0] temp_value_huns_old;
 
-    temp_input ti(
+    temp_input temp_input(
         .rst(rst),
         .value(temp_sw),
         .enter(enter_key),
@@ -83,15 +83,35 @@ module top(
     );
 
     // -------------------------------------------------
-    //              TEMP MONITOR
+    //              TEMP CHANGE
     // -------------------------------------------------
-
-    wire [1:0] state;
-    wire temp_delta_sign;
 
     wire [3:0] temp_delta_ones;
     wire [3:0] temp_delta_tens;
     wire [3:0] temp_delta_huns;
+    wire temp_delta_sign;
+
+    bcd_sub bcd_sub(
+        .a_huns(temp_value_huns),
+        .a_tens(temp_value_tens),
+        .a_ones(temp_value_ones),
+
+        .b_huns(temp_value_huns_old),
+        .b_tens(temp_value_tens_old),
+        .b_ones(temp_value_ones_old),
+
+        .out_huns(temp_delta_huns),
+        .out_tens(temp_delta_tens),
+        .out_ones(temp_delta_ones),
+
+        .negative(temp_delta_sign)
+    );
+
+    // -------------------------------------------------
+    //              TEMP MONITOR
+    // -------------------------------------------------
+
+    wire [1:0] state;
 
     // monitor is only enabled when we are done inputting the value
     assign monitor_en = (input_state == `INPUT_STATE_DONE);
@@ -106,10 +126,6 @@ module top(
         .temp_value_huns(temp_value_huns),
         .temp_value_sign(temp_value_sign),
 
-        .temp_value_ones_old(temp_value_ones_old),
-        .temp_value_tens_old(temp_value_tens_old),
-        .temp_value_huns_old(temp_value_huns_old),
-
         .temp_delta_ones(temp_delta_ones),
         .temp_delta_tens(temp_delta_tens),
         .temp_delta_huns(temp_delta_huns),
@@ -117,8 +133,6 @@ module top(
 
         .state(state)
     );
-
-    assign LEDG[0] = temp_value_sign;
 
     // -------------------------------------------------
     //              STATE TO BCD

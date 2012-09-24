@@ -35,28 +35,28 @@ module disp_mux(
 );
 
     // mux the displays depending on what display mode were in
-    assign seg_0 = 
+    assign seg_0 =
         (input_state == `INPUT_STATE_ONES) ? current_input_value :
         (input_state == `INPUT_STATE_TENS) ? temp_value_ones :  
         (input_state == `INPUT_STATE_HUNS) ? temp_value_ones :
         (disp_mode == `DISP_MODE_TEMP)     ? temp_value_ones :
         (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_ones :
         (disp_mode == `DISP_MODE_STATE)    ? state_bcd_0 : 0;
-    assign seg_1 = 
+    assign seg_1 =
         (input_state == `INPUT_STATE_ONES) ? `BCD_BLANK :
         (input_state == `INPUT_STATE_TENS) ? current_input_value :  
         (input_state == `INPUT_STATE_HUNS) ? temp_value_tens :
         (disp_mode == `DISP_MODE_TEMP)     ? temp_value_tens :
         (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_tens :
         (disp_mode == `DISP_MODE_STATE)    ? state_bcd_1 : 0;
-    assign seg_2 = 
+    assign seg_2 =
         (input_state == `INPUT_STATE_ONES) ? `BCD_BLANK :
         (input_state == `INPUT_STATE_TENS) ? `BCD_BLANK :  
         (input_state == `INPUT_STATE_HUNS) ? current_input_value :
         (disp_mode == `DISP_MODE_TEMP)     ? temp_value_huns :
         (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_huns :
         (disp_mode == `DISP_MODE_STATE)    ? state_bcd_2 : 0;
-    assign seg_3 = 
+    assign seg_3 =
         (input_state == `INPUT_STATE_ONES) ? temp_value_sign_bcd :
         (input_state == `INPUT_STATE_TENS) ? temp_value_sign_bcd :  
         (input_state == `INPUT_STATE_HUNS) ? temp_value_sign_bcd :
