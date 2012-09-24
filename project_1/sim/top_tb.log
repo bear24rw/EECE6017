@@ -1,0 +1,49 @@
+rm -f top_tb.vvp.list
+iverilog -o top_tb.vvp -I../rtl/ -c top_tb.vvp.list -s top_tb
+vvp top_tb.vvp
+VCD info: dumpfile top_tb.vcd opened for output.
+temp | delta | state
+--------------------
+  Normal Operation  
+--------------------
+398  |  398  | 0 (N)   [PASS]
+399  |  001  | 0 (N)   [PASS]
+400  |  001  | 1 (B)   [PASS]
+401  |  001  | 1 (B)   [PASS]
+402  |  001  | 1 (B)   [PASS]
+468  |  468  | 1 (B)   [PASS]
+469  |  001  | 1 (B)   [PASS]
+470  |  001  | 2 (A)   [PASS]
+471  |  001  | 2 (A)   [PASS]
+472  |  001  | 2 (A)   [PASS]
+498  |  498  | 2 (A)   [PASS]
+499  |  001  | 2 (A)   [PASS]
+500  |  001  | 3 (E)   [PASS]
+501  |  001  | 3 (E)   [PASS]
+502  |  001  | 3 (E)   [PASS]
+--------------------
+     Delta > 5      
+--------------------
+000  |  000  | 0 (N)   [PASS]
+000  |  000  | 0 (N)   [PASS]
+070  |  070  | 3 (E)   [PASS]
+360  |  290  | 3 (E)   [PASS]
+360  |  000  | 0 (N)   [PASS]
+420  |  060  | 3 (E)   [PASS]
+460  |  040  | 1 (B)   [PASS]
+540  |  080  | 3 (E)   [PASS]
+470  |  070  | 3 (E)   [PASS]
+470  |  000  | 2 (A)   [PASS]
+050  |  420  | 3 (E)   [PASS]
+050  |  000  | 0 (N)   [PASS]
+--------------------
+    Mode Changed    
+--------------------
+000  |  000  | 0 (N)   [PASS]
+010  |  010  | 0 (N)   [PASS]
+020  |  010  | 3 (E)   [PASS]
+030  |  010  | 3 (E)   [PASS]
+000  |  000  | 0 (N)   [PASS]
+010  |  010  | 0 (N)   [PASS]
+020  |  010  | 3 (E)   [PASS]
+030  |  010  | 3 (E)   [PASS]
