@@ -7,6 +7,7 @@ module temp_input(
     input [3:0] value,
 
     output [1:0] input_state,
+    output reg new_number = 0,
 
     output [3:0] current_value,
     output reg [3:0] temp_value_ones = 0,
@@ -23,6 +24,7 @@ module temp_input(
     always @(posedge enter, posedge rst) begin
         if (rst) begin
             state = `INPUT_STATE_DONE;
+            new_number = 0;
             temp_value_ones = 0;
             temp_value_tens = 0;
             temp_value_huns = 0;
@@ -44,9 +46,11 @@ module temp_input(
                 `INPUT_STATE_HUNS: begin
                     temp_value_huns_old = temp_value_huns;
                     temp_value_huns = current_value;
+                    new_number = 1;
                     state = `INPUT_STATE_DONE;
                 end
                 `INPUT_STATE_DONE: begin
+                    new_number = 0;
                     state = `INPUT_STATE_ONES;
                 end
             endcase
