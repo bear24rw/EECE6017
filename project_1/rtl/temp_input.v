@@ -19,8 +19,10 @@ module temp_input(
     output reg [3:0] temp_value_huns_old = 0
 );
 
+    // initialize the state variable to the 'DONE' state
     reg [1:0] state = `INPUT_STATE_DONE;
 
+    // 'enter' signifies we want to clock in the next value
     always @(posedge enter, posedge rst) begin
         if (rst) begin
             state = `INPUT_STATE_DONE;
@@ -32,6 +34,12 @@ module temp_input(
             temp_value_tens_old = 0;
             temp_value_huns_old = 0;
         end else begin
+
+            // lookup what state we are in
+            // save the old value for that digit
+            // latch in the new one
+            // go to the next state
+
             case (state)
                 `INPUT_STATE_ONES: begin 
                     temp_value_ones_old = temp_value_ones;
@@ -54,11 +62,16 @@ module temp_input(
                     state = `INPUT_STATE_ONES;
                 end
             endcase
+
         end
     end
 
+    // limit the current input value to 9 since bcd cannot
+    // be greater than 9
     assign current_value = (value < 10) ? value : 9;
 
+    // if we use the 'state' variable directly as an output
+    // quartus won't recognize our state machine
     assign input_state = state;
 
 endmodule

@@ -15,13 +15,24 @@ module top(
     // -------------------------------------------------
     //              KEY & SW ASSIGNMENTS
     // -------------------------------------------------
-    
+   
+    // invert the keys because we want to deal with 
+    // positive edge logic
+
     assign rst = ~KEY[0];
     assign enter_key = ~KEY[3];
 
+    // temperature value is in bcd so we only need the
+    // first 4 switches
+
     wire [3:0] temp_sw = SW[3:0];
 
+    // switch 9 is used to indicate the sign or 'mode'
+    // of our temperature values
+
     assign temp_value_sign = SW[9];
+
+    // status / debug leds
 
     assign LEDG[7:6] = input_state;
     assign LEDG[5:4] = disp_mode;
@@ -33,7 +44,12 @@ module top(
     // -------------------------------------------------
 
     // divide the 50MHz clock down to 1Hz
+    // if we are in a simulation we don't want to wait
+    // 25 millions clocks so we override the parameter
+    // with 5
+
     wire clk_1hz;
+
     `ifdef SIMULATION
         clk_div #(.COUNT(5)) clk_div(CLOCK_50, clk_1hz);
     `else
@@ -43,6 +59,11 @@ module top(
     // -------------------------------------------------
     //              DISPLAY MODE
     // -------------------------------------------------
+
+    // cycle through 3 display states:
+    // TEMP - display the most recently read temperature
+    // DELTA - display the difference between the last two
+    // STATE - display ascii text telling what state we are in
 
     reg [1:0] disp_mode = `DISP_MODE_TEMP;
     always @(posedge clk_1hz)
@@ -55,6 +76,14 @@ module top(
     // -------------------------------------------------
     //              TEMP INPUT
     // -------------------------------------------------
+
+    // clocks in new bcd temperature values from the
+    // switches. 'input_state' is which digit we are
+    // on. 'current_input_value' is the real time value
+    // on the input switches. 'new_number' is a flag
+    // that goes high when we finish clocking in a new
+    // number. 'temp_value_*' are the bcd digits of the
+    // number.
 
     wire [1:0] input_state;
     wire [3:0] current_input_value;
@@ -89,6 +118,10 @@ module top(
     //              TEMP CHANGE
     // -------------------------------------------------
 
+    // calculates the difference between the most current
+    // temperature reading and the one previous to it.
+    // 'temp_delta_sign' indicates a negative result when 1
+
     wire [3:0] temp_delta_ones;
     wire [3:0] temp_delta_tens;
     wire [3:0] temp_delta_huns;
@@ -114,6 +147,11 @@ module top(
     //              TEMP MONITOR
     // -------------------------------------------------
 
+    // monitors the state of the current temperature,
+    // the delta of current temperature and previous
+    // temperature, and the system mode (temp_value_sign)
+    // and determines which state the system is in.
+
     wire [1:0] state;
 
     monitor monitor(
@@ -137,6 +175,9 @@ module top(
     //              STATE TO BCD
     // -------------------------------------------------
 
+    // converts the current system state to human readable
+    // text on the 4 7-segment displays
+
     wire [4:0] state_bcd_0;
     wire [4:0] state_bcd_1;
     wire [4:0] state_bcd_2;
@@ -154,6 +195,9 @@ module top(
     //              TEMP SIGN TO BCD
     // -------------------------------------------------
 
+    // converts the negative sings to their proper bcd
+    // lookup value
+
     wire [4:0] temp_value_sign_bcd;
     wire [4:0] temp_delta_sign_bcd;
     assign temp_value_sign_bcd = temp_value_sign ? `BCD_NEG : `BCD_BLANK;
@@ -163,6 +207,9 @@ module top(
     //                  ALARM
     // -------------------------------------------------
 
+    // outputs different 'alarms' to the red leds depending
+    // on which state the system is in
+
     alarm alarm(
         .clk(CLOCK_50),
         .state(state),
@@ -170,8 +217,11 @@ module top(
     );
 
     // -------------------------------------------------
-    //                  7 SEGS
+    //                  7 SEG MUX
     // -------------------------------------------------
+
+    // muxes all values onto the proper 7-segment display
+    // depending on various input and display states
 
     wire [4:0] seg_0;
     wire [4:0] seg_1;
@@ -215,6 +265,9 @@ module top(
         .seg_2_en(seg_2_en),
         .seg_3_en(seg_3_en)
     );
+
+    // translates between the bcd lookup values and the
+    // actual segments on the displays
 
     seven_seg s0(seg_0_en, seg_0, HEX0);
     seven_seg s1(seg_1_en, seg_1, HEX1);

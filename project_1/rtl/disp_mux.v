@@ -34,7 +34,10 @@ module disp_mux(
     output seg_3_en
 );
 
-    // mux the displays depending on what display mode were in
+    // for each 7-segment display we need to figure out what to display
+    // we use a priority mux to determine which value should be displayed
+    // when according to the input state and display mode
+
     assign seg_0 =
         (input_state == `INPUT_STATE_ONES) ? current_input_value :
         (input_state == `INPUT_STATE_TENS) ? temp_value_ones :  
@@ -64,9 +67,12 @@ module disp_mux(
         (disp_mode == `DISP_MODE_DELTA)    ? temp_delta_sign_bcd :
         (disp_mode == `DISP_MODE_STATE)    ? state_bcd_3 : 0;
 
+    // we want to pulse the current input value
     wire pulse_led_slow;
     pulse_led #(.step_size(10000)) pulse_slow (clk, pulse_led_slow);
-    
+   
+    // if any of the displays are currently showing the current input value
+    // we want to pulse their enable lines, otherwise just keep them enabled
     assign seg_0_en = (input_state == `INPUT_STATE_ONES) ? pulse_led_slow : 1;
     assign seg_1_en = (input_state == `INPUT_STATE_TENS) ? pulse_led_slow : 1;
     assign seg_2_en = (input_state == `INPUT_STATE_HUNS) ? pulse_led_slow : 1;

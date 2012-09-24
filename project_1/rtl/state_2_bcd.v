@@ -8,6 +8,12 @@ module state_2_bcd(
     output reg [4:0] bcd_3 = 0
 );
 
+    // we want to display human readable state
+    // indicators on the 4 7-segment displays
+    // simply look up which state the system is
+    // in and assign the 4 displays the proper
+    // bcd lookup value
+
     always @(state) begin
         case (state)
             `STATE_NORMAL: begin

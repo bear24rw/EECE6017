@@ -6,6 +6,11 @@ module seven_seg(
     output reg [6:0] seg = 0
 );
 
+    // if the display is enabled translate the bcd lookup
+    // value into the correct number, letter, or symbol
+    // if the display is not enabled just keep it blank
+    // default to a unused symbol to indicate an error
+
     always @(value, en)
         if (!en)
             seg <= 7'b1111111;
