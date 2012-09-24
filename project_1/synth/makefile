@@ -7,7 +7,7 @@
 
 PROJECT = top
 ASSIGNMENT_FILES = top.qpf top.qsf
-SIM_TB = temp_input_tb
+SIM_TB = top_tb
 
 SRC = \
 	../rtl/top.v \
@@ -17,13 +17,13 @@ SRC = \
 	../rtl/pulse_led.v \
 	../rtl/monitor.v \
 	../rtl/clk_div.v \
-	../rtl/bin_2_bcd.v \
+	../rtl/alarm.v \
+	../rtl/disp_mux.v \
 	../rtl/bcd_sub.v
 
 SIM_SRC = \
 	../sim/monitor_tb.v \
 	../sim/bcd_sub_tb.v \
-	../sim/bin_2_bcd_tb.v \
 	../sim/temp_input_tb.v \
 	../sim/top_tb.v
 
@@ -45,7 +45,7 @@ view: $(SIM_TB).view
 
 clean:
 	rm -rf *.rpt *.chg smart.log *.htm *.eqn *.pin *.sof *.pof *.done *.jdi db incremental_db \
-		*.vvp *.vcd *.log *.list
+		*.vvp *.vcd *.log *.list *.smsg
 
 map: smart.log $(PROJECT).map.rpt
 fit: smart.log $(PROJECT).fit.rpt
