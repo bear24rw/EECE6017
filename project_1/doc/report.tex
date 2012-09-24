@@ -1,0 +1,37 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1.0in]{geometry}
+\usepackage{titling}
+\usepackage[compact]{titlesec}
+
+\setlength{\droptitle}{-4em}
+\addtolength{\droptitle}{-4pt}
+
+\title{Embedded System Design \\ Project 1}
+\author{ Max Thrun | Ian Cathey | Mark Labbato }
+
+\begin{document}
+\maketitle
+
+
+\section*{Abstract}
+This project implements a temperature monitoring system that determines the state of the system. The system displays the current state of the system (out of 4 possible states), the current temperature, and the temperature change from the last sample. In addition to the temperature display, it includes LED alarms, and user-controlled .temperature input., and a user-controlled asynchronous reset.
+
+
+\section*{Implementation/Design}
+Our implementation uses the first four switches on the DE1 board to input temperatures in BCD. Since there are three digits per temperature value Key 3 is used as an .enter. key to enter the next digit. While entering a number the system pulses the 7-segment display which is showing the current input digit.  After the temperature is inputted, the system displays the current temperature on the four 7-segment displays, then after 1 second it displays the change in temperature from the last reading. It then displays the current state in a human readable text format. Switch 9 is used as the mode switch. If at any time during operation the mode changes the system will go into an emergency state and signals the .mode changed. alarm. The mode changed alarm is signified by all 10 red LEDs pulsing. If a new temperature value differs more than 5 degrees from the previous temperature the system goes into emergency state and signals the .delta > 5. alarm. The delta alarm is signified by every other red LED pulsing. The system uses the 50MHz oscillator on the DE1 board to drive the 1Hz clock divider as well as the LED pulse modules
+
+
+\section*{Testing strategy}
+We established that it was not necessary to exhaustively test our program. There are too many possible transitions to test in a reasonable amount of time. We chose to test corner cases and state transitions. The state transitions were the easiest to test. We incremented the temperature a tenth of a degree every cycle on either side of the boundary between states, checking each cycle for the correct state. This included the changes from Normal to Borderline, Borderline to Attention, and Attention to Emergency. Next we tested the case where the temperature jumped greater than 5 degrees. The temperature incremented from a very low number to a high number and then watch the emergency alarm go off. We did the opposite to check a negative change in the temperature we also checked a temperature change greater than 5, while going into an alarmed state. This checks the priority of the alarms. Finally, we checked the mode being changed while the system is enabled. This was done by changing the mode switch and checking for the Emergency alarm going off. We feel that the implemented test suite accurately validates all reasonable inputs to the system.
+
+
+\section*{Implementation Size}
+Our design implementation used 496 LUTs and 124 FFs. It is by no means the smallest implementation possible, but it is fully functional on the board level and has a nice suite of features. If this were a real implementation for a customer, certain elements could be eliminated to save on size and power consumption. For instance, if we were able to work with binary numbers, rather than BCD, from the beginning, many of our logical blocks could be eliminated, and the arithmetic would be much simpler. We also could have chosen to only display the temperature and not the change in temperature, or not used any LEDs in our alarm displays (and only use the 7seg displays). These things all could have been omitted but we decided to commit to a more thorough design, rather than chop things out.
+
+
+\section*{Team Member Contributions}
+Mark - Testbench, Clock Divider, LED Pulsing
+Ian - BCD Subtraction, Seven Segment Driver, State Display, Temperature Input
+Max - Top Level, Monitor, Display Mux, Alarm
+
+\end{document}
