@@ -21,6 +21,8 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
+`include "constants.h"
+
 module top_tb();
 
     reg CLOCK_50 = 0;
@@ -54,231 +56,199 @@ module top_tb();
         #1 CLOCK_50 = ~CLOCK_50;
 
     initial begin
-        /*
-        $monitor("%b | %b | disp_mode: %b | input_state: %b | temp state: %b | temp_value_bcd: %b", 
-            LEDR, LEDG, uut.disp_mode, uut.input_state, uut.state, uut.monitor.temp_value_bcd);
-        */
-                
-                
-            // The following section will test the temperature input
-            // from 0 to 50 (not comprehensive) this will cover standard 
-            // increments that will not trigger a '>5' alarm
-            // as well as show that each state works
-            
-            
-            // Normal operation
-            
-        #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h000);    // enter the number
-        #100;
-        $display("------------------------");
 
-        #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h010);    // enter the number
-        #100;
-        $display("------------------------");
+        reset;
 
-        #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h020);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h030);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h040);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h050);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h390);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          // End Normal Operation
-          // The ">5" alarm should go off now. 
-          // Begin Borderline Operation
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h400);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h410);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h420);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h430);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h440);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h450);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h460);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          // End Borderline Operation
-          // Begin Attention Operation
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h470);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h480);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h490);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          // End Attention Operation
-          // Begin Emergency Operation
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h500);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          // Out of range alarm should be going off now.
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h510);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h520);    // enter the number
-        #100;
-        $display("------------------------");
+        $display("temp | delta | state");
+               
+        //
+        // The following section will test the temperature input
+        // from 0 to 50 (not comprehensive) this will cover standard 
+        // increments that will not trigger a '>5' alarm
+        // as well as show that each state works
+        // 
 
-          // This next group will test the delta alarm going off
-          // (if the change in temp is greater than 5)
+        $display("--------------------");
+        $display("  Normal Operation  ");
+        $display("--------------------");
+
+        // border around 40
+        reset;
+        #100 enter_value(12'h398); check(`STATE_NORMAL);
+        #100 enter_value(12'h399); check(`STATE_NORMAL);
+        #100 enter_value(12'h400); check(`STATE_BORDERLINE);
+        #100 enter_value(12'h401); check(`STATE_BORDERLINE);
+        #100 enter_value(12'h402); check(`STATE_BORDERLINE);
+
+        // border around 47
+        reset;
+        #100 enter_value(12'h468); check(`STATE_BORDERLINE);
+        #100 enter_value(12'h469); check(`STATE_BORDERLINE);
+        #100 enter_value(12'h470); check(`STATE_ATTENTION);
+        #100 enter_value(12'h471); check(`STATE_ATTENTION);
+        #100 enter_value(12'h472); check(`STATE_ATTENTION);
+
+        // border around 50
+        reset;
+        #100 enter_value(12'h498); check(`STATE_ATTENTION);
+        #100 enter_value(12'h499); check(`STATE_ATTENTION);
+        #100 enter_value(12'h500); check(`STATE_EMERGENCY);
+        #100 enter_value(12'h501); check(`STATE_EMERGENCY);
+        #100 enter_value(12'h502); check(`STATE_EMERGENCY);
+
+
+        //
+        // This next group will test the delta alarm going off
+        // (if the change in temp is greater than 5)
+        //
+
+        $display("--------------------");
+        $display("     Delta > 5      ");
+        $display("--------------------");
+
+        reset;
           
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h000);    // enter the number
-        #100;
-        $display("------------------------");
+        #100 enter_value(12'h000); check(`STATE_NORMAL);
+        #100 enter_value(12'h000); check(`STATE_NORMAL);
+        #100 enter_value(12'h070); check(`STATE_EMERGENCY);
+        #100 enter_value(12'h360); check(`STATE_EMERGENCY);
           
-          // start it with the alarm off
+        // turn off the alarm by not changing the temp
+        // The next jump will cross a borderline from 
+        // normal to attention. alarm should still go off
           
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h000);    // enter the number
-        #100;
-        $display("------------------------");
+        #100 enter_value(12'h360); check(`STATE_NORMAL);
+        #100 enter_value(12'h420); check(`STATE_EMERGENCY);
           
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h070);    // enter the number
-        #100;
-        $display("------------------------");
+        // This will test for the case when the temperature
+        // increments greater than 5, but also out of range
           
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h360);    // enter the number
-        #100;
-        $display("------------------------");
+        #100 enter_value(12'h460); check(`STATE_BORDERLINE);
+        #100 enter_value(12'h540); check(`STATE_EMERGENCY);
           
-          // turn off the alarm by not changing the temp
-          // The next jump will cross a borderline from 
-          // normal to attention. alarm should still go off
+        // This test will drop from out of range into attention mode
+        // A delta of >5.
           
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h360);    // enter the number
-        #100;
-        $display("------------------------");
+        #100 enter_value(12'h470); check(`STATE_EMERGENCY);
           
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h420);    // enter the number
-        #100;
-        $display("------------------------");
+        // This will test a massive drop from 47 to 5
+        // start with the >5 alarm off (attention alarm is on)
           
-          // This will test for the case when the temperature
-          // increments greater than 5, but also out of range
+        #100 enter_value(12'h470); check(`STATE_ATTENTION);
+        #100 enter_value(12'h050); check(`STATE_EMERGENCY);
           
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h460);    // enter the number
-        #100;
-        $display("------------------------");
+        // The alarm should turn off after this reading
           
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h540);    // enter the number
-        #100;
-        $display("------------------------");
+        #100 enter_value(12'h050); check(`STATE_NORMAL);
           
-          // This test will drop from out of range into attention mode
-          // A delta of >5.
+        //
+        // This group of tests checks to make sure the
+        // alarm goes off if the mode changes
+        //
+
+        $display("--------------------");
+        $display("    Mode Changed    ");
+        $display("--------------------");
+
+        set_mode(0);
+        reset;
           
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h470);    // enter the number
-        #100;
-        $display("------------------------");
+        #100 enter_value(12'h000); check(`STATE_NORMAL);
+        #100 enter_value(12'h010); check(`STATE_NORMAL);
+        set_mode(1);
+        #100 enter_value(12'h020); check(`STATE_EMERGENCY);
+        #100 enter_value(12'h030); check(`STATE_EMERGENCY);
+
+        set_mode(1);
+        reset;
           
-          // This will test a massive drop  from 47 to 5
-          // start with the >5 alarm off (attention alarm is on)
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h470);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h050);    // enter the number
-        #100;
-        $display("------------------------");
-          
-          // The alarm should turn off after this reading
-          
-          #100 pulse_enter;             // start entering a new number
-        #100 enter_value(12'h50);    // enter the number
-        #100;
-        $display("------------------------");
-          
+        #100 enter_value(12'h000); check(`STATE_NORMAL);
+        #100 enter_value(12'h010); check(`STATE_NORMAL);
+        set_mode(0);
+        #100 enter_value(12'h020); check(`STATE_EMERGENCY);
+        #100 enter_value(12'h030); check(`STATE_EMERGENCY);
+
         #5000;
         $finish;
     end
 
+
+    // pulses the reset key
+    task reset; begin
+        #50 KEY[0] = 1; #50 KEY[0] = 0;
+    end
+    endtask
+
+    // changes the mode switch
+    task set_mode;
+        input x;
+        #50 SW[9] = x;
+    endtask
+
+    // pulses the enter key
     task pulse_enter; begin
         #50 KEY[3] = 1; #50 KEY[3] = 0; 
     end
     endtask
 
+    // enters the passed value by settings the
+    // switches and pulsing the enter key
+    // also displays the current state of the system
     task enter_value;
         input [11:0] val;
         begin
-            #50 SW[3:0] = val[3:0];
-            #50 pulse_enter;
-            #50 SW[3:0] = val[7:4];
-            #50 pulse_enter;
-            #50 SW[3:0] = val[11:8];
-            #50 pulse_enter;
+            #50 pulse_enter;            // start entering a number
+            #50 SW[3:0] = val[3:0];     // setup switches for the ones digit
+            #50 pulse_enter;            // latch in that digit
+            #50 SW[3:0] = val[7:4];     // setup switches for the tens digit
+            #50 pulse_enter;            // latch in that digit
+            #50 SW[3:0] = val[11:8];    // setup switches for the huns digit
+            #50 pulse_enter;            // latch in that digit
+            #50;
+
+            $write("%0d%0d%0d  |  %0d%0d%0d  | %0d ",
+                uut.temp_value_huns,
+                uut.temp_value_tens,
+                uut.temp_value_ones,
+
+                uut.temp_delta_huns,
+                uut.temp_delta_tens,
+                uut.temp_delta_ones,
+
+                uut.state
+            );
+
+            write_state_name(uut.state);
         end
     endtask
+
+    // checks the current state of the system against
+    // the parameter. displays pass or fail
+    task check;
+        input [1:0] s;
+        begin
+            if (uut.state != s)  begin
+                $write("<--[FAIL]-- Expected state: %d ", s);
+                write_state_name(s);
+                $write("\n");
+            end else 
+                $write("   [PASS]\n");
+        end
+    endtask
+
+    // given a system state name print out a code
+    // indicating which state it is
+    task write_state_name;
+        input [1:0] s;
+        begin
+            case (s)
+                `STATE_NORMAL: $write("(N)");
+                `STATE_BORDERLINE: $write("(B)");
+                `STATE_ATTENTION: $write("(A)");
+                `STATE_EMERGENCY: $write("(E)");
+            endcase
+        end
+    endtask
+
 
 endmodule
