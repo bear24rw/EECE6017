@@ -9,15 +9,14 @@ module monitor_tb();
     reg [3:0] temp_value_huns;
     reg       temp_value_sign;
 
-    wire [3:0] temp_delta_ones;
-    wire [3:0] temp_delta_tens;
-    wire [3:0] temp_delta_huns;
-    wire       temp_delta_sign;
+    reg [3:0] temp_delta_ones;
+    reg [3:0] temp_delta_tens;
+    reg [3:0] temp_delta_huns;
+    reg       temp_delta_sign;
 
     wire [3:0] state;
 
     monitor uut(
-        .clk(clk),
         .rst(rst),
         .en(en),
 
@@ -39,9 +38,6 @@ module monitor_tb();
         $dumpvars(0, monitor_tb);
     end
 
-    always
-        #1 clk = ~clk;
-
 
     reg [3:0] a_ones;
     reg [3:0] a_tens;
@@ -49,7 +45,8 @@ module monitor_tb();
 
     initial begin
         #50; 
-        en = 1;
+
+        en = 0;
         temp_value_sign = 0;
 
         #10 rst = 0;
@@ -58,12 +55,18 @@ module monitor_tb();
 
         $display("temp_value | temp_value_old | temp_delta");
         for (a_huns = 0; a_huns < 10; a_huns=a_huns+1)
-        for (a_tens = 0; a_tens < 10; a_tens=a_tens+1)
+        for (a_tens = 0; a_tens < 10; a_tens=a_tens+4)
         for (a_ones = 0; a_ones < 10; a_ones=a_ones+3)
         begin
+            temp_delta_ones = 3;
+            temp_delta_tens = 3;
+            temp_delta_huns = 0;
+
             temp_value_ones = a_ones;
             temp_value_tens = a_tens;
             temp_value_huns = a_huns;
+
+            #1 en = 1; #1 en = 0;
 
             #100; 
             /*
