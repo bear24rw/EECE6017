@@ -17,7 +17,7 @@ module temp_input_tb();
         .rst(rst),
         .enter(enter),
         .value(value),
-        .input_state(state),
+        .state(state),
         .current_value(current_value),
         .temp_value_ones(temp_value_ones),
         .temp_value_tens(temp_value_tens),
@@ -26,6 +26,11 @@ module temp_input_tb();
         .temp_value_tens_old(temp_value_tens_old),
         .temp_value_huns_old(temp_value_huns_old)
     );
+
+    initial begin
+        $dumpfile("temp_input_tb.vcd");
+        $dumpvars(0, temp_input_tb);
+    end
 
     initial begin
 
@@ -41,22 +46,22 @@ module temp_input_tb();
             temp_value_ones_old
         );
        
-        $display("------------------------");
-        enter_value(12'h123);
+        #1 pulse_enter;             // start entering a new number
+        #1 enter_value(12'h123);    // enter the number
         #10;
-        #1 pulse_enter;
         $display("------------------------");
-        enter_value(12'h555);
-        #10;
-        #1 pulse_enter;
-        $display("------------------------");
-        enter_value(12'h001);
-        #10;
-        #1 pulse_enter;
-        $display("------------------------");
-        enter_value(12'h444);
-        #10;
 
+        #1 pulse_enter;             // start entering a new number
+        #1 enter_value(12'h875);    // enter the number
+        #10;
+        $display("------------------------");
+
+        #1 pulse_enter;             // start entering a new number
+        #1 enter_value(12'h440);    // enter the number
+        #10;
+        $display("------------------------");
+
+        #50;
         $finish;
     end
 
