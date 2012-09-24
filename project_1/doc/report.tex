@@ -1,5 +1,5 @@
 \documentclass[12pt]{article}
-\usepackage[margin=1.0in]{geometry}
+\usepackage[margin=0.5in]{geometry}
 \usepackage{titling}
 \usepackage[compact]{titlesec}
 
@@ -28,10 +28,28 @@ We established that it was not necessary to exhaustively test our program. There
 \section*{Implementation Size}
 Our design implementation used 496 LUTs and 124 FFs. It is by no means the smallest implementation possible, but it is fully functional on the board level and has a nice suite of features. If this were a real implementation for a customer, certain elements could be eliminated to save on size and power consumption. For instance, if we were able to work with binary numbers, rather than BCD, from the beginning, many of our logical blocks could be eliminated, and the arithmetic would be much simpler. We also could have chosen to only display the temperature and not the change in temperature, or not used any LEDs in our alarm displays (and only use the 7seg displays). These things all could have been omitted but we decided to commit to a more thorough design, rather than chop things out.
 
+\begin{verbatim}
+Fitter Status : Successful - Mon Sep 24 16:38:37 2012
+Quartus II 32-bit Version : 12.0 Build 178 05/31/2012 SJ Web Edition
+Revision Name : top
+Top-level Entity Name : top
+Family : Cyclone II
+Device : EP2C20F484C7
+Timing Models : Final
+Total logic elements : 496 / 18,752 ( 3 % )
+    Total combinational functions : 473 / 18,752 ( 3 % )
+        Dedicated logic registers : 121 / 18,752 ( < 1 % )
+        Total registers : 124
+        Total pins : 61 / 315 ( 19 % )
+        Total virtual pins : 0
+        Total memory bits : 0 / 239,616 ( 0 % )
+        Embedded Multiplier 9-bit elements : 0 / 52 ( 0 % )
+        Total PLLs : 0 / 4 ( 0 % )
+\end{verbatim}
 
 \section*{Team Member Contributions}
-Mark - Testbench, Clock Divider, LED Pulsing
-Ian - BCD Subtraction, Seven Segment Driver, State Display, Temperature Input
-Max - Top Level, Monitor, Display Mux, Alarm
+Mark - Testbench, Clock Divider, LED Pulsing\\
+Ian - BCD Subtraction, Seven Segment Driver, State Display, Temperature Input\\
+Max - Top Level, Monitor, Display Mux, Alarm\\
 
 \end{document}
