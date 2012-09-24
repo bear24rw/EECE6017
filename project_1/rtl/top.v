@@ -16,7 +16,7 @@ module top(
     //              KEY & SW ASSIGNMENTS
     // -------------------------------------------------
     
-    assign rst = ~KEY[1];
+    assign rst = ~KEY[0];
     assign enter_key = ~KEY[3];
 
     wire [3:0] temp_sw = SW[3:0];
@@ -26,6 +26,7 @@ module top(
     assign LEDG[7:6] = input_state;
     assign LEDG[5:4] = disp_mode;
     assign LEDG[3:2] = state;
+    assign LEDG[0] = new_number;
 
     // -------------------------------------------------
     //              1 HZ CLOCK
@@ -57,6 +58,7 @@ module top(
 
     wire [1:0] input_state;
     wire [3:0] current_input_value;
+    wire new_number;
 
     wire [3:0] temp_value_ones;
     wire [3:0] temp_value_tens;
@@ -72,6 +74,7 @@ module top(
         .enter(enter_key),
         .current_value(current_input_value),
         .input_state(input_state),
+        .new_number(new_number),
 
         .temp_value_ones(temp_value_ones),
         .temp_value_tens(temp_value_tens),
@@ -113,13 +116,9 @@ module top(
 
     wire [1:0] state;
 
-    // monitor is only enabled when we are done inputting the value
-    assign monitor_en = (input_state == `INPUT_STATE_DONE);
-
     monitor monitor(
-        .clk(clk_1hz),
         .rst(rst),
-        .en(monitor_en),
+        .en(new_number),
 
         .temp_value_ones(temp_value_ones),
         .temp_value_tens(temp_value_tens),
