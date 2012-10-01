@@ -41,7 +41,7 @@ module top(
 
     reg running = 0;
 
-    always @(negedge KEY[0])
+    always @(negedge KEY[3])
         running <= ~running;
 
     // -------------------------------------------------
@@ -62,7 +62,7 @@ module top(
 
     wire [7:0] new_value;
 
-    random random(
+    LFSR lfsr(
         .clk(CLOCK_50),
         .value(new_value)
     );
@@ -74,8 +74,9 @@ module top(
     wire [8:0] average;
     wire [5:0] average_frac;
 
-    average average(
+    average avg(
         .clk(CLOCK_50),
+        .rst(KEY[0]),
         .new_value(new_value),
         .average(average),
         .average_frac(average_frac)
@@ -94,7 +95,7 @@ module top(
     wire [4:0] seg_0 = running ? count[3:0] : `BCD_BLANK;
     wire [4:0] seg_1 = running ? count[7:4] : `BCD_BLANK;
     wire [4:0] seg_2 = running ? count[11:8] : `BCD_BLANK;
-    wire [4:0] seg_3 = running ? count[16:12] : `BCD_BLANK;
+    wire [4:0] seg_3 = running ? count[15:12] : `BCD_BLANK;
 
     // translates between the bcd lookup values and the
     // actual segments on the displays
@@ -107,3 +108,4 @@ module top(
 endmodule
 
 // vim: set textwidth=60:
+
