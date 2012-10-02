@@ -32,7 +32,7 @@ module seven_seg(
     // symbol if the display is not enabled just keep it blank default to
     // a unused symbol to indicate an error
 
-    always @(value, en)
+    always @(value)
         case (value)
             `BCD_0: seg <= 7'b1000000;
             `BCD_1: seg <= 7'b1111001;
