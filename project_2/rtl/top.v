@@ -60,30 +60,38 @@ module top(
     //               RANDOM NUMBER GEN
     // -------------------------------------------------
 
-    wire [7:0] new_value;
+    wire [7:0] rand_value;
 
     LFSR lfsr(
         .clk(CLOCK_50),
-        .value(new_value)
+        .value(rand_value)
     );
 
     // -------------------------------------------------
-    //                    AVERAGE
+    //                  DIVIDE BY 3
     // -------------------------------------------------
 
-    wire [8:0] average;
-    wire [5:0] average_frac;
+    wire [7:0] div_value;
 
-    average avg(
+    div_3 div(
         .clk(CLOCK_50),
-        .rst(KEY[0]),
-        .new_value(new_value),
-        .average(average),
-        .average_frac(average_frac)
+        .in(rand_value),
+        .out(div_value)
     );
 
-    assign LEDR = average;
-    assign LEDG = average_frac;
+    // -------------------------------------------------
+    //                   SUM LAST 3
+    // -------------------------------------------------
+
+    wire [7:0] sum_value;
+
+    sum_3 sum(
+        .clk(CLOCK_50),
+        .in(div_value),
+        .out(sum_value)
+    );
+
+    assign LEDR = sum_value;
 
     // -------------------------------------------------
     //                 7-SEG DISPLAY
