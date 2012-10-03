@@ -36,25 +36,20 @@ module top(
 );
 
     // -------------------------------------------------
+    //                  KEY MAPPING
+    // -------------------------------------------------
+  
+    assign rst = ~KEY[0];
+    assign start_stop = ~KEY[3];
+
+    // -------------------------------------------------
     //              START / STOP TOGGLE
     // -------------------------------------------------
 
     reg running = 0;
 
-    always @(negedge KEY[3])
+    always @(posedge start_stop)
         running <= ~running;
-
-    // -------------------------------------------------
-    //                    COUNTER
-    // -------------------------------------------------
-
-    reg [15:0] count = 0;
-
-    always @(posedge CLOCK_50)
-        if (running)
-            count <= count + 1;
-        else
-            count <= 0;
 
     // -------------------------------------------------
     //               RANDOM NUMBER GEN
@@ -94,19 +89,48 @@ module top(
     assign LEDR = sum_value;
 
     // -------------------------------------------------
+    //                    COUNTER
+    // -------------------------------------------------
+    
+    wire [6:0] base;
+    wire [3:0] exponent;
+
+    counter counter(
+        .clk(CLOCK_50),
+        .rst(rst),
+        .en(running),
+        .base(base),
+        .exponent(exponent)
+    );
+
+    // -------------------------------------------------
+    //                  BINARY 2 BCD
+    // -------------------------------------------------
+  
+    wire [4:0] base_bcd_ones;
+    wire [4:0] base_bcd_tens;
+
+    bin_2_bcd b2b_base(
+        .bin(base),
+        .ones(base_bcd_ones),
+        .tens(base_bcd_tens)
+    );
+
+    wire [4:0] exponent_bcd;
+
+    bin_2_bcd b2b_exp(
+        .bin(base),
+        .ones(exponent_bcd),
+    );
+
+    // -------------------------------------------------
     //                 7-SEG DISPLAY
     // -------------------------------------------------
 
-    // muxes all values onto the proper 7-segment display
-    // depending on various input and display states
-
-    wire [4:0] seg_0 = running ? count[3:0] : `BCD_BLANK;
-    wire [4:0] seg_1 = running ? count[7:4] : `BCD_BLANK;
-    wire [4:0] seg_2 = running ? count[11:8] : `BCD_BLANK;
-    wire [4:0] seg_3 = running ? count[15:12] : `BCD_BLANK;
-
-    // translates between the bcd lookup values and the
-    // actual segments on the displays
+    wire [4:0] seg_0 = running ? `BCD_BLANK : exponent_bcd;
+    wire [4:0] seg_1 = running ? `BCD_BLANK : `BCD_E;
+    wire [4:0] seg_2 = running ? `BCD_BLANK : base_bcd_tens;
+    wire [4:0] seg_3 = running ? `BCD_BLANK : base_bcd_ones;
 
     seven_seg s0(seg_0, HEX0);
     seven_seg s1(seg_1, HEX1);

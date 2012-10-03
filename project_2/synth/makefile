@@ -7,18 +7,20 @@
 
 PROJECT = top
 ASSIGNMENT_FILES = top.qpf top.qsf
-SIM_TB = div_3_tb
+SIM_TB = counter_tb
 
 SRC = \
 	../rtl/top.v \
 	../rtl/LFSR.v \
 	../rtl/div_3.v \
 	../rtl/sum_3.v \
+	../rtl/counter.v \
 	../rtl/seven_seg.v
 
 SIM_SRC = \
 	../sim/div_3_tb.v \
 	../sim/sum_3_tb.v \
+	../sim/counter_tb.v \
 	../sim/lfsr_tb.v
 
 VINCDIR = \
