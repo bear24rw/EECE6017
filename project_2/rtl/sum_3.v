@@ -24,13 +24,13 @@
 module sum_3(
     input clk,
     input rst,
-    input [7:0] in,
-    output [7:0] out
+    input signed [7:0] in,
+    output signed [7:0] out
 );
 
-    reg [7:0] value_0 = 0;
-    reg [7:0] value_1 = 0;
-    reg [7:0] value_2 = 0;
+    reg signed [7:0] value_0 = 0;
+    reg signed [7:0] value_1 = 0;
+    reg signed [7:0] value_2 = 0;
 
     always @(posedge clk, posedge rst) begin
         if (rst) begin

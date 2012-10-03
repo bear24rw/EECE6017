@@ -64,7 +64,7 @@ module top(
 
     LFSR lfsr(
         .clk(CLOCK_50),
-        .value(rand_value)
+        .lfsr(rand_value)
     );
 
     // -------------------------------------------------
