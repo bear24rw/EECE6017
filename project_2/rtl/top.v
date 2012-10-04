@@ -120,7 +120,7 @@ module top(
 
     bin_2_bcd b2b_exp(
         .bin(base),
-        .ones(exponent_bcd),
+        .ones(exponent_bcd)
     );
 
     // -------------------------------------------------
