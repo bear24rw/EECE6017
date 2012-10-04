@@ -9,10 +9,10 @@ module div_3(
     // we need to figure out what (1/3) is in binary
     // 6 fractional bits give 2**6 = 64 values
     // 1/64 = 0.015625 per bit
-    // 0.3/0.015625 = 19.2
-    // 0.015625*19 = 0.296875 (close enough to 1/3)
-    // 19 = 0b10011
-    `define MULT 8'sb00_010011
+    // 0.333333/0.015625 = 21.333312
+    // 0.015625*21 = 0.328125 (close enough to 1/3)
+    // 21 = 0b10101
+    `define MULT 8'sb00_010101
 
     reg signed [15:0] mult_out;
 
