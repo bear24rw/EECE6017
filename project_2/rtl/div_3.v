@@ -23,6 +23,8 @@ module div_3(
             mult_out <= in * `MULT;
     end
 
-    assign out = mult_out[15:6];
+    // mult_out = 0000.000000_000000
+    // we only want 8 bits from it
+    assign out = mult_out[13:6];
 
 endmodule

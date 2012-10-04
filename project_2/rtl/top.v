@@ -70,6 +70,7 @@ module top(
 
     div_3 div(
         .clk(CLOCK_50),
+        .rst(rst),
         .in(rand_value),
         .out(div_value)
     );
@@ -82,6 +83,7 @@ module top(
 
     sum_3 sum(
         .clk(CLOCK_50),
+        .rst(rst),
         .in(div_value),
         .out(sum_value)
     );
@@ -107,8 +109,8 @@ module top(
     //                  BINARY 2 BCD
     // -------------------------------------------------
   
-    wire [4:0] base_bcd_ones;
-    wire [4:0] base_bcd_tens;
+    wire [3:0] base_bcd_ones;
+    wire [3:0] base_bcd_tens;
 
     bin_2_bcd b2b_base(
         .bin(base),
@@ -116,7 +118,7 @@ module top(
         .tens(base_bcd_tens)
     );
 
-    wire [4:0] exponent_bcd;
+    wire [3:0] exponent_bcd;
 
     bin_2_bcd b2b_exp(
         .bin(base),

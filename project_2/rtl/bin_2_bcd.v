@@ -1,11 +1,11 @@
 module bin_2_bcd (
-    input [11:0] bin,
+    input [7:0] bin,
     output reg [3:0] tens,
     output reg [3:0] ones
 );
 
     reg [3:0] num_shifts = 0;
-    reg [11:0] binary = 0;
+    reg [7:0] binary = 0;
 
     always @(*) begin
 
@@ -26,7 +26,7 @@ module bin_2_bcd (
             tens[0] = ones[3];
 
             ones = ones << 1;
-            ones[0] = binary[11];
+            ones[0] = binary[7];
 
             binary = binary << 1;
 
