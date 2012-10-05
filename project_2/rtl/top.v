@@ -39,8 +39,8 @@ module top(
     //                  KEY MAPPING
     // -------------------------------------------------
   
-    assign rst = ~KEY[0];
-    assign start_stop = ~KEY[3];
+    wire rst = ~KEY[0];
+    wire start_stop = ~KEY[3];
 
     // -------------------------------------------------
     //              START / STOP TOGGLE
