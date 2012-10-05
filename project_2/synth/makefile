@@ -7,7 +7,7 @@
 
 PROJECT = top
 ASSIGNMENT_FILES = top.qpf top.qsf
-SIM_TB = div_3_tb
+SIM_TB = counter_tb
 
 SRC = \
 	../rtl/top.v \
