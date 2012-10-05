@@ -48,8 +48,11 @@ module top(
 
     reg running = 0;
 
-    always @(posedge start_stop)
-        running <= ~running;
+    always @(posedge start_stop, posedge rst)
+        if (rst)
+            running <= 0;
+        else
+            running <= ~running;
 
     // -------------------------------------------------
     //               RANDOM NUMBER GEN
