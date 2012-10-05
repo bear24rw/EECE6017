@@ -127,7 +127,7 @@ module top(
     wire [3:0] exponent_bcd;
 
     bin_2_bcd b2b_exp(
-        .bin(base),
+        .bin(exponent),
         .ones(exponent_bcd)
     );
 
