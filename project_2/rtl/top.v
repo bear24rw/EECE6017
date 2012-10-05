@@ -135,15 +135,10 @@ module top(
     //                 7-SEG DISPLAY
     // -------------------------------------------------
 
-    wire [4:0] seg_0 = running ? `BCD_BLANK : exponent_bcd;
-    wire [4:0] seg_1 = running ? `BCD_BLANK : `BCD_E;
-    wire [4:0] seg_2 = running ? `BCD_BLANK : base_bcd_tens;
-    wire [4:0] seg_3 = running ? `BCD_BLANK : base_bcd_ones;
-
-    seven_seg s0(seg_0, HEX0);
-    seven_seg s1(seg_1, HEX1);
-    seven_seg s2(seg_2, HEX2);
-    seven_seg s3(seg_3, HEX3);
+    seven_seg s0(exponent_bcd,  HEX0);
+    seven_seg s1(`BCD_E,        HEX1);
+    seven_seg s2(base_bcd_ones, HEX2);
+    seven_seg s3(base_bcd_tens, HEX3);
             
 endmodule
 
