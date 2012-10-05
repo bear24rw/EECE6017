@@ -105,7 +105,7 @@ module top(
 
     counter counter(
         .clk(CLOCK_50),
-        .rst(rst),
+        .rst(~running),
         .en(running),
         .base(base),
         .exponent(exponent)
