@@ -3,7 +3,7 @@
  *   Copyright (C) 2012 by Ian Cathey                                      *
  *   Copyright (C) 2012 by Mark Labbato                                    *
  *                                                                         *
- *   Embedded System - Project 1                                           *
+ *   Embedded System - Project 2                                           *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
