@@ -1,9 +1,11 @@
 module counter_tb();
 
     reg clk = 0;
+    reg en = 1;
 
     counter uut(
         .clk(clk),
+        .en(en),
         .rst(rst)
     );
 

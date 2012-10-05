@@ -2,6 +2,7 @@ module div_3_tb();
 
     reg clk = 0;
     reg rst = 0;
+    reg en = 1;
     reg signed [7:0] in = 0;
 
     wire signed [7:0] out;
@@ -9,6 +10,7 @@ module div_3_tb();
     div_3 uut(
         .clk(clk),
         .rst(rst),
+        .en(en),
         .in(in),
         .out(out)
     );
