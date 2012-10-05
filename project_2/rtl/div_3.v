@@ -1,6 +1,7 @@
 module div_3(
     input clk,
     input rst,
+    input en,
     input signed [7:0] in,
     output signed [7:0] out
 );
@@ -19,7 +20,7 @@ module div_3(
     always @(posedge clk, posedge rst) begin
         if (rst)
             mult_out <= 0;
-        else
+        else if (en)
             mult_out <= in * `MULT;
     end
 

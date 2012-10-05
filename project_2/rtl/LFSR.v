@@ -1,6 +1,7 @@
-module LFSR(clk, lfsr);
+module LFSR(clk, en, lfsr);
 
 	input clk;
+    input en;
 	output reg [7:0] lfsr = 8'b10011011;
 
 	wire bit0;
@@ -9,6 +10,7 @@ module LFSR(clk, lfsr);
 	
 	always @(posedge clk)
 	begin
+        if (en)
 			lfsr <= {lfsr[6:0],bit0};
 	end	
 endmodule

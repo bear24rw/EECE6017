@@ -24,6 +24,7 @@
 module sum_3(
     input clk,
     input rst,
+    input en,
     input signed [7:0] in,
     output signed [7:0] out
 );
@@ -37,7 +38,7 @@ module sum_3(
             value_0 <= 0;
             value_1 <= 0;
             value_2 <= 0;
-        end else begin
+        end else if (en) begin
             value_2 <= value_1;
             value_1 <= value_0;
             value_0 <= in;

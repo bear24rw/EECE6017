@@ -59,6 +59,7 @@ module top(
 
     LFSR lfsr(
         .clk(CLOCK_50),
+        .en(running),
         .lfsr(rand_value)
     );
 
@@ -71,6 +72,7 @@ module top(
     div_3 div(
         .clk(CLOCK_50),
         .rst(rst),
+        .en(running),
         .in(rand_value),
         .out(div_value)
     );
@@ -84,6 +86,7 @@ module top(
     sum_3 sum(
         .clk(CLOCK_50),
         .rst(rst),
+        .en(running),
         .in(div_value),
         .out(sum_value)
     );
