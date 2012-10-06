@@ -36,14 +36,27 @@ module counter(
     reg [29:0] count = 0;
 
     always @(posedge clk, posedge rst) begin
+
+        // if we are in reset we want to clear everything inluding
+        // the output values
         if (rst) begin
             base = 0;
             exponent = 0;
             count = 0;
             o_base = 0;
             o_exponent = 0;
-        end else if (en) begin
-            
+
+        // if we are not enabled we also want to reset everything
+        // we still want to keep the output values because we want 
+        // to be able to read them when system is stopped
+        end else if (!en) begin
+            base = 0;
+            exponent = 0;
+            count = 0;
+
+        // normal operation, just count up
+        end else begin
+
             count = count + 1;
 
             case (exponent)
