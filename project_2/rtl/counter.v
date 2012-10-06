@@ -40,6 +40,8 @@ module counter(
             base = 0;
             exponent = 0;
             count = 0;
+            o_base = 0;
+            o_exponent = 0;
         end else if (en) begin
             
             count = count + 1;
