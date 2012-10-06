@@ -27,10 +27,12 @@ module counter(
     input clk,
     input rst,
     input en,
-    output reg [6:0] base = 0,
-    output reg [3:0] exponent = 0
+    output reg [6:0] o_base = 0,
+    output reg [3:0] o_exponent = 0
 );
 
+    reg [6:0] base = 0;
+    reg [3:0] exponent = 0;
     reg [29:0] count = 0;
 
     always @(posedge clk, posedge rst) begin
@@ -59,6 +61,9 @@ module counter(
                 base = 10; 
                 exponent = exponent + 1; 
             end
+
+            o_base = base;
+            o_exponent = exponent;
         end
     end
 

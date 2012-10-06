@@ -107,8 +107,8 @@ module top(
         .clk(CLOCK_50),
         .rst(~running),
         .en(running),
-        .base(base),
-        .exponent(exponent)
+        .o_base(base),
+        .o_exponent(exponent)
     );
 
     // -------------------------------------------------
