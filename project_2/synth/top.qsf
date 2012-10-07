@@ -506,7 +506,6 @@ set_global_assignment -name VERILOG_FILE ../rtl/top.v
 set_global_assignment -name VERILOG_FILE ../rtl/sum_3.v
 set_global_assignment -name VERILOG_FILE ../rtl/seven_seg.v
 set_global_assignment -name VERILOG_FILE ../rtl/LFSR.v
-set_global_assignment -name VERILOG_FILE ../rtl/divide.v
 set_global_assignment -name VERILOG_FILE ../rtl/div_3.v
 set_global_assignment -name VERILOG_FILE ../rtl/counter.v
 set_global_assignment -name SOURCE_FILE ../rtl/constants.h
@@ -524,6 +523,6 @@ set_global_assignment -name TIMEQUEST_MULTICORNER_ANALYSIS ON
 set_global_assignment -name TIMEQUEST_DO_REPORT_TIMING ON
 set_global_assignment -name TIMEQUEST_DO_CCPP_REMOVAL OFF
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "3.3-V LVTTL"
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name FLOW_ENABLE_POWER_ANALYZER ON
 set_global_assignment -name POWER_DEFAULT_INPUT_IO_TOGGLE_RATE "12.5 %"
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
