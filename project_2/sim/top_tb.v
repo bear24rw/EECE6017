@@ -65,7 +65,7 @@ module top_tb();
 		#100 start_stop;
 		
 		for (i=0; i<1000; i = i+1) begin
-			#1 $write("|%d|%d|%d|%d|%d|%d|%d|%d|",
+			#1 $write("|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|",
 					uut.rand_value,
 					uut.div_value,
 					uut.sum_value,
@@ -73,7 +73,10 @@ module top_tb();
 					uut.exponent,
 					uut.base_bcd_ones,
 					uut.base_bcd_tens,
-					uut.exponent_bcd
+					uut.exponent_bcd,
+					uut.sum_3.value_0,
+					uut.sum_3.value_1,
+					uut.sum_3.value_2,
 					);
 		end
 		
