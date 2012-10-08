@@ -38,8 +38,13 @@ module div_3(
     // 21 = 0b10101
     `define MULT 8'sb00_010101
 
+    // the width of the result will be
+    // the sum of the width of the two things
+    // being multiplied. both of our numbers are
+    // 8 bits so the result will be 16
     reg signed [15:0] mult_out;
 
+    // calculate the new number every clock cycle
     always @(posedge clk, posedge rst) begin
         if (rst)
             mult_out <= 0;

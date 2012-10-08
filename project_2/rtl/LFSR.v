@@ -25,13 +25,16 @@ module LFSR(clk, en, lfsr);
     input en;
 	output reg [7:0] lfsr = 8'b10011011;
 
+    // xor the special tap bits to generate the new lsb
 	wire bit0;
-	
 	xnor(bit0, lfsr[7], lfsr[5], lfsr[4], lfsr[3]);
-	
+
+    // every clock generate the next number by
+    // shifting in the result of the xor'd bits
+    // we only want to generate new numbers
+    // when enabled
 	always @(posedge clk)
 	begin
-        if (en)
-			lfsr <= {lfsr[6:0],bit0};
+        if (en) lfsr <= {lfsr[6:0],bit0};
 	end	
 endmodule

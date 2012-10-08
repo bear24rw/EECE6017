@@ -59,6 +59,10 @@ module counter(
 
             count = count + 1;
 
+            // depending on the current exponent we will need to wait until
+            // we count to different values before we increment the base
+            // once we reach that number we can increment the base and 
+            // restart the count
             case (exponent)
                 0: if (count == 10**00) begin base = base + 1; count = 0; end
                 1: if (count == 10**01) begin base = base + 1; count = 0; end
@@ -72,11 +76,14 @@ module counter(
                 9: if (count == 10**09) begin base = base + 1; count = 0; end
             endcase                      
 
+            // if our base gets to 99 we need to incement the exponent
+            // because we cannot display a base of 100 with only 2 digits
             if (base == 100) begin 
                 base = 10; 
                 exponent = exponent + 1; 
             end
 
+            // since we are enabled output the updated count
             o_base = base;
             o_exponent = exponent;
         end

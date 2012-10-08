@@ -38,13 +38,19 @@ module top(
     // -------------------------------------------------
     //                  KEY MAPPING
     // -------------------------------------------------
-  
+ 
+    // invert the keys because we want to deal with
+    // active high logic
+
     wire rst = ~KEY[0];
     wire start_stop = ~KEY[3];
 
     // -------------------------------------------------
     //              START / STOP TOGGLE
     // -------------------------------------------------
+
+    // running flag indicates that the system is currently
+    // processing numbers
 
     reg running = 0;
 
@@ -58,6 +64,9 @@ module top(
     //               RANDOM NUMBER GEN
     // -------------------------------------------------
 
+    // on every clock cycle if we are running the lfsr
+    // will output a new random 8-bit number
+
     wire signed [7:0] rand_value;
 
     LFSR lfsr(
@@ -69,6 +78,9 @@ module top(
     // -------------------------------------------------
     //                  DIVIDE BY 3
     // -------------------------------------------------
+
+    // on every clock cycle if we are running the divider
+    // will divide the most recent random number by 3
 
     wire signed [7:0] div_value;
 
@@ -83,6 +95,9 @@ module top(
     // -------------------------------------------------
     //                   SUM LAST 3
     // -------------------------------------------------
+
+    // the sum keeps track of the last three divided numbers
+    // and outputs their sum
 
     wire signed [7:0] sum_value;
 
@@ -99,7 +114,11 @@ module top(
     // -------------------------------------------------
     //                    COUNTER
     // -------------------------------------------------
-    
+   
+    // when the system is running the counter keeps track
+    // of how many numbers we have generated. it outputs
+    // the count in scientific notation: 00E0
+
     wire [6:0] base;
     wire [3:0] exponent;
 
@@ -114,6 +133,9 @@ module top(
     // -------------------------------------------------
     //                  BINARY 2 BCD
     // -------------------------------------------------
+
+    // since the base from the counter is 2 digits we
+    // need to split them up for the two 7-segments
   
     wire [3:0] base_bcd_ones;
     wire [3:0] base_bcd_tens;
@@ -124,18 +146,11 @@ module top(
         .tens(base_bcd_tens)
     );
 
-    wire [3:0] exponent_bcd;
-
-    bin_2_bcd b2b_exp(
-        .bin(exponent),
-        .ones(exponent_bcd)
-    );
-
     // -------------------------------------------------
     //                 7-SEG DISPLAY
     // -------------------------------------------------
 
-    seven_seg s0(exponent_bcd,  HEX0);
+    seven_seg s0(exponent,  HEX0);
     seven_seg s1(`BCD_E,        HEX1);
     seven_seg s2(base_bcd_ones, HEX2);
     seven_seg s3(base_bcd_tens, HEX3);

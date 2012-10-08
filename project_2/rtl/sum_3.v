@@ -29,10 +29,13 @@ module sum_3(
     output signed [7:0] out
 );
 
+    // we need to store the last three values
+    // to preform a moving sum
     reg signed [7:0] value_0 = 0;
     reg signed [7:0] value_1 = 0;
     reg signed [7:0] value_2 = 0;
 
+    // every clock cycle shift in the new value
     always @(posedge clk, posedge rst) begin
         if (rst) begin
             value_0 <= 0;
@@ -45,6 +48,7 @@ module sum_3(
         end
     end
 
+    // continuously calculate and output the sum
     assign out = value_0 + value_1 + value_2;
 
 endmodule
