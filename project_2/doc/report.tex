@@ -24,7 +24,7 @@ We decided to take a completely module approach and break down each function int
 \section*{Testing strategy}
 For this lab we decided to test everything exhaustively. Each person wrote a test bench for the module that they wrote. Other team members then went through each test bench and validated the code, then tested the module themselves. Python scripts were developed to verify the full output of each test bench. For the LFSR a gnuplot script plots a histogram of a few thousand values. This allows us to visually verify the distribution of numbers and ensure it is flat. After each test was both spot checked by hand and automatically checked by a Python script we wrote a master top level test bench. Again, a Python script was written to fully verify the top level output. We found that this strategy of using Python to fully verify each module allowed us to quickly find corner case errors that would have been hard to find otherwise.
 
-
+\newpage
 \section*{Implementation Resource Usage}
 
 
@@ -69,6 +69,21 @@ The max clock speed as reported by the timing analyzer is 102.51MHz and our Tota
 +------------+-----------------+------------+------+
 \end{verbatim}
 
+\newpage
+\begin{verbatim}
+PowerPlay Power Analyzer Status : Successful - Mon Oct  8 14:22:00 2012
+Quartus II 32-bit Version : 12.0 Build 178 05/31/2012 SJ Web Edition
+Revision Name : top
+Top-level Entity Name : top
+Family : Cyclone II
+Device : EP2C20F484C7
+Power Models : Final
+Total Thermal Power Dissipation : 81.98 mW
+Core Dynamic Thermal Power Dissipation : 4.25 mW
+Core Static Thermal Power Dissipation : 47.38 mW
+I/O Thermal Power Dissipation : 30.35 mW
+Power Estimation Confidence : Low: user provided insufficient toggle rate data
+\end{verbatim}
 
 Our critical path is through the huge 30-bit counter that we use to count in scientific notation. 
 
@@ -85,11 +100,10 @@ Our critical path is through the huge 30-bit counter that we use to count in sci
 \end{verbatim}
 
 \section*{Team Member Contributions}
-Ian Cathey - LFSR module, Seven Segment Display driver, LFSR testbench, attempted to write a divider but Max.s was better
-Mark Labbato - Top level design module, summation module, binary-to-BCD converter, top level testbench, module testbenches.
-Max Thrun - Divider, and counter circuits, testbenches for these modules
-
-
+\textbf{Ian Cathey} - LFSR module, Seven Segment Display driver, LFSR testbench \\
+\textbf{Mark Labbato} - Top level design module, summation module, binary-to-BCD converter, top level testbench, module testbenches. \\
+\textbf{Max Thrun} - Divider, and counter circuits, testbenches for these modules \\
+\\
 All members participated in verifying each others module in a group setting.
 
 \end{document}
