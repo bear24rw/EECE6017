@@ -23,8 +23,8 @@
 
 module top_tb();
 	
-		reg CLOCK_50;
-		reg [3:0] KEY;
+		reg CLOCK_50 = 0;
+		reg [3:0] KEY = 1;
 		reg [9:0] SW;
 		wire [7:0] LEDG;
 		wire [9:0] LEDR;
@@ -90,14 +90,14 @@ module top_tb();
 			
 		// pulses the reset key
 		task reset; begin
-			#50 KEY[0] = 1; #50 KEY[0] = 0;
+			#50 KEY[0] = 0; #50 KEY[0] = 1;
 		end
 		endtask
 		
 		
 		// pulses the start/stop key
 		task start_stop; begin
-			#50 KEY[3] = 1; #50 KEY[3] = 0;
+			#50 KEY[3] = 0; #50 KEY[3] = 1;
 		end
 		endtask	
 		
