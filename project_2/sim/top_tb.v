@@ -55,25 +55,25 @@ module top_tb();
         reset;
         
         // Start the random number generator
-        #100 start_stop;
-        
+        start_stop;
+
         for (i=0; i<1000; i = i+1) begin
             #1 CLOCK_50 = 1;
             #1 CLOCK_50 = 0;
 
-            $write("%d|%d|%d|%d|%d|%d|%d|%d|%d|%d|%d",
-                uut.rand_value,
-                uut.div_value,
-                uut.sum_value,
-                uut.base,
-                uut.exponent,
-                uut.base_bcd_ones,
-                uut.base_bcd_tens,
-                uut.exponent_bcd,
-                uut.sum.value_0,
-                uut.sum.value_1,
-                uut.sum.value_2,
-            );
+            disp_num(uut.rand_value); $write("|");
+            disp_num(uut.div_value); $write("|");
+            disp_num(uut.sum_value); $write("|");
+            disp_num(uut.sum.value_0); $write("|");
+            disp_num(uut.sum.value_1); $write("|");
+            disp_num(uut.sum.value_2); $write("|");
+            $write("%d|", uut.base);
+            $write("%d|", uut.exponent);
+            $write("%d|", uut.base_bcd_tens);
+            $write("%d|", uut.base_bcd_ones);
+            $write("%d", uut.exponent_bcd);
+            $write("\n");
+
         end
         
         // stop the generator and the test
@@ -83,6 +83,21 @@ module top_tb();
         $finish;
 
     end
+
+    reg [7:0] z = 0;
+    task disp_num;
+        input signed [7:0] x;
+        begin
+            // check if negative
+            if (x[7]) begin
+                z = (~(x[7:0]))+1;
+                $write("-");
+                $write("%0d.%6d", z[7:6], z[5:0]*15625);
+            end else begin
+                $write("%0d.%6d", x[7:6], x[5:0]*15625);
+            end
+        end
+    endtask
             
             
     // pulses the reset key
