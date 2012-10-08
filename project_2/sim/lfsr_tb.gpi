@@ -4,7 +4,9 @@ reset
 set terminal png enhanced font "Vera,12" size 1024, 768
 set output "lfsr_tb.png"
 
-
+set xlabel "Random number"
+set ylabel "Frequency"
+set title "LFSR Distribution"
 
 binwidth=1
 bin(x,width)=width*floor(x/width)+binwidth/2

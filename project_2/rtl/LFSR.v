@@ -27,7 +27,7 @@ module LFSR(clk, en, lfsr);
 
 	wire bit0;
 	
-	xnor(bit0, lfsr[7], lfsr[5], lfsr[2], lfsr[1]);
+	xnor(bit0, lfsr[7], lfsr[5], lfsr[4], lfsr[3]);
 	
 	always @(posedge clk)
 	begin
