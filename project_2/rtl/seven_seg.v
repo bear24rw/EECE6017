@@ -1,7 +1,5 @@
 /***************************************************************************
- *   Copyright (C) 2012 by Max Thrun                                       *
  *   Copyright (C) 2012 by Ian Cathey                                      *
- *   Copyright (C) 2012 by Mark Labbato                                    *
  *                                                                         *
  *   Embedded System - Project 2                                           *
  *                                                                         *
