@@ -46,11 +46,6 @@ module top_tb();
         .HEX3(HEX3)
     );
     
-    initial begin
-        $dumpfile("top_tb.vcd");
-        $dumpvars(0, top_tb);
-    end
-        
         
     integer i;
         
