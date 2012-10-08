@@ -24,7 +24,7 @@
 module top_tb();
     
     reg CLOCK_50 = 0;
-    reg [3:0] KEY = 1;
+    reg [3:0] KEY = 4'b1111;
     reg [9:0] SW;
     wire [7:0] LEDG;
     wire [9:0] LEDR;
