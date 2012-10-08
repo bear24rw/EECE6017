@@ -58,7 +58,7 @@ module top(
     //               RANDOM NUMBER GEN
     // -------------------------------------------------
 
-    wire [7:0] rand_value;
+    wire signed [7:0] rand_value;
 
     LFSR lfsr(
         .clk(CLOCK_50),
@@ -70,7 +70,7 @@ module top(
     //                  DIVIDE BY 3
     // -------------------------------------------------
 
-    wire [7:0] div_value;
+    wire signed [7:0] div_value;
 
     div_3 div(
         .clk(CLOCK_50),
@@ -84,7 +84,7 @@ module top(
     //                   SUM LAST 3
     // -------------------------------------------------
 
-    wire [7:0] sum_value;
+    wire signed [7:0] sum_value;
 
     sum_3 sum(
         .clk(CLOCK_50),
