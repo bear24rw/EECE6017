@@ -1,0 +1,32 @@
+digraph G {
+    rankdir=LR;
+    labelloc="b";
+
+    node [shape=plaintext];
+
+    subgraph clusterUser {label="User"; labelloc="b"; peripheries=0; user};
+    user [shapefile="stick.png", peripheries=0, label="" ];
+
+    subgraph clusterAdmin {label="Admin"; labelloc="b"; peripheries=0; admin};
+    admin [shapefile="stick.png", peripheries=0, label="" ];
+
+    subgraph clusterSystemBoundries
+    {
+        label="System Boundry";
+        node [shape=ellipse, style=solid];
+        {
+            rank=same;
+
+            read_state [label="Read State"];
+            read_temp [label="Read Temp"];
+            read_delta [label="Read Delta"];
+            set_mode [label="Set Mode"];
+        }
+    }
+
+    user -> read_state;
+    user -> read_temp;
+    user -> read_delta;
+    admin -> set_mode;
+}
+

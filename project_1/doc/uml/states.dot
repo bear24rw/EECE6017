@@ -1,0 +1,24 @@
+
+digraph G {
+    graph [rankdir=LR; overlap=false;];
+
+    norm[label="State Normal"];
+    bord[label="State Borderline"];
+    attn[label="State Attention"];
+    emerg[label="State Emergency"];
+
+    norm->bord[label="40<=T<47"];
+    norm->attn[label="47<=T<50"];
+    norm->emerg[label="T>=50"];
+
+    bord->norm[label="T<40"];
+    bord->attn[label="47<=T<50"];
+    bord->emerg[label="T>=50"];
+
+    attn->norm[label="T<40"];
+    attn->bord[label="40<=T<47"];
+    attn->emerg[label="T>=50"];
+    
+    {rank=same; norm bord attn emerg};
+}
+

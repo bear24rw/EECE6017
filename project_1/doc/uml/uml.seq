@@ -1,0 +1,36 @@
+# UML User Guide: Appendix A,p. 436
+
+.PS
+
+copy "sequence.pic";
+
+# Define the objects
+pobject(E,"External Messages");
+object(ADMIN,"Admin");
+object(DISPDRIVER,"Disp Driver");
+object(STATEMON, "State Monitor");
+object(DISPLAY, "Display");
+
+step();
+
+# Message sequences
+active(ADMIN);
+message(ADMIN,STATEMON,"Choose New Mode");
+active(STATEMON);
+message(STATEMON,DISPDRIVER, "Sign Change");
+active(DISPDRIVER);
+message(DISPDRIVER,STATEMON, "Trigger Alarm?");
+message(STATEMON,DISPDRIVER, "Yes/No");
+message(DISPDRIVER,DISPLAY, "Send Display Mode / Alarm");
+active(DISPLAY);
+message(DISPLAY,ADMIN, "Output");
+
+
+step();
+
+complete(ADMIN);
+complete(STATEMON);
+complete(DISPDRIVER);
+complete(DISPLAY);
+
+.PE
