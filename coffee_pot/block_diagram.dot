@@ -1,0 +1,35 @@
+digraph G {
+    rankdir=LR;
+    //labelloc="b";
+
+    node [shape=record];
+
+    hour [label="Hour Increment"];
+    min [label="Minute Increment"];
+    mode [label="Mode Toggle"];
+    rtc [label="Real Time Clock"];
+    set_time [label="Brew Start Time"];
+    disp_mux [label="Display Mux"];
+    state [label="Brew State"];
+    led [label="Brew Finished Indicator"];
+    seven_segs [label="7 Segment Displays"];
+
+    state -> led;
+    hour -> set_time;
+    min -> set_time;
+    mode -> set_time;
+
+    set_time -> disp_mux;
+    mode -> disp_mux;
+    set_time -> state;
+
+    rtc -> state;
+    disp_mux -> seven_segs;
+
+    subgraph clusterInput {label="Inputs"; hour; min; mode};
+    subgraph clusterMac {label="Automatic Coffee Pot"; rtc; set_time; disp_mux; state};
+    subgraph clusterOut {label="Outputs"; led; seven_segs};
+
+
+}
+

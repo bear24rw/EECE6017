@@ -1,0 +1,27 @@
+digraph G {
+    rankdir=LR;
+    labelloc="b";
+
+    node [shape=plaintext];
+
+    subgraph clusterUser {label="User"; labelloc="b"; peripheries=0; user};
+    user [shapefile="stick.png", peripheries=0, label="" ];
+
+        node [shape=ellipse, style=solid];
+        {
+            rank=same;
+
+            mode [label="Toggle Mode"];
+            set_time [label="Set Brewing Time"];
+            read_time [label="Read Current Time"];
+            read_done [label="Read Completion Indicator"];
+            remove [label="Remove Pot"];
+        }
+
+    user -> mode;
+    user -> set_time;
+    user -> read_time;
+    user -> read_done;
+    user -> remove;
+}
+
