@@ -9,7 +9,9 @@
 
 
 /* Definition of shared_buf_sem Semaphore */
-OS_EVENT *shared_buf_sem;
+OS_EVENT *shared_buf_sem_rd;    // num of readers
+OS_EVENT *shared_buf_sem_wr;    // writer is writing
+OS_SEM_DATA sem_data;
 
 /* Definition of Task Stacks */
 OS_STK reader_stk[TASK_STACKSIZE];
@@ -28,10 +30,17 @@ void reader(void *pdata){
 
 	while(true)
 	{
-		OSSemPend(shared_buf_sem, 0, &return_code);
+        // wait for writer to finish
+		OSSemPend(shared_buf_sem_wr, 0, &return_code);
+
+        // we are using a read spot
+		OSSemPend(shared_buf_sem_rd, 0, &return_code);
+
+        // give write sem back so other readers can read
+        OSSemPost(shared_buf_sem_wr);
 
 		if(book_mark == 0){
-			OSSemPost(shared_buf_sem);
+			OSSemPost(shared_buf_sem_rd);
 			OSTimeDlyHMSM(0,0,2,0);
 		}else{
 			INT8U index = 0;
@@ -46,7 +55,7 @@ void reader(void *pdata){
 
 			printf("\n");
 
-			OSSemPost(shared_buf_sem);
+			OSSemPost(shared_buf_sem_rd);
 
 			OSTimeDlyHMSM(0,0,10,0);
 		}
@@ -57,7 +66,13 @@ void writer(void *pdata){
 	INT8U return_code;
 
 	while(true){
-		OSSemPend(shared_buf_sem, 0, &return_code);
+
+        // wait for all readers to finish
+        OSSemQuery(shared_buf_sem_rd, &sem_data);
+        if (sem_data.OSCnt < 3) continue;
+
+        // writer is now in use
+		OSSemPend(shared_buf_sem_wr, 0, &return_code);
 
 		if(book_mark == WORDS_IN_BOOK -1){
 			book_mark = 0;
@@ -70,7 +85,8 @@ void writer(void *pdata){
 
 		book_mark += 1;
 
-		OSSemPost(shared_buf_sem);
+        // done writing
+		OSSemPost(shared_buf_sem_wr);
 
 		OSTimeDlyHMSM(0,0,1,0);
 	}
@@ -111,7 +127,8 @@ void  reader_writer_init()
 
 int main (int argc, char* argv[], char* envp[])
 {
-	shared_buf_sem = OSSemCreate(1);//binary semaphore
+	shared_buf_sem_wr = OSSemCreate(1);
+	shared_buf_sem_rd = OSSemCreate(3);
 
 	reader_writer_init();
 
