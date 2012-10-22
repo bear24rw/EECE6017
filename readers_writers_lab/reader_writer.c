@@ -100,6 +100,12 @@ void  reader_writer_init()
 	//create reader
 	return_code = OSTaskCreate(reader, NULL, (void*)&reader_stk[TASK_STACKSIZE-1], READER_PRIO);
 	alt_ucosii_check_return_code(return_code);
+
+	return_code = OSTaskCreate(reader, NULL, (void*)&reader_stk[TASK_STACKSIZE-1], READER_PRIO);
+	alt_ucosii_check_return_code(return_code);
+
+	return_code = OSTaskCreate(reader, NULL, (void*)&reader_stk[TASK_STACKSIZE-1], READER_PRIO);
+	alt_ucosii_check_return_code(return_code);
 }
 
 
