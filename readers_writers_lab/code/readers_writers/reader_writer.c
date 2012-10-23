@@ -14,7 +14,9 @@ OS_EVENT *shared_buf_sem_wr;    // writer is writing
 OS_SEM_DATA sem_data;
 
 /* Definition of Task Stacks */
-OS_STK reader_stk[TASK_STACKSIZE];
+OS_STK reader_1_stk[TASK_STACKSIZE];
+OS_STK reader_2_stk[TASK_STACKSIZE];
+OS_STK reader_3_stk[TASK_STACKSIZE];
 OS_STK writer_stk[TASK_STACKSIZE];
 
 void elipsis(){
@@ -45,15 +47,10 @@ void reader(void *pdata){
 		}else{
 			INT8U index = 0;
 
-			printf("Reader is reading");
-			elipsis();
-
 			while(index < book_mark){
-				printf("%s ", book[index][0]);
+				printf("Reader %d: %s\n", pdata, book[index][0]);
 				index += 1;
 			}
-
-			printf("\n");
 
 			OSSemPost(shared_buf_sem_rd);
 
@@ -77,11 +74,9 @@ void writer(void *pdata){
 		if(book_mark == WORDS_IN_BOOK -1){
 			book_mark = 0;
 		}
-		printf("Writer is writing");
-		elipsis();
 
 		book[book_mark][0] = pangram[book_mark][0];
-		printf("%s \n", book[book_mark][0]);
+		printf("Writer: %s \n", book[book_mark][0]);
 
 		book_mark += 1;
 
@@ -114,13 +109,13 @@ void  reader_writer_init()
 	alt_ucosii_check_return_code(return_code);
 
 	//create reader
-	return_code = OSTaskCreate(reader, NULL, (void*)&reader_stk[TASK_STACKSIZE-1], READER_1_PRIO);
+	return_code = OSTaskCreate(reader, (void*)1, (void*)&reader_1_stk[TASK_STACKSIZE-1], READER_1_PRIO);
 	alt_ucosii_check_return_code(return_code);
 
-	return_code = OSTaskCreate(reader, NULL, (void*)&reader_stk[TASK_STACKSIZE-1], READER_2_PRIO);
+	return_code = OSTaskCreate(reader, (void*)2, (void*)&reader_2_stk[TASK_STACKSIZE-1], READER_2_PRIO);
 	alt_ucosii_check_return_code(return_code);
 
-	return_code = OSTaskCreate(reader, NULL, (void*)&reader_stk[TASK_STACKSIZE-1], READER_3_PRIO);
+	return_code = OSTaskCreate(reader, (void*)3, (void*)&reader_3_stk[TASK_STACKSIZE-1], READER_3_PRIO);
 	alt_ucosii_check_return_code(return_code);
 }
 
