@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -6,11 +5,10 @@
 #include "alt_ucosii_simple_error_check.h"
 #include "reader_writer.h"
 
-
-
 /* Definition of shared_buf_sem Semaphore */
-OS_EVENT *mutex_access;         // exclusive access for either all the readers of the writer
-OS_EVENT *mutex_num_readers;    // protect the 'num_readers' variable
+OS_EVENT *mutex_wr;
+OS_EVENT *mutex_rd;
+OS_EVENT *mutex_num_readers;
 
 /* Definition of Task Stacks */
 OS_STK reader_1_stk[TASK_STACKSIZE];
@@ -21,77 +19,90 @@ OS_STK writer_stk[TASK_STACKSIZE];
 // number of readers accessing the buffer
 unsigned char num_readers = 0;
 
-void elipsis(){
-    INT8U i;
-    for(i=0; i<3; i++){
-        printf(".");
-        OSTimeDlyHMSM(0,0,1,0);
-    }
-}
+// helper functions to make code more readable
+void pend(OS_EVENT *pevent) { OSSemPend(pevent, 0, NULL); }
+void post(OS_EVENT *pevent) { OSSemPost(pevent); }
 
 void reader(void *pdata){
-    INT8U return_code;
 
     while(true)
     {
 
+        // wait for exclusive read access
+        pend(mutex_rd);
+
         // request access to the 'num_readers' variable
-        OSSemPend(mutex_num_readers, 0, &return_code);
+        pend(mutex_num_readers);
 
-        // if we are the first reader request exclusive access for the readers
-        if (num_readers == 0)
-            OSSemPend(mutex_access, 0, &return_code);
+        // if we are the first reader wait for writer to finish
+        if (num_readers == 0) {
+            printf_debug("Waiting to lock out writer...\n");
+            pend(mutex_wr);
+        }
 
-        // we are currently readering so increase the count
+        // we are currently reading so increase the count
         num_readers++;
 
         // release the 'num_readers' variable
-        OSSemPost(mutex_num_readers);
+        post(mutex_num_readers);
 
-        printf("\e[1;36mReader %d: ", pdata);
+        // we don't really need exclusive read access anymore.
+        // realeasing this allows the higher priority write task
+        // to run if it's waiting
+        post(mutex_rd);
+
+        printf_reader("Reader %d: ", pdata);
         INT8U index = 0;
-        while(index < book_mark){
-            printf("%s ", book[index][0]);
+        while(index < book_mark ){
+            printf_reader("%s ", book[index][0]);
             index += 1;
         }
         printf("\n");
 
+        OSTimeDlyHMSM(0,0,1,0);
+
         // request access to the 'num_readers' variable
-        OSSemPend(mutex_num_readers, 0, &return_code);
+        pend(mutex_num_readers);
 
         // we are done reading
         num_readers--;
 
-        // if we are the last reader, release exclusive access
+        // if we are the last reader release the write lock
         if (num_readers == 0)
-            OSSemPost(mutex_access);
+            post(mutex_wr);
 
         // release the 'num_readers' variable
-        OSSemPost(mutex_num_readers);
-        
-        OSTimeDlyHMSM(0,0,1,0);
+        post(mutex_num_readers);
+
     }
 }
 
 void writer(void *pdata){
-    INT8U return_code;
 
     while(true){
 
-        // request exclusive access
-        OSSemPend(mutex_access, 0 , &return_code);
+        // wait for reader to finish
+        printf_debug("Writer: Waiting to lock out reader...\n");
+        pend(mutex_rd);
 
-        if(book_mark == WORDS_IN_BOOK -1){
-            book_mark = 0;
-        }
+        // request exclusive access
+        printf_debug("Writer: Waiting for gain write lock...\n");
+        pend(mutex_wr);
+
+        if (book_mark == WORDS_IN_BOOK) book_mark = 0;
 
         book[book_mark][0] = pangram[book_mark][0];
-        printf("\e[1;31mWriter: %s \n", book[book_mark][0]);
+        printf_writer("Writer: %s \n", book[book_mark][0]);
 
-        book_mark += 1;
+        book_mark++;
 
-        // no longer need exclusive access
-        OSSemPost(mutex_access);
+        // no longer need exclusive write access
+        printf_debug("Writer: giving up write lock...\n");
+        post(mutex_wr);
+
+        // let the readers continue
+        printf_debug("Writer: giving up reader lockout...\n");
+        post(mutex_rd);
 
         OSTimeDlyHMSM(0,0,1,0);
     }
@@ -135,7 +146,8 @@ int main (int argc, char* argv[], char* envp[])
     printf("\e[0m");
     printf("----------------------\n");
     
-    mutex_access = OSSemCreate(1);
+    mutex_wr = OSSemCreate(1);
+    mutex_rd = OSSemCreate(1);
     mutex_num_readers = OSSemCreate(1);
 
     printf("Init..\n");
