@@ -11,9 +11,7 @@ OS_EVENT *mutex_rd;
 OS_EVENT *mutex_num_readers;
 
 /* Definition of Task Stacks */
-OS_STK reader_1_stk[TASK_STACKSIZE];
-OS_STK reader_2_stk[TASK_STACKSIZE];
-OS_STK reader_3_stk[TASK_STACKSIZE];
+OS_STK reader_stk[NUM_READERS][TASK_STACKSIZE];
 OS_STK writer_stk[TASK_STACKSIZE];
 
 // number of readers accessing the buffer
@@ -117,6 +115,7 @@ void writer(void *pdata){
 
 void  reader_writer_init()
 {
+    INT8U i = 0;
     INT8U return_code = OS_NO_ERR;
     book_mark = 0;
 
@@ -136,14 +135,10 @@ void  reader_writer_init()
     alt_ucosii_check_return_code(return_code);
 
     //create reader
-    return_code = OSTaskCreate(reader, (void*)1, (void*)&reader_1_stk[TASK_STACKSIZE-1], READER_1_PRIO);
-    alt_ucosii_check_return_code(return_code);
-
-    return_code = OSTaskCreate(reader, (void*)2, (void*)&reader_2_stk[TASK_STACKSIZE-1], READER_2_PRIO);
-    alt_ucosii_check_return_code(return_code);
-
-    return_code = OSTaskCreate(reader, (void*)3, (void*)&reader_3_stk[TASK_STACKSIZE-1], READER_3_PRIO);
-    alt_ucosii_check_return_code(return_code);
+    for (i=0; i<NUM_READERS; i++) {
+        return_code = OSTaskCreate(reader, (void*)i, (void*)&reader_stk[i][TASK_STACKSIZE-1], READER_PRIO+i);
+        alt_ucosii_check_return_code(return_code);
+    }
 }
 
 

@@ -2,6 +2,8 @@
 #ifndef ENUMERATIONS_H_
 #define ENUMERATIONS_H_
 
+#define NUM_READERS 3
+
 #define MAX_WORD_SIZE 6
 #define WORDS_IN_BOOK 9
 
@@ -15,9 +17,7 @@ INT8U book_mark;
 #define TASK_STACKSIZE 2048
 
 #define WRITER_PRIO     15
-#define READER_1_PRIO   16
-#define READER_2_PRIO   17
-#define READER_3_PRIO   18
+#define READER_PRIO   16
 
 #define printf_reader(...) { printf("\e[1;36m"); printf(__VA_ARGS__);}
 #define printf_writer(...) { printf("\e[1;31m"); printf(__VA_ARGS__);}
