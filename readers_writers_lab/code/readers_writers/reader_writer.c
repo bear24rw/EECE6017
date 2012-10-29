@@ -40,15 +40,24 @@ OS_STK writer_stk[TASK_STACKSIZE];
 // number of readers currently accessing the buffer
 unsigned char num_readers = 0;
 
+// array to store all possible words
+char* pangram[WORDS_IN_BOOK][MAX_WORD_SIZE];
+
+// array for writer to write into
+char* book[WORDS_IN_BOOK][MAX_WORD_SIZE];
+
+// which word the writer is currently writing
+unsigned char cur_word;
+
 // helper functions to make code more readable
 void pend(OS_EVENT *pevent) { OSSemPend(pevent, 0, NULL); }
 void post(OS_EVENT *pevent) { OSSemPost(pevent); }
 
 void reader(void *pdata) {
 
-    INT8U i = 0;
+    unsigned char i = 0;
 
-    while(true) {
+    while(1) {
 
         // wait for exclusive read access
         printf_debug("[R%d] Waiting for read lock...\n", pdata);
@@ -76,7 +85,7 @@ void reader(void *pdata) {
         post(mutex_rd);
 
         printf_reader("[R%d] ", pdata);
-        for (i=0; i<book_mark; i++)
+        for (i=0; i<cur_word; i++)
             printf_reader("%s ", book[i][0]);
         printf("\n");
 
@@ -103,7 +112,7 @@ void reader(void *pdata) {
 
 void writer(void *pdata) {
 
-    while(true) {
+    while(1) {
 
         // wait for reader to finish
         printf_debug("[W0] Waiting to lock out reader...\n");
@@ -113,12 +122,12 @@ void writer(void *pdata) {
         printf_debug("[W0] Waiting for gain write lock...\n");
         pend(mutex_wr);
 
-        if (book_mark == WORDS_IN_BOOK) book_mark = 0;
+        if (cur_word == WORDS_IN_BOOK) cur_word = 0;
 
-        book[book_mark][0] = pangram[book_mark][0];
-        printf_writer("[W0] %s \n", book[book_mark][0]);
+        book[cur_word][0] = pangram[cur_word][0];
+        printf_writer("[W0] %s \n", book[cur_word][0]);
 
-        book_mark++;
+        cur_word++;
 
         // no longer need exclusive write access
         printf_debug("[W0] giving up write lock...\n");
@@ -137,7 +146,7 @@ void  reader_writer_init() {
 
     INT8U i = 0;
     INT8U return_code = OS_NO_ERR;
-    book_mark = 0;
+    cur_word = 0;
 
     //initialize pangram
     pangram[0][0] = "A\0";
