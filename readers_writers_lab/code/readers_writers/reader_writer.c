@@ -9,15 +9,18 @@
 
 
 /* Definition of shared_buf_sem Semaphore */
-OS_EVENT *shared_buf_sem_rd;    // num of readers
-OS_EVENT *shared_buf_sem_wr;    // writer is writing
-OS_SEM_DATA sem_data;
+OS_EVENT *mutex_no_accessing;
+OS_EVENT *mutex_reader_count;
+OS_EVENT *mutex_no_waiting;
 
 /* Definition of Task Stacks */
 OS_STK reader_1_stk[TASK_STACKSIZE];
 OS_STK reader_2_stk[TASK_STACKSIZE];
 OS_STK reader_3_stk[TASK_STACKSIZE];
 OS_STK writer_stk[TASK_STACKSIZE];
+
+// number of readers accessing the buffer
+unsigned char readers = 0;
 
 void elipsis(){
 	INT8U i;
@@ -32,30 +35,30 @@ void reader(void *pdata){
 
 	while(true)
 	{
-        // wait for writer to finish
-		OSSemPend(shared_buf_sem_wr, 0, &return_code);
+		OSSemPend(mutex_no_waiting, 0, &return_code);
 
-        // we are using a read spot
-		OSSemPend(shared_buf_sem_rd, 0, &return_code);
+		OSSemPend(mutex_reader_count, 0, &return_code);
+        if (readers == 0)
+            OSSemPend(mutex_no_accessing, 0, &return_code);
+        readers++;
+        OSSemPost(mutex_no_waiting);
+        OSSemPost(mutex_reader_count);
 
-        // give write sem back so other readers can read
-        OSSemPost(shared_buf_sem_wr);
+        printf("\e[1;36mReader %d: ", pdata);
+        INT8U index = 0;
+        while(index < book_mark){
+            printf("%s ", book[index][0]);
+            index += 1;
+        }
+        printf("\n");
 
-		if(book_mark == 0){
-			OSSemPost(shared_buf_sem_rd);
-			OSTimeDlyHMSM(0,0,2,0);
-		}else{
-			INT8U index = 0;
-
-			while(index < book_mark){
-				printf("Reader %d: %s\n", pdata, book[index][0]);
-				index += 1;
-			}
-
-			OSSemPost(shared_buf_sem_rd);
-
-			OSTimeDlyHMSM(0,0,10,0);
-		}
+        OSSemPend(mutex_reader_count, 0, &return_code);
+        readers--;
+        if (readers == 0)
+            OSSemPost(mutex_no_accessing);
+        OSSemPost(mutex_reader_count);
+        
+        OSTimeDlyHMSM(0,0,1,0);
 	}
 }
 
@@ -64,26 +67,22 @@ void writer(void *pdata){
 
 	while(true){
 
-        // wait for all readers to finish
-        OSSemQuery(shared_buf_sem_rd, &sem_data);
-        if (sem_data.OSCnt < 3) continue;
-
-        // writer is now in use
-		OSSemPend(shared_buf_sem_wr, 0, &return_code);
+		OSSemPend(mutex_no_waiting, 0 , &return_code);
+		OSSemPend(mutex_no_accessing, 0 , &return_code);
+        OSSemPost(mutex_no_waiting);
 
 		if(book_mark == WORDS_IN_BOOK -1){
 			book_mark = 0;
 		}
 
 		book[book_mark][0] = pangram[book_mark][0];
-		printf("Writer: %s \n", book[book_mark][0]);
+		printf("\e[1;31mWriter: %s \n", book[book_mark][0]);
 
 		book_mark += 1;
 
-        // done writing
-		OSSemPost(shared_buf_sem_wr);
+        OSSemPost(mutex_no_accessing);
 
-		OSTimeDlyHMSM(0,0,1,0);
+        OSTimeDlyHMSM(0,0,1,0);
 	}
 }
 
@@ -122,8 +121,12 @@ void  reader_writer_init()
 
 int main (int argc, char* argv[], char* envp[])
 {
-	shared_buf_sem_wr = OSSemCreate(1);
-	shared_buf_sem_rd = OSSemCreate(3);
+    printf("\e[0m");
+    printf("----------------------\n");
+    
+    mutex_no_accessing = OSSemCreate(1);
+    mutex_reader_count = OSSemCreate(1);
+    mutex_no_waiting = OSSemCreate(1);
 
     printf("Init..\n");
 
