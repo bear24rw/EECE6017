@@ -46,6 +46,8 @@ void post(OS_EVENT *pevent) { OSSemPost(pevent); }
 
 void reader(void *pdata) {
 
+    INT8U i = 0;
+
     while(true) {
 
         // wait for exclusive read access
@@ -74,11 +76,8 @@ void reader(void *pdata) {
         post(mutex_rd);
 
         printf_reader("[R%d] ", pdata);
-        INT8U index = 0;
-        while(index < book_mark ) {
-            printf_reader("%s ", book[index][0]);
-            index += 1;
-        }
+        for (i=0; i<book_mark; i++)
+            printf_reader("%s ", book[i][0]);
         printf("\n");
 
         OSTimeDlyHMSM(0,0,5-(int)pdata,0);
