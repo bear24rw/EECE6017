@@ -29,14 +29,16 @@ void reader(void *pdata){
     {
 
         // wait for exclusive read access
+        printf_debug("[R%d] Waiting for read lock...\n", pdata);
         pend(mutex_rd);
 
         // request access to the 'num_readers' variable
+        printf_debug("[R%d] Waiting for num_readers lock...\n", pdata);
         pend(mutex_num_readers);
 
         // if we are the first reader wait for writer to finish
         if (num_readers == 0) {
-            printf_debug("Waiting to lock out writer...\n");
+            printf_debug("[R%d] Waiting to lock out writer...\n", pdata);
             pend(mutex_wr);
         }
 
@@ -51,7 +53,7 @@ void reader(void *pdata){
         // to run if it's waiting
         post(mutex_rd);
 
-        printf_reader("Reader %d: ", pdata);
+        printf_reader("[R%d] ", pdata);
         INT8U index = 0;
         while(index < book_mark ){
             printf_reader("%s ", book[index][0]);
@@ -59,17 +61,21 @@ void reader(void *pdata){
         }
         printf("\n");
 
+        //OSTimeDlyHMSM(0,0,5-(int)pdata,0);
         OSTimeDlyHMSM(0,0,1,0);
 
         // request access to the 'num_readers' variable
         pend(mutex_num_readers);
 
         // we are done reading
+        printf_debug("[R%d] Decrementing num_readers...\n", pdata);
         num_readers--;
 
         // if we are the last reader release the write lock
-        if (num_readers == 0)
+        if (num_readers == 0){
+            printf_debug("[R%d] Releasing the writer lockout...\n", pdata);
             post(mutex_wr);
+        }
 
         // release the 'num_readers' variable
         post(mutex_num_readers);
@@ -82,26 +88,26 @@ void writer(void *pdata){
     while(true){
 
         // wait for reader to finish
-        printf_debug("Writer: Waiting to lock out reader...\n");
+        printf_debug("[W0] Waiting to lock out reader...\n");
         pend(mutex_rd);
 
         // request exclusive access
-        printf_debug("Writer: Waiting for gain write lock...\n");
+        printf_debug("[W0] Waiting for gain write lock...\n");
         pend(mutex_wr);
 
         if (book_mark == WORDS_IN_BOOK) book_mark = 0;
 
         book[book_mark][0] = pangram[book_mark][0];
-        printf_writer("Writer: %s \n", book[book_mark][0]);
+        printf_writer("[W0] %s \n", book[book_mark][0]);
 
         book_mark++;
 
         // no longer need exclusive write access
-        printf_debug("Writer: giving up write lock...\n");
+        printf_debug("[W0] giving up write lock...\n");
         post(mutex_wr);
 
         // let the readers continue
-        printf_debug("Writer: giving up reader lockout...\n");
+        printf_debug("[W0] giving up reader lockout...\n");
         post(mutex_rd);
 
         OSTimeDlyHMSM(0,0,1,0);
