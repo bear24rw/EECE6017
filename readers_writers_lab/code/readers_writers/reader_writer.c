@@ -1,3 +1,26 @@
+/***************************************************************************
+ *   Copyright (C) 2012 by Max Thrun                                       *
+ *   Copyright (C) 2012 by Ian Cathey                                      *
+ *   Copyright (C) 2012 by Mark Labbato                                    *
+ *                                                                         *
+ *   Embedded System - Readers Writers                                     *
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ *   This program is distributed in the hope that it will be useful,       *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of        *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         *
+ *   GNU General Public License for more details.                          *
+ *                                                                         *
+ *   You should have received a copy of the GNU General Public License     *
+ *   along with this program; if not, write to the                         *
+ *   Free Software Foundation, Inc.,                                       *
+ *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
+ ***************************************************************************/
+
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -5,26 +28,25 @@
 #include "alt_ucosii_simple_error_check.h"
 #include "reader_writer.h"
 
-/* Definition of shared_buf_sem Semaphore */
+// mutexes
 OS_EVENT *mutex_wr;
 OS_EVENT *mutex_rd;
 OS_EVENT *mutex_num_readers;
 
-/* Definition of Task Stacks */
+// task stacks
 OS_STK reader_stk[NUM_READERS][TASK_STACKSIZE];
 OS_STK writer_stk[TASK_STACKSIZE];
 
-// number of readers accessing the buffer
+// number of readers currently accessing the buffer
 unsigned char num_readers = 0;
 
 // helper functions to make code more readable
 void pend(OS_EVENT *pevent) { OSSemPend(pevent, 0, NULL); }
 void post(OS_EVENT *pevent) { OSSemPost(pevent); }
 
-void reader(void *pdata){
+void reader(void *pdata) {
 
-    while(true)
-    {
+    while(true) {
 
         // wait for exclusive read access
         printf_debug("[R%d] Waiting for read lock...\n", pdata);
@@ -53,14 +75,14 @@ void reader(void *pdata){
 
         printf_reader("[R%d] ", pdata);
         INT8U index = 0;
-        while(index < book_mark ){
+        while(index < book_mark ) {
             printf_reader("%s ", book[index][0]);
             index += 1;
         }
         printf("\n");
 
-        //OSTimeDlyHMSM(0,0,5-(int)pdata,0);
-        OSTimeDlyHMSM(0,0,1,0);
+        OSTimeDlyHMSM(0,0,5-(int)pdata,0);
+        //OSTimeDlyHMSM(0,0,1,0);
 
         // request access to the 'num_readers' variable
         pend(mutex_num_readers);
@@ -70,20 +92,19 @@ void reader(void *pdata){
         num_readers--;
 
         // if we are the last reader release the write lock
-        if (num_readers == 0){
+        if (num_readers == 0) {
             printf_debug("[R%d] Releasing the writer lockout...\n", pdata);
             post(mutex_wr);
         }
 
         // release the 'num_readers' variable
         post(mutex_num_readers);
-
     }
 }
 
-void writer(void *pdata){
+void writer(void *pdata) {
 
-    while(true){
+    while(true) {
 
         // wait for reader to finish
         printf_debug("[W0] Waiting to lock out reader...\n");
@@ -113,8 +134,8 @@ void writer(void *pdata){
 }
 
 
-void  reader_writer_init()
-{
+void  reader_writer_init() {
+
     INT8U i = 0;
     INT8U return_code = OS_NO_ERR;
     book_mark = 0;
@@ -127,7 +148,7 @@ void  reader_writer_init()
     pangram[4][0] = "jumps\0";
     pangram[5][0] = "over\0";
     pangram[6][0] = "the\0";
-    pangram[7][0] = "lazy\0";\
+    pangram[7][0] = "lazy\0";
     pangram[8][0] = "dog\0";
 
     //create writer
@@ -142,8 +163,8 @@ void  reader_writer_init()
 }
 
 
-int main (int argc, char* argv[], char* envp[])
-{
+int main (int argc, char* argv[], char* envp[]) {
+
     printf("\e[0m");
     printf("----------------------\n");
     
@@ -160,4 +181,5 @@ int main (int argc, char* argv[], char* envp[])
     OSStart();
 
     return 0;
+
 }
