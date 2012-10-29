@@ -9,9 +9,8 @@
 
 
 /* Definition of shared_buf_sem Semaphore */
-OS_EVENT *mutex_no_accessing;
-OS_EVENT *mutex_reader_count;
-OS_EVENT *mutex_no_waiting;
+OS_EVENT *mutex_access;         // exclusive access for either all the readers of the writer
+OS_EVENT *mutex_num_readers;    // protect the 'num_readers' variable
 
 /* Definition of Task Stacks */
 OS_STK reader_1_stk[TASK_STACKSIZE];
@@ -20,7 +19,7 @@ OS_STK reader_3_stk[TASK_STACKSIZE];
 OS_STK writer_stk[TASK_STACKSIZE];
 
 // number of readers accessing the buffer
-unsigned char readers = 0;
+unsigned char num_readers = 0;
 
 void elipsis(){
 	INT8U i;
@@ -35,14 +34,19 @@ void reader(void *pdata){
 
 	while(true)
 	{
-		OSSemPend(mutex_no_waiting, 0, &return_code);
 
-		OSSemPend(mutex_reader_count, 0, &return_code);
-        if (readers == 0)
-            OSSemPend(mutex_no_accessing, 0, &return_code);
-        readers++;
-        OSSemPost(mutex_no_waiting);
-        OSSemPost(mutex_reader_count);
+        // request access to the 'num_readers' variable
+		OSSemPend(mutex_num_readers, 0, &return_code);
+
+        // if we are the first reader request exclusive access for the readers
+        if (num_readers == 0)
+            OSSemPend(mutex_access, 0, &return_code);
+
+        // we are currently readering so increase the count
+        num_readers++;
+
+        // release the 'num_readers' variable
+        OSSemPost(mutex_num_readers);
 
         printf("\e[1;36mReader %d: ", pdata);
         INT8U index = 0;
@@ -52,11 +56,18 @@ void reader(void *pdata){
         }
         printf("\n");
 
-        OSSemPend(mutex_reader_count, 0, &return_code);
-        readers--;
-        if (readers == 0)
-            OSSemPost(mutex_no_accessing);
-        OSSemPost(mutex_reader_count);
+        // request access to the 'num_readers' variable
+        OSSemPend(mutex_num_readers, 0, &return_code);
+
+        // we are done reading
+        num_readers--;
+
+        // if we are the last reader, release exclusive access
+        if (num_readers == 0)
+            OSSemPost(mutex_access);
+
+        // release the 'num_readers' variable
+        OSSemPost(mutex_num_readers);
         
         OSTimeDlyHMSM(0,0,1,0);
 	}
@@ -67,9 +78,8 @@ void writer(void *pdata){
 
 	while(true){
 
-		OSSemPend(mutex_no_waiting, 0 , &return_code);
-		OSSemPend(mutex_no_accessing, 0 , &return_code);
-        OSSemPost(mutex_no_waiting);
+        // request exclusive access
+		OSSemPend(mutex_access, 0 , &return_code);
 
 		if(book_mark == WORDS_IN_BOOK -1){
 			book_mark = 0;
@@ -80,7 +90,8 @@ void writer(void *pdata){
 
 		book_mark += 1;
 
-        OSSemPost(mutex_no_accessing);
+        // no longer need exclusive access
+        OSSemPost(mutex_access);
 
         OSTimeDlyHMSM(0,0,1,0);
 	}
@@ -124,9 +135,8 @@ int main (int argc, char* argv[], char* envp[])
     printf("\e[0m");
     printf("----------------------\n");
     
-    mutex_no_accessing = OSSemCreate(1);
-    mutex_reader_count = OSSemCreate(1);
-    mutex_no_waiting = OSSemCreate(1);
+    mutex_access = OSSemCreate(1);
+    mutex_num_readers = OSSemCreate(1);
 
     printf("Init..\n");
 
