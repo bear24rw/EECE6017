@@ -25,7 +25,7 @@ to keep track of how many readers are currently accessing the buffer. To
 do this we use a variable called "num\_readers" and a mutex called
 "mutex\_num\_readers". Each reader pends on access to this mutex and once
 it gains access it increments the "num\_readers". When the reader is done
-accessing the shared buffer it tries to grain the mutex and then decrements
+accessing the shared buffer it tries to gain the mutex and then decrements
 "num\_readers" since it is now finished. In order to lock out the writer
 task each reader checks the value of "num\_readers" when it first gains access
 to it. If it sees that it is the first reader (num\_readers == 0) it pends on
