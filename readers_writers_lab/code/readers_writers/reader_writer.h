@@ -40,7 +40,7 @@
 
 #define printf_reader(...) { printf("\e[1;36m"); printf(__VA_ARGS__);}
 #define printf_writer(...) { printf("\e[1;31m"); printf(__VA_ARGS__);}
-#define printf_debug(...) { printf("\e[1;30m"); printf(__VA_ARGS__);}
-//#define printf_debug(...)
+//#define printf_debug(...) { printf("\e[1;30m"); printf(__VA_ARGS__);}
+#define printf_debug(...)
 
 #endif /* ENUMERATIONS_H_ */

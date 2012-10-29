@@ -89,7 +89,7 @@ void reader(void *pdata) {
             printf_reader("%s ", book[i][0]);
         printf("\n");
 
-        OSTimeDlyHMSM(0,0,5-(int)pdata,0);
+        OSTimeDlyHMSM(0,0,15-(int)pdata,0);
         //OSTimeDlyHMSM(0,0,1,0);
 
         // request access to the 'num_readers' variable
@@ -129,6 +129,8 @@ void writer(void *pdata) {
 
         cur_word++;
 
+        OSTimeDlyHMSM(0,0,5,0);
+
         // no longer need exclusive write access
         printf_debug("[W0] giving up write lock...\n");
         post(mutex_wr);
@@ -136,8 +138,6 @@ void writer(void *pdata) {
         // let the readers continue
         printf_debug("[W0] giving up reader lockout...\n");
         post(mutex_rd);
-
-        OSTimeDlyHMSM(0,0,1,0);
     }
 }
 
