@@ -41,14 +41,6 @@ by one thread (aka philosopher) at a time. After the philosopher has obtained bo
 forks it delays for a random amount of time while it 'eats' and then releases
 both forks.
 \\\\
-A pseudo-random number generator, based on a LFSR, was developed to generate delay values
-and fitted with a mutex lock to make it thread safe. Using random numbers for our delays 
-allowed us to avoid time aliasing which might occur with fixed length delays. Time aliasing 
-can allow conditions such as deadlocks to remain hidden since the threads are
-executing the exact same sequence and timing over and over. If that specific time interval
-happens to be deadlock free you will never see it occur.  While the LFSR does not provide 
-truly random delays it allows us to have more confidence in the robustness of our solution.
-\\\\
 Finally, a thread safe print function was developed to facilitate different types of printing
 modes and formats. Every time the eater changes states or pends or posts on a mutex it calls
 the print function specifying whether it should print this change as a standard INFO message
