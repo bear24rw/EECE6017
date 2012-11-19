@@ -27,4 +27,24 @@
 #define NUM_EATERS      5
 #define TASK_STACKSIZE  2048
 
-#endif /* ENUMERATIONS_H_ */
+// eater states
+enum eater_states {
+    THINKING,
+    EATING,
+    WAITING_LEFT,
+    WAITING_RIGHT,
+    PUTTING_LEFT,
+    PUTTING_RIGHT
+};
+
+// eater structure
+typedef struct {
+    int num;            // which eater are we
+    int right_fork;     // index of fork to our right
+    int left_fork;      // index of fork to our left
+    int time;           // how much time to think and eat
+    int bites;          // how many bites of food
+    int state;          // which state the eater is in
+} Eater;
+
+#endif

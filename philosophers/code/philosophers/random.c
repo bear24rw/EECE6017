@@ -26,11 +26,11 @@
 #include "includes.h"
 #include "random.h"
 
-INT16U lfsr = 0xACE1; // seed
+INT16U lfsr = 0xACE1;   // random seed
 INT8U i;
-INT16U spread;
-INT16U mask;
-INT16U result;
+INT16U spread;          // diff between 'max' and 'min'
+INT16U mask;            // bitmask to get the LFSR value close to the spread
+INT16U result;          // result of bitmasking the lfsr value
 
 OS_EVENT *lock;
 
@@ -38,17 +38,25 @@ void init_random(void) {
     lock = OSSemCreate(1);
 }
 
-
+// return a new random number between 'min' and 'max'
 INT16U random(INT16U min, INT16U max) {
 
+    // if min is greater than max there is nothing to choose between
     if (min > max) return 0;
+
+    // if min equals max there is only one number to choose from
     if (min == max) return min;
 
+    // capture the lock so we can work on the global variables
     OSSemPend(lock, 0, NULL);
 
+    // figure out how much range there is
+    // we are going to be generating number 0 -> spread
+    // and then adding it back to 'min'
     spread = max - min;
 
-    // increase mask size until it is just bigger than our max value
+    // use a bitmask to get the LFSR value as close as possible
+    // increase mask size until it is just bigger than our spread value
     for (i = 1; i<16; i++) {
 
         mask = ~(0xFFFF << i);
@@ -64,10 +72,13 @@ INT16U random(INT16U min, INT16U max) {
         // mask the number to get it close to our spread
         result = lfsr & mask;
 
+    // if the result, even after masking, is bigger than the spread try again
     } while (result > spread);
 
+    // un-zero the value
     result += min;
 
+    // we're done, release the lock
     OSSemPost(lock);
 
     return result;
