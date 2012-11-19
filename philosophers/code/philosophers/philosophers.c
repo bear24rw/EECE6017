@@ -22,12 +22,14 @@
  ***************************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-#include "includes.h"
+//#include <time.h>
+//#include "includes.h"
 #include "alt_ucosii_simple_error_check.h"
 #include "philosophers.h"
-#include "random.h"
+//#include "random.h"
 #include "print.h"
 
 // each fork is its own mutex
@@ -51,7 +53,7 @@ void eater_task(void *pdata) {
     while(1) {
 
         eater.state = THINKING;             // we are now thinking
-        eater.time = random(1,8);           // set how much time we want to think for
+        eater.time = rand() % 5 + 1;        // set how much time we want to think for
         print(INFO, eater);                 // display the new state
         delay(eater.time);                  // think
 
@@ -79,7 +81,7 @@ void eater_task(void *pdata) {
         }
 
         eater.state = EATING;               // we are now eating
-        eater.time = random(1,8);           // set how much time we want to eat for
+        eater.time = rand() % 5 + 1;        // set how much time we want to eat for
         eater.bites++;                      // we ate another bite
         print(INFO, eater);                 // display this new state
         delay(eater.time);                  // eat
@@ -99,9 +101,6 @@ void eater_task(void *pdata) {
 void init(void) {
 
     int i = 0;
-
-    // initialize random number gen
-    init_random();
 
     // initialize print function
     init_print();
