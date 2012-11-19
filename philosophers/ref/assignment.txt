@@ -1,0 +1,37 @@
+Due: November 19th
+         ____________________________________________
+        |                                            |                              
+        |            Dining Philosophers             |
+        |____________________________________________|
+
+                           North Philosopher
+                     NW Utensil    |    NE Utensil
+               West Philosopher ---|--- East Philosopher
+                     SW Utensil    |    SE Utensil
+                           South Philosopher
+
+There are four dining philosophers (tasks) and they all sit at a table with a compass oriented at its center.  
+A philosopher sits at each of the cardinal directions on the compass--namely North, South, East, and West.  
+The philosophers exist in two states, either thinking or eating.  If a philosopher wishes to stop thinking and eat, he or she must pick up the two eating utensils adjacent to him or her (left and right) and enter the eating state.  The utensils (semaphores) sit at each of the intercardinal directions on the compass--namely Northwest, Southwest, Northeast, and Southeast.  The utensils are shared by neighboring philosophers.  
+
+North Philosopher:
+    NE utensil & NW utensil
+East Philosopher:
+    SE utensil & NE utensil
+South Philosopher:
+    SW utensil & SE utensil
+West Philosopher:
+    NW utensil & SW utensil
+
+The philosophers should be created in a loop using the same code.  The only difference is that each philosopher should be passed a unique task identifier (task argument) and unique task priority.  Upon creation, the philosophers are in the thinking state then they attempt to enter the eating state.  Each philosopher should be created with a different priority, keeping in mind that the lower the priority value the higher the actual task priority (0 being the highest priority).  You should explore different combinations of philosopher task priorities to obtain a well scheduled application.
+
+An array of structs should be created that each philosopher task can index into with its unique task identifier.  
+Each struct will store the left and right utensils (semaphores) for each philosopher.  Using the task identifier, 
+each philosopher task should index into the array of structs to find which semaphores it needs to eat.
+
+Each philosopher shares utensils (resources) with his or her neighbor at the table.  For example, if North Philosopher wishes to stop thinking and eat, he or she must acquire (in no particular order) the NE utensil (semaphore) and the NW utensil (semaphore).  If he or she cannot obtain both of the necessary utensils, he or she must wait and possiblly starve of resources.  Once a philosopher acquires the utensils (semaphores) to eat it should print to the Nios II console: "Phil X eating".  The console should be protected by a semaphore to ensure it does not get muddied up.  Each philosopher should eat for five seconds and release it resources (left and right semaphores), printing 
+"Phil X thinking" to the Nios II console.  
+
+When finished eating, the philosopher task should enter a thinking state for a fixed length of time.  The length 
+of time each philosopher thinks might need to be empirically determined if some of the lower priority philosopher 
+tasks are getting starved.
