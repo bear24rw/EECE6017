@@ -24,7 +24,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <stdarg.h>
-#include "includes.h"
 #include "philosophers.h"
 #include "print.h"
 

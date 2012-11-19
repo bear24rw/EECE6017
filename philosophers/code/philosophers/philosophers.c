@@ -25,11 +25,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
-//#include <time.h>
-//#include "includes.h"
 #include "alt_ucosii_simple_error_check.h"
 #include "philosophers.h"
-//#include "random.h"
 #include "print.h"
 
 // each fork is its own mutex
