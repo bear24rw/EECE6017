@@ -3,7 +3,7 @@
  *   Copyright (C) 2012 by Ian Cathey                                      *
  *   Copyright (C) 2012 by Mark Labbato                                    *
  *                                                                         *
- *   Embedded System - Random Number Gen                                   *
+ *   Embedded System - Print functions                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -21,10 +21,20 @@
  *   51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA.              *
  ***************************************************************************/
 
-#ifndef _RANDOM_H_
-#define _RANDOM_H_
+#ifndef _PRINT_H_
+#define _PRINT_H_
 
-void init_random(void);
-INT16U random(INT16U min, INT16U max);
+// types of prints
+#define NORM    0
+#define DEBUG   1
+
+// asni control helper macros
+#define set_color(x)    printf("\e[1;%dm", x)
+#define goto_line(x,y)  printf("\e[%d;%dH",y,x)
+#define clear_line()    printf("\e[K")
+#define clear_screen()  printf("\e[2J")
+
+void init_print(void);
+void print(int type, int num, int bites, char *format, ...);
 
 #endif

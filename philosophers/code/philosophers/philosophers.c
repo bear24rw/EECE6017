@@ -28,6 +28,7 @@
 #include "alt_ucosii_simple_error_check.h"
 #include "philosophers.h"
 #include "random.h"
+#include "print.h"
 
 // each fork is its own mutex
 OS_EVENT *forks[NUM_EATERS];
@@ -36,8 +37,8 @@ OS_EVENT *forks[NUM_EATERS];
 OS_STK stack[NUM_EATERS][TASK_STACKSIZE];
 
 // helper functions to make code more readable
-void pend(OS_EVENT *pevent) { OSSemPend(pevent, 0, NULL); }
-void post(OS_EVENT *pevent) { OSSemPost(pevent); }
+void pend(OS_EVENT *pevent) { INT8U rt;  OSSemPend(pevent, 0, &rt); alt_ucosii_check_return_code(rt);}
+void post(OS_EVENT *pevent) { INT8U rt = OSSemPost(pevent);         alt_ucosii_check_return_code(rt);}
 void delay(int x)           { OSTimeDlyHMSM(0,0,x,0); }
 
 void eater(void *pdata) {
@@ -52,47 +53,51 @@ void eater(void *pdata) {
     // time in seconds to 'think' and 'eat'
     int time = 0;
 
+    // number of times this eater has eaten
+    int bites = 0;
+
     while(1) {
 
         // think
         time = random(1,8);
-        printf_eater(num, "[%d] Thinking for %ds...\n", num, time);
+        print(NORM, num, bites, "Thinking for %ds...\n", time);
         delay(time);
 
         // we always pick up the lowest numbered fork first
         if (left_fork < right_fork) {
 
             // wait to pick up left fork
-            printf_debug("[%d] Waiting to pick up left fork (%d)...\n", num, left_fork);
+            print(DEBUG, num, bites, "Waiting to pick up left fork (%d)...\n", left_fork);
             pend(forks[left_fork]);
 
             // wait to pick up right fork
-            printf_debug("[%d] Waiting to pick up right fork (%d)...\n", num, right_fork);
+            print(DEBUG, num, bites, "Waiting to pick up right fork (%d)...\n", right_fork);
             pend(forks[right_fork]);
 
         } else {
 
             // wait to pick up right fork
-            printf_debug("[%d] Waiting to pick up right fork (%d)...\n", num, right_fork);
+            print(DEBUG, num, bites, "Waiting to pick up right fork (%d)...\n", right_fork);
             pend(forks[right_fork]);
 
             // wait to pick up left fork
-            printf_debug("[%d] Waiting to pick up left fork (%d)...\n", num, left_fork);
+            print(DEBUG, num, bites, "Waiting to pick up left fork (%d)...\n", left_fork);
             pend(forks[left_fork]);
 
         }
 
         // eat
         time = random(1,8);
-        printf_eater(num, "[%d] Eating for %ds...\n", num, time);
+        print(NORM, num, bites, "Eating for %ds...\n", time);
         delay(time);
+        bites++;
 
         // put down right fork
-        printf_debug("[%d] Putting down right fork(%d)...\n", num, right_fork);
+        print(DEBUG, num, bites, "Putting down right fork(%d)...\n", right_fork);
         post(forks[right_fork]);
 
         // put down left fork
-        printf_debug("[%d] Putting down left fork (%d)...\n", num, left_fork);
+        print(DEBUG, num, bites, "Putting down left fork (%d)...\n", left_fork);
         post(forks[left_fork]);
 
     }
@@ -104,7 +109,10 @@ void init(void) {
     int i = 0;
 
     // initialize random number gen
-    random_init();
+    init_random();
+
+    // initialize print function
+    init_print();
 
     // init mutexes
     for (i=0; i<NUM_EATERS; i++)
@@ -121,13 +129,11 @@ void init(void) {
 
 int main (int argc, char* argv[], char* envp[]) {
 
-    printf_debug("----------------------\n");
-    
-    printf_debug("Init..\n");
+    printf("----------------------\n");
 
     init();
-    
-    printf_debug("Starting..\n");
+
+    clear_screen();
 
     OSStart();
 

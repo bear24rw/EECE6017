@@ -24,16 +24,7 @@
 #ifndef ENUMERATIONS_H_
 #define ENUMERATIONS_H_
 
-#define DEBUG           1
 #define NUM_EATERS      5
 #define TASK_STACKSIZE  2048
-
-#define printf_eater(x,...) { printf("\e[1;%dm", 31+x); printf(__VA_ARGS__);}
-
-#ifdef DEBUG
-#define printf_debug(...) { printf("\e[1;30m"); printf(__VA_ARGS__);}
-#else
-#define printf_debug(...)
-#endif
 
 #endif /* ENUMERATIONS_H_ */

@@ -34,7 +34,7 @@ INT16U result;
 
 OS_EVENT *lock;
 
-void random_init(void) {
+void init_random(void) {
     lock = OSSemCreate(1);
 }
 
