@@ -25,16 +25,19 @@
 #define _PRINT_H_
 
 // types of prints
-#define NORM    0
-#define DEBUG   1
+enum print_types {
+    INFO,
+    DEBUG
+};
 
 // ANSI control helper macros
-#define set_color(x)    printf("\e[1;%dm", x)
-#define goto_line(x,y)  printf("\e[%d;%dH",y,x)
-#define clear_line()    printf("\e[K")
-#define clear_screen()  printf("\e[2J")
+#define set_color(x)        printf("\e[0;%dm", x)
+#define set_color_bold(x)   printf("\e[1;%dm", x)
+#define goto_line(x,y)      printf("\e[%d;%dH",y,x)
+#define clear_line()        printf("\e[K")
+#define clear_screen()      printf("\e[2J")
 
 void init_print(void);
-void print(int type, int num, int bites, char *format, ...);
+void print(int type, Eater eater);
 
 #endif

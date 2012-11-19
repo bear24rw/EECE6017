@@ -3,7 +3,7 @@
  *   Copyright (C) 2012 by Ian Cathey                                      *
  *   Copyright (C) 2012 by Mark Labbato                                    *
  *                                                                         *
- *   Embedded System - Random Number Gen                                   *
+ *   Embedded System - Print Functions                                     *
  *                                                                         *
  *   This program is free software; you can redistribute it and/or modify  *
  *   it under the terms of the GNU General Public License as published by  *
@@ -25,6 +25,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include "includes.h"
+#include "philosophers.h"
 #include "print.h"
 
 // mutex to protect ourselves while we print out a line
@@ -54,7 +55,7 @@ void init_print(void) {
 //
 // [print_count] [Eater: num] [Bites: bites] ...
 //
-void print(int type, int num, int bites, char *format, ...) {
+void print(int type, Eater eater) {
 
     // if we are skipping debug lines don't do anything
     if (type == DEBUG && !print_debug) return;
@@ -65,30 +66,37 @@ void print(int type, int num, int bites, char *format, ...) {
     // if we are printing each line in place go to a unique Y coordinate
     // depending on which eater we are, then clear the line
     if (print_inplace) {
-        goto_line(1, num+1);
+        goto_line(1, eater.num+1);
         clear_line();
     }
 
-    // print which print number this is in gray
-    set_color(30);
+    // display the print count in gray
+    set_color_bold(30);
     printf("[%4d] ", print_count);
 
-    // if print type is normal then choose a uniq color based on our number
-    // other wise set the color to gray
-    if (type == NORM)
-        set_color(31+num);
-    else
-        set_color(30);
-
     // print which eater we are and how many bites we've taken
-    printf("[Eater: %d] [Bites: %d] ", num, bites);
+    set_color_bold(31+eater.num);
+    printf("[Eater: %d] [Bites: %d] ", eater.num, eater.bites);
 
-    // print the formatted string
-    va_list args;
-    va_start(args, format);
-    vprintf(format, args);
-    va_end(args);
+    // if we are eating we want to see it in bold
+    if (eater.state == EATING)
+        set_color_bold(31+eater.num);
+    else
+        set_color(31+eater.num);
 
+    // if this is a debug message we want it to be bold
+    if (type == DEBUG) set_color_bold(30);
+
+    // print out the status message for this state
+    switch (eater.state) {
+        case THINKING:      printf("Thinking for %ds\n", eater.time); break;
+        case WAITING_LEFT:  printf("Waiting to pick up left fork (%d)...\n", eater.left_fork); break;
+        case WAITING_RIGHT: printf("Waiting to pick up right fork (%d)...\n", eater.right_fork); break;
+        case EATING:        printf("Eating for %ds\n", eater.time); break;
+        case PUTTING_RIGHT: printf("Putting down right fork (%d)...\n", eater.right_fork); break;
+        case PUTTING_LEFT:  printf("Putting down left fork (%d)...\n", eater.left_fork); break;
+    }
+        
     // we just printed a line, increment the count
     print_count++;
 

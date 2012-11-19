@@ -33,6 +33,9 @@
 // each fork is its own mutex
 OS_EVENT *forks[NUM_EATERS];
 
+// list of eaters
+Eater eater[NUM_EATERS];
+
 // task stacks
 OS_STK stack[NUM_EATERS][TASK_STACKSIZE];
 
@@ -41,64 +44,53 @@ void pend(OS_EVENT *pevent) { INT8U rt;  OSSemPend(pevent, 0, &rt); alt_ucosii_c
 void post(OS_EVENT *pevent) { INT8U rt = OSSemPost(pevent);         alt_ucosii_check_return_code(rt);}
 void delay(int x)           { OSTimeDlyHMSM(0,0,x,0); }
 
-void eater(void *pdata) {
+void eater_task(void *pdata) {
 
-    // which number philosopher are we?
-    int num = (int)pdata;
-
-    // figure out which number fork is to our right and left
-    int right_fork = num;
-    int left_fork = (num+1) % NUM_EATERS;
-
-    // time in seconds to 'think' and 'eat'
-    int time = 0;
-
-    // number of times this eater has eaten
-    int bites = 0;
+    Eater eater = *(Eater*)pdata;
 
     while(1) {
 
-        // think
-        time = random(1,8);
-        print(NORM, num, bites, "Thinking for %ds...\n", time);
-        delay(time);
+        eater.state = THINKING;             // we are now thinking
+        eater.time = random(1,8);           // set how much time we want to think for
+        print(INFO, eater);                 // display the new state
+        delay(eater.time);                  // think
 
-        // we always pick up the lowest numbered fork first
-        if (left_fork < right_fork) {
+        // always pick up the lowest numbered fork first
+        if (eater.left_fork < eater.right_fork) {
 
-            // wait to pick up left fork
-            print(DEBUG, num, bites, "Waiting to pick up left fork (%d)...\n", left_fork);
-            pend(forks[left_fork]);
+            eater.state = WAITING_LEFT;     // we are now waiting for left fork
+            print(DEBUG, eater);            // display this as a debug message
+            pend(forks[eater.left_fork]);   // wait for the fork to become free
 
-            // wait to pick up right fork
-            print(DEBUG, num, bites, "Waiting to pick up right fork (%d)...\n", right_fork);
-            pend(forks[right_fork]);
+            eater.state = WAITING_RIGHT;    // we are now waiting for right fork
+            print(DEBUG, eater);            // display this as a debug message
+            pend(forks[eater.right_fork]);  // wait for the fork to become free
 
         } else {
 
-            // wait to pick up right fork
-            print(DEBUG, num, bites, "Waiting to pick up right fork (%d)...\n", right_fork);
-            pend(forks[right_fork]);
+            eater.state = WAITING_RIGHT;    // we are now waiting for right fork
+            print(DEBUG, eater);            // display this as a debug message
+            pend(forks[eater.right_fork]);  // wait for the fork to become free
 
-            // wait to pick up left fork
-            print(DEBUG, num, bites, "Waiting to pick up left fork (%d)...\n", left_fork);
-            pend(forks[left_fork]);
+            eater.state = WAITING_LEFT;     // we are now waiting for left fork
+            print(DEBUG, eater);            // display this as a debug message
+            pend(forks[eater.left_fork]);   // wait for the fork to become free
 
         }
 
-        // eat
-        time = random(1,8);
-        print(NORM, num, bites, "Eating for %ds...\n", time);
-        delay(time);
-        bites++;
+        eater.state = EATING;               // we are now eating
+        eater.time = random(1,8);           // set how much time we want to eat for
+        eater.bites++;                      // we ate another bite
+        print(INFO, eater);                 // display this new state
+        delay(eater.time);                  // eat
 
-        // put down right fork
-        print(DEBUG, num, bites, "Putting down right fork(%d)...\n", right_fork);
-        post(forks[right_fork]);
+        eater.state = PUTTING_RIGHT;        // we are now putting right fork down
+        print(DEBUG, eater);                // display this as a debug message
+        post(forks[eater.right_fork]);      // release the fork
 
-        // put down left fork
-        print(DEBUG, num, bites, "Putting down left fork (%d)...\n", left_fork);
-        post(forks[left_fork]);
+        eater.state = PUTTING_LEFT;         // we are now putting left fork down
+        print(DEBUG, eater);                // display this as a debug message
+        post(forks[eater.left_fork]);       // release the fork
 
     }
 }
@@ -114,14 +106,23 @@ void init(void) {
     // initialize print function
     init_print();
 
+    // initialize eaters
+    for (i=0; i<NUM_EATERS; i++) {
+        eater[i].num = i;                          // this eaters number
+        eater[i].right_fork = i;                   // index of fork on right
+        eater[i].left_fork = (i+1) % NUM_EATERS;   // index of fork on left
+        eater[i].time = 0;                         // time in seconds to 'think' and 'eat'
+        eater[i].bites = 0;                        // number of times this eater has eaten
+    }
+
     // init mutexes
     for (i=0; i<NUM_EATERS; i++)
         forks[i] = OSSemCreate(1);
 
     //create eaters
     for (i=0; i<NUM_EATERS; i++) {
-        int return_code = OSTaskCreate(eater, (void*)i, (void*)&stack[i][TASK_STACKSIZE-1], i);
-        alt_ucosii_check_return_code(return_code);
+        int rt = OSTaskCreate(eater_task, (void*)&eater[i], (void*)&stack[i][TASK_STACKSIZE-1], i);
+        alt_ucosii_check_return_code(rt);
     }
 
 }
