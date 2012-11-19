@@ -28,7 +28,7 @@
 #define NORM    0
 #define DEBUG   1
 
-// asni control helper macros
+// ANSI control helper macros
 #define set_color(x)    printf("\e[1;%dm", x)
 #define goto_line(x,y)  printf("\e[%d;%dH",y,x)
 #define clear_line()    printf("\e[K")
