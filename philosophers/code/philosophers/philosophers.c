@@ -42,8 +42,10 @@ void post(OS_EVENT *pevent) { OSSemPost(pevent); }
 void eater(void *pdata) {
 
     int num = (int)pdata;
-    int left_fork = num;
-    int right_fork = (num+1) % NUM_EATERS;
+
+    int right_fork = num;
+    int left_fork = (num+1) % NUM_EATERS;
+
     int time = 0;
 
     while(1) {
@@ -53,13 +55,28 @@ void eater(void *pdata) {
         printf_eater(num, "[%d] Thinking for %ds...\n", num, time);
         OSTimeDlyHMSM(0,0,time,0);
 
-        // wait to pick up left fork
-        printf_debug("[%d] Waiting to pick up left fork (%d)...\n", num, left_fork);
-        pend(forks[left_fork]);
+        // we always pick up the lowest numbered fork first
+        if (left_fork < right_fork) {
 
-        // wait to pick up right fork
-        printf_debug("[%d] Waiting to pick up right fork (%d)...\n", num, right_fork);
-        pend(forks[right_fork]);
+            // wait to pick up left fork
+            printf_debug("[%d] Waiting to pick up left fork (%d)...\n", num, left_fork);
+            pend(forks[left_fork]);
+
+            // wait to pick up right fork
+            printf_debug("[%d] Waiting to pick up right fork (%d)...\n", num, right_fork);
+            pend(forks[right_fork]);
+
+        } else {
+
+            // wait to pick up right fork
+            printf_debug("[%d] Waiting to pick up right fork (%d)...\n", num, right_fork);
+            pend(forks[right_fork]);
+
+            // wait to pick up left fork
+            printf_debug("[%d] Waiting to pick up left fork (%d)...\n", num, left_fork);
+            pend(forks[left_fork]);
+
+        }
 
         // eat
         time = random(1,8);
