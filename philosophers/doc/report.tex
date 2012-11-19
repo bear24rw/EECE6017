@@ -24,29 +24,39 @@ both. If a fork is not available then he waits until it
 does become available. To solve this problem we implemented the common
 resource hierarchy solution \cite{sol}. Our solution is based on the
 convention that each fork is numbered and the philosopher will pick up
-the fork with the lowest number first. This breaks the deadlock of each
+the fork with the lowest number first. This prevents the deadlock of each
 person simply picking up the fork to their left. For instance, with 5
 philosophers philosopher 5 and philosopher 1 both share fork 1. Fork 1
 is the lowest value fork for both these philosophers so they cannot both
 pick it up at the same time. This fact prevents the deadlock of all the
 philosophers taking one fork from a particular side.
 \\\\
-From our programs perspective, when each thread starts it calculates the
-value of the fork on its left and right. Then, after a random 'thinking'
-delay, it checks to see which fork has the lower value. If the fork on the
-left has the lowest value it tries to pick that one up first and vica versa.
+In our program each fork is representing by a mutex. During initialization 
+we loop through each eater and calculate which fork is on its left and right. 
+We then spawn the eater tasks which start off by 'thinking' for a random amount of
+time. We then check to see which fork has the lower value. If the fork on the
+left has the lowest value we try to pick that one up first and vica versa.
 Each fork is represented by a mutex which ensures that it can only be touched
 by one thread (aka philosopher) at a time. After the philosopher has obtained both
 forks it delays for a random amount of time while it 'eats' and then releases
 both forks.
 \\\\
-Additionally, a pseudo-random number generator, based on a LFSR, was developed
+A pseudo-random number generator, based on a LFSR, was developed to generate delay values
 and fitted with a mutex lock to make it thread safe. Using random numbers for our delays 
 allowed us to avoid time aliasing which might occur with fixed length delays. Time aliasing 
-can cause conditions such as deadlocks and starvation to remain hidden since the threads are
+can allow conditions such as deadlocks to remain hidden since the threads are
 executing the exact same sequence and timing over and over. If that specific time interval
 happens to be deadlock free you will never see it occur.  While the LFSR does not provide 
 truly random delays it allows us to have more confidence in the robustness of our solution.
+\\\\
+Finally, a thread safe print function was developed to facilitate different types of printing
+modes and formats. Every time the eater changes states or pends or posts on a mutex it calls
+the print function specifying whether it should print this change as a standard INFO message
+(shown in unique color per task) or a DEBUG message (shown in gray). Two different types of 
+printing modes are supported: regular, and in-place.  The in-place mode uses ANSI control 
+sequences to write the status of each eater on the same unique line every time. This allows 
+you to easily see all at once which eaters are eating and which are thinking. Regular print mode 
+is more useful for debugging as it will show the linear history of status messages.
 
 \begin{thebibliography}{9}
     \bibitem{sol} \url{http://en.wikipedia.org/wiki/Dining_philosophers_problem#Resource_hierarchy_solution}
