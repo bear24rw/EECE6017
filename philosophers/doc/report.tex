@@ -37,7 +37,7 @@ delay, it checks to see which fork has the lower value. If the fork on the
 left has the lowest value it tries to pick that one up first and vica versa.
 Each fork is represented by a mutex which ensures that it can only be touched
 by one thread (aka philosopher) at a time. After the philosopher has obtained both
-forks it delays for a random amount of time while it 'thinks' and then releases
+forks it delays for a random amount of time while it 'eats' and then releases
 both forks.
 \\\\
 Additionally, a pseudo-random number generator, based on a LFSR, was developed
