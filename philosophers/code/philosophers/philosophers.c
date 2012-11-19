@@ -38,14 +38,18 @@ OS_STK stack[NUM_EATERS][TASK_STACKSIZE];
 // helper functions to make code more readable
 void pend(OS_EVENT *pevent) { OSSemPend(pevent, 0, NULL); }
 void post(OS_EVENT *pevent) { OSSemPost(pevent); }
+void delay(int x)           { OSTimeDlyHMSM(0,0,x,0); }
 
 void eater(void *pdata) {
 
+    // which number philosopher are we?
     int num = (int)pdata;
 
+    // figure out which number fork is to our right and left
     int right_fork = num;
     int left_fork = (num+1) % NUM_EATERS;
 
+    // time in seconds to 'think' and 'eat'
     int time = 0;
 
     while(1) {
@@ -53,7 +57,7 @@ void eater(void *pdata) {
         // think
         time = random(1,8);
         printf_eater(num, "[%d] Thinking for %ds...\n", num, time);
-        OSTimeDlyHMSM(0,0,time,0);
+        delay(time);
 
         // we always pick up the lowest numbered fork first
         if (left_fork < right_fork) {
@@ -81,7 +85,7 @@ void eater(void *pdata) {
         // eat
         time = random(1,8);
         printf_eater(num, "[%d] Eating for %ds...\n", num, time);
-        OSTimeDlyHMSM(0,0,time,0);
+        delay(time);
 
         // put down right fork
         printf_debug("[%d] Putting down right fork(%d)...\n", num, right_fork);
@@ -98,7 +102,9 @@ void eater(void *pdata) {
 void init(void) {
 
     int i = 0;
-    int return_code = OS_NO_ERR;
+
+    // initialize random number gen
+    random_init();
 
     // init mutexes
     for (i=0; i<NUM_EATERS; i++)
@@ -106,7 +112,7 @@ void init(void) {
 
     //create eaters
     for (i=0; i<NUM_EATERS; i++) {
-        return_code = OSTaskCreate(eater, (void*)i, (void*)&stack[i][TASK_STACKSIZE-1], i);
+        int return_code = OSTaskCreate(eater, (void*)i, (void*)&stack[i][TASK_STACKSIZE-1], i);
         alt_ucosii_check_return_code(return_code);
     }
 
