@@ -5,7 +5,7 @@
 
 BSP_DIR=../bsp
 QUARTUS_PROJECT_DIR=../../synth/
-NIOS2_APP_GEN_ARGS="--elf-name readers_writers.elf --set OBJDUMP_INCLUDE_SOURCE 1 --src-files philosophers.c alt_ucosii_simple_error_check.c random.c print.c"
+NIOS2_APP_GEN_ARGS="--elf-name readers_writers.elf --set OBJDUMP_INCLUDE_SOURCE 1 --src-files philosophers.c alt_ucosii_simple_error_check.c print.c"
 
 
 # First, check to see if $SOPC_KIT_NIOS2 environmental variable is set.
