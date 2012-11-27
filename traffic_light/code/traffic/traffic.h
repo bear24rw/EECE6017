@@ -29,15 +29,15 @@
 #define TASK_STACKSIZE  2048
 
 // light delay constants
-#define PRI_GREEN_TIME      5
-#define PRI_YELLOW_TIME     1
-#define PRI_RED_TIME        0   // really SEC_GREEN_TIME
-#define SEC_GREEN_TIME      2
-#define SEC_YELLOW_TIME     1
-#define SEC_RED_TIME        0   // really PRI_GREEN_TIME
-#define TURN_GREEN_TIME     2
+#define PRI_GREEN_TIME      6
+#define PRI_YELLOW_TIME     2
+#define PRI_RED_TIME        1
+#define SEC_GREEN_TIME      3
+#define SEC_YELLOW_TIME     2
+#define SEC_RED_TIME        1
+#define TURN_GREEN_TIME     3
 #define TURN_YELLOW_TIME    2
-#define TURN_RED_TIME       0
+#define TURN_RED_TIME       1
 
 // light indexes
 #define PRI_STRAIGHT_1      0
@@ -47,20 +47,24 @@
 #define SEC_1               4
 #define SEC_2               5
 
-// traffic states
-#define PRI_GREEN   0
-#define PRI_YELLOW  1
-#define PRI_RED     2 
-#define SEC_GREEN   3
-#define SEC_YELLOW  4
-#define SEC_RED     5
+// task a
+enum traffic_states {
+    PRI_GREEN,
+    PRI_YELLOW,
+    PRI_RED,
+    SEC_GREEN,
+    SEC_YELLOW,
+    SEC_RED
+};
 
-// turn lane states
-#define CHECK_CARS      0
-#define WAIT_FOR_GREEN  1
-#define TURN_GREEN      2
-#define TURN_YELLOW     3
-#define TURN_RED        4
+// task b
+enum turn_lane_states {
+    CHECK_CARS,
+    WAIT_FOR_GREEN,
+    TURN_GREEN,
+    TURN_YELLOW,
+    TURN_RED
+};
 
 enum light_states {
     RED,
