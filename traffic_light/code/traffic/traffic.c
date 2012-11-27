@@ -154,7 +154,7 @@ void task_b(void *pdata) {
             case CHECK_CARS:
 
                 // delay a little bit so there isn't _always_ a car there
-                delay(1);
+                delay(6);
 
                 // 1 / 10 chance of there being a car there
                 if (rand() % 10 == 0) {
