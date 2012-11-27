@@ -31,21 +31,30 @@
 // light delay constants
 #define PRI_GREEN_TIME      6
 #define PRI_YELLOW_TIME     2
-#define PRI_RED_TIME        1
+#define PRI_RED_TIME        2
+
 #define SEC_GREEN_TIME      3
 #define SEC_YELLOW_TIME     2
-#define SEC_RED_TIME        1
+#define SEC_RED_TIME        2
+
 #define TURN_GREEN_TIME     3
 #define TURN_YELLOW_TIME    2
-#define TURN_RED_TIME       1
+#define TURN_RED_TIME       2
+
+#define WALK_GREEN_TIME     4
+#define WALK_YELLOW_TIME    3
+#define WALK_RED_TIME       2
+
+#define FLASH_TIME          1
+
 
 // light indexes
-#define PRI_STRAIGHT_1      0
-#define PRI_STRAIGHT_2      1
-#define PRI_TURN_1          2
-#define PRI_TURN_2          3
-#define SEC_1               4
-#define SEC_2               5
+#define PRI_STRAIGHT_1      2
+#define PRI_STRAIGHT_2      5
+#define PRI_TURN_1          1
+#define PRI_TURN_2          4
+#define SEC_1               0
+#define SEC_2               3
 
 // task a
 enum traffic_states {
@@ -66,11 +75,33 @@ enum turn_lane_states {
     TURN_RED
 };
 
+// task c
+enum cross_walk_states {
+    CHECK_WALK,
+    WAIT_FOR_RED,
+    WALK_GREEN,
+    WALK_YELLOW,
+    WALK_RED
+};
+
+// task e
+enum broken_states {
+    CHECK_BROKEN,
+    FLASH_ON,
+    FLASH_OFF
+};
+
 enum light_states {
     RED,
     YELLOW,
-    GREEN
+    GREEN,
+    WAITING,    // used for crosswalk
+    OFF         // used for flashing
 };
+
+// we need to draw indicaters next to the currently selected lights
+extern int manual_mode;
+extern int selected_light;
 
 // helper functions to make code more readable
 extern inline void pend(OS_EVENT *pevent);

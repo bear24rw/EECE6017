@@ -46,6 +46,7 @@
 // ANSI control helper macros
 #define set_color(x)        printf("\e[0;%dm", x)
 #define set_color_bold(x)   printf("\e[1;%dm", x)
+#define set_color_inv(x)    printf("\e[7;%dm", x)
 #define goto_line(x,y)      printf("\e[%d;%dH",y,x)
 #define clear_line()        printf("\e[K")
 #define clear_screen()      printf("\e[2J")
@@ -55,7 +56,7 @@ void init_print(void);
 void draw_lights(int *lights);
 void draw_street(void);
 void draw_car(char yes);
-void draw_status(const char *msg);
-void draw_sub_status(const char *msg);
+void draw_status(int y, const char *msg);
+void draw_walk(int state);
 
 #endif
