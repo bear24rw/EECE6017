@@ -39,9 +39,9 @@ Eater eater[NUM_EATERS];
 OS_STK stack[NUM_EATERS][TASK_STACKSIZE];
 
 // helper functions to make code more readable
-void pend(OS_EVENT *pevent) { INT8U rt;  OSSemPend(pevent, 0, &rt); alt_ucosii_check_return_code(rt);}
-void post(OS_EVENT *pevent) { INT8U rt = OSSemPost(pevent);         alt_ucosii_check_return_code(rt);}
-void delay(int x)           { OSTimeDlyHMSM(0,0,x,0); }
+inline void pend(OS_EVENT *pevent) { INT8U rt;  OSSemPend(pevent, 0, &rt); alt_ucosii_check_return_code(rt);}
+inline void post(OS_EVENT *pevent) { INT8U rt = OSSemPost(pevent);         alt_ucosii_check_return_code(rt);}
+inline void delay(int x)           { OSTimeDlyHMSM(0,0,x,0); }
 
 void eater_task(void *pdata) {
 
