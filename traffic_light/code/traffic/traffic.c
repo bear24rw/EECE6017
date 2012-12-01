@@ -222,7 +222,7 @@ void task_b(void *pdata) {
                 // is the primary street about to turn green?
                 if (traffic_state == PRI_GREEN) {
 
-                    draw_status(1, "Primary street turning green taking control of lights");
+                    draw_status(1, "Primary street turning green");
 
                     // take control of the lights
                     pend(light_lock);

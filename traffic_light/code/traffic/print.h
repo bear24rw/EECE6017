@@ -44,7 +44,8 @@
 #define BG_WHITE        47
 
 // ANSI control helper macros
-#define set_color(x)        printf("\e[0;%dm", x)
+#define set_color(x)        printf("\e[%dm", x)
+#define set_color_dim(x)    printf("\e[0;%dm", x)
 #define set_color_bold(x)   printf("\e[1;%dm", x)
 #define set_color_inv(x)    printf("\e[7;%dm", x)
 #define goto_line(x,y)      printf("\e[%d;%dH",y,x)

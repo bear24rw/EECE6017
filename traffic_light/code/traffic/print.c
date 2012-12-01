@@ -79,10 +79,10 @@ const char frame[FRAME_HEIGHT][FRAME_WIDTH] =
 "| |                                     |  |                                                | |",
 "| |                                     |  |                                                | |",
 "| |                                     |  |                                                | |",
-"| |                                     |  |                                                | |",
 "| |                                     |  2------------------------------------------------3 |",
 "| |                                     |                                                     |",
 "| |                                     |  0------------------------------------------------1 |",
+"| |                                     |  |                                                | |",
 "| |                                     |  |                                                | |",
 "| |                                     |  |                                                | |",
 "| |                                     |  |                                                | |",
@@ -96,7 +96,7 @@ const char frame[FRAME_HEIGHT][FRAME_WIDTH] =
 
 int keymap_loc[] = { 4, 45};
 int street_loc[] = { 4,  4};
-int status_loc[] = {17, 45};
+int status_loc[] = {16, 45};
 
 int light_loc[6][2] = {
     { 4, 17}, // light 0
@@ -136,7 +136,6 @@ void draw_reset(void) {
     draw_lights();
 }
 
-
 void set_light_color(int state) {
     switch (state) {
         case RED:       set_color_bold(FG_RED);     break;
@@ -146,7 +145,6 @@ void set_light_color(int state) {
         case OFF:       set_color_bold(FG_BLACK);   break;
     }
 }
-
 
 void draw_status(int y, const char *msg) {
     // obtain the lock so no other thread can interrupt us
@@ -232,17 +230,16 @@ void draw_street(void) {
                 // http://www.utf8-chartable.de/unicode-utf8-table.pl
 
                 // lane markers
+                case '=': set_color_dim(FG_YELLOW); printf("\u2550"); break;
+                case ',': set_color_dim(FG_YELLOW); printf("\u2551"); break;
                 case '-': set_color_bold(FG_WHITE); printf("\u2500"); break;
-                case '=': set_color(FG_YELLOW);     printf("\u2550"); break;
                 case '|': set_color_bold(FG_WHITE); printf("\u2502"); break;
-                case ',': set_color(FG_YELLOW);     printf("\u2551"); break;
                 case 'v': set_color_bold(FG_WHITE); printf("\u2518"); break;
                 case 'r': set_color_bold(FG_WHITE); printf("\u250C"); break;
                 case 'n': set_color_bold(FG_WHITE); printf("\u2510"); break;
                 case 'l': set_color_bold(FG_WHITE); printf("\u2514"); break;
 
                 // cross walks
-                //case 'h': set_color(FG_WHITE); printf("\u2573"); break;
                 case 'h': printf(" "); break;
                 case 'c': printf("C"); break;
 
