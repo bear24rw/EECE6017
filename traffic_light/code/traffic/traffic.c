@@ -52,13 +52,32 @@ OS_EVENT *input_lock;
 // state of the whole system
 int traffic_state = PRI_GREEN;
 
-
 int manual_mode = 0;
 int selected_light = 0;
+
+int emergency_duration = 5;
 
 // helper functions to make code more readable
 inline void pend(OS_EVENT *pevent) { INT8U rt;  OSSemPend(pevent, 0, &rt); alt_ucosii_check_return_code(rt);}
 inline void post(OS_EVENT *pevent) { INT8U rt = OSSemPost(pevent);         alt_ucosii_check_return_code(rt);}
+
+int key_pressed(char key) {
+
+    int pressed = 0;
+
+    pend(input_lock);
+
+    if (key_down[key]) {
+        key_down[key] = 0;
+        pressed = 1;
+    } else {
+        pressed = 0;
+    }
+
+    post(input_lock);
+
+    return pressed;
+}
 
 void task_input(void *pdata) {
 
@@ -79,27 +98,12 @@ void task_input(void *pdata) {
             post(input_lock);
         }
 
+        if (key_pressed('r')) draw_reset();
+
         delay_ms(10);
     }
 }
 
-int key_pressed(char key) {
-
-    int rt = 0;
-
-    pend(input_lock);
-
-    if (key_down[key]) {
-        key_down[key] = 0;
-        rt = 1;
-    } else {
-        rt = 0;
-    }
-
-    post(input_lock);
-
-    return rt;
-}
 
 void task_a(void *pdata) {
 
@@ -178,7 +182,7 @@ void task_a(void *pdata) {
         }
 
         // update the display with new light values
-        draw_lights(lights);  
+        draw_lights();  
 
         // we are done changing the lights
         post(light_lock);
@@ -205,34 +209,20 @@ void task_b(void *pdata) {
 
             case CHECK_CARS:
 
-              
                 if (key_pressed('c')) {
                     draw_car(1);
                     draw_status(1, "Car waiting");
                     turn_state = WAIT_FOR_GREEN;
                 }
 
-                /*
-                // delay a little bit so there isn't _always_ a car there
-                delay(6);
-
-                // 1 / 10 chance of there being a car there
-                if (rand() % 10 == 0) {
-                    draw_car(1);
-                    draw_status(1, "Car waiting");
-                    turn_state = WAIT_FOR_GREEN;
-                } else {
-                    draw_car(0);
-                }
-                */
-                
                 break;
 
             case WAIT_FOR_GREEN:
-                // is it time for the primary street to turn green?
+
+                // is the primary street about to turn green?
                 if (traffic_state == PRI_GREEN) {
 
-                    draw_status(1, "Light about to be green. Taking control of lights");
+                    draw_status(1, "Primary street turning green taking control of lights");
 
                     // take control of the lights
                     pend(light_lock);
@@ -245,6 +235,7 @@ void task_b(void *pdata) {
                 break;
 
             case TURN_GREEN:
+
                 // its green, cars are gone
                 draw_car(0);
 
@@ -259,7 +250,7 @@ void task_b(void *pdata) {
                 lights[PRI_STRAIGHT_2] = RED;
                
                 // update the diagram with new light values
-                draw_lights(lights);
+                draw_lights();
 
                 draw_status(0, "Turn green");
 
@@ -271,6 +262,7 @@ void task_b(void *pdata) {
                 break;
 
             case TURN_YELLOW:
+
                 // turn lights are now yellow
                 lights[PRI_TURN_1] = YELLOW;
                 lights[PRI_TURN_2] = YELLOW;
@@ -278,7 +270,7 @@ void task_b(void *pdata) {
                 draw_status(0, "Turn yellow");
 
                 // update the diagram with new light values
-                draw_lights(lights);
+                draw_lights();
 
                 // wait for yellow light
                 delay(TURN_YELLOW_TIME);
@@ -296,7 +288,7 @@ void task_b(void *pdata) {
                 draw_status(1, "Turn complete");
 
                 // update the diagram with new light values
-                draw_lights(lights);
+                draw_lights();
 
                 // go back to wait for more cars
                 turn_state = CHECK_CARS;
@@ -391,8 +383,83 @@ void task_d(void *pdata) {
        time, the system should return to task A.
     */
 
+    int emergency_state = CHECK_EMERGENCY;
+    int flash_count = 0;
+
     while(1) {
-        delay(10);
+        
+        switch (emergency_state) {
+
+            case CHECK_EMERGENCY:
+
+                if (key_pressed('-')) {
+                    emergency_duration--;
+                    if (emergency_duration < 0) emergency_duration = 0;
+                    draw_keymap();
+                }
+
+                if (key_pressed('+')) {
+                    emergency_duration++;
+                    if (emergency_duration > 9) emergency_duration = 9;
+                    draw_keymap();
+                }
+
+                if (key_pressed('e')) {
+                    // wait to gain control of them
+                    pend(light_lock);
+                    flash_count = 0;
+                    draw_status(0, "Emergency!");
+                    emergency_state = FLASH_RED_ON;
+                }
+
+                break;
+
+            case FLASH_RED_ON:
+
+                // turn the lights on
+                lights[PRI_STRAIGHT_1] = RED;
+                lights[PRI_STRAIGHT_2] = RED;
+                lights[PRI_TURN_1] = RED;
+                lights[PRI_TURN_2] = RED;
+                lights[SEC_1] = RED;
+                lights[SEC_2] = RED;
+
+                draw_lights();
+                delay(FLASH_TIME);
+
+                flash_count++;
+                if (flash_count == emergency_duration) {
+                    emergency_state = CHECK_EMERGENCY;
+
+                    // release the lights
+                    post(light_lock);
+
+                } else {
+                    emergency_state = FLASH_RED_OFF;
+                }
+
+                break;
+
+            case FLASH_RED_OFF:
+
+                // turn the lights off
+                lights[PRI_STRAIGHT_1] = OFF;
+                lights[PRI_STRAIGHT_2] = OFF;
+                lights[PRI_TURN_1] = OFF;
+                lights[PRI_TURN_2] = OFF;
+                lights[SEC_1] = OFF;
+                lights[SEC_2] = OFF;
+
+                draw_lights();
+                delay(FLASH_TIME);
+
+                emergency_state = FLASH_RED_ON;
+
+                break;
+
+        }
+
+        delay_ms(10);
     }
 }
 
@@ -431,7 +498,7 @@ void task_e(void *pdata) {
                         lights[PRI_TURN_2] = RED;
                         lights[SEC_1] = RED;
                         lights[SEC_2] = RED;
-                        draw_lights(lights);
+                        draw_lights();
 
                         // release the lights
                         post(light_lock);
@@ -464,7 +531,7 @@ void task_e(void *pdata) {
                 lights[SEC_1] = RED;
                 lights[SEC_2] = RED;
 
-                draw_lights(lights);
+                draw_lights();
                 delay(FLASH_TIME);
 
                 broken_state = FLASH_OFF;
@@ -481,7 +548,7 @@ void task_e(void *pdata) {
                 lights[SEC_1] = OFF;
                 lights[SEC_2] = OFF;
 
-                draw_lights(lights);
+                draw_lights();
                 delay(FLASH_TIME);
 
                 // go back and see if we're still broken
@@ -522,7 +589,7 @@ void task_f(void *pdata) {
                 lights[PRI_TURN_2] = RED;
                 lights[SEC_1] = RED;
                 lights[SEC_2] = RED;
-                draw_lights(lights);
+                draw_lights();
 
                 // release the lights
                 post(light_lock);
@@ -536,7 +603,7 @@ void task_f(void *pdata) {
                 pend(light_lock);
 
                 draw_status(0, "Manual mode");
-                draw_lights(lights);
+                draw_lights();
             }
 
         }
@@ -552,24 +619,24 @@ void task_f(void *pdata) {
             if (key_pressed('j')) {
                 selected_light--;
                 if (selected_light < 0) selected_light = 5;
-                draw_lights(lights);
+                draw_lights();
             }
             else if (key_pressed('k')) {
                 selected_light++;
                 if (selected_light > 5) selected_light = 0;
-                draw_lights(lights);
+                draw_lights();
             }
             else if (key_pressed('1')) {
                 lights[selected_light] = RED;
-                draw_lights(lights);
+                draw_lights();
             }
             else if (key_pressed('2')) {
                 lights[selected_light] = YELLOW;
-                draw_lights(lights);
+                draw_lights();
             }
             else if (key_pressed('3')) {
                 lights[selected_light] = GREEN;
-                draw_lights(lights);
+                draw_lights();
             }
 
         }
@@ -582,7 +649,7 @@ void task_f(void *pdata) {
 void init(void) {
 
     // initialize print function
-    init_print();
+    draw_init();
 
     // initialize the input mutex
     input_lock = OSSemCreate(1);
@@ -610,17 +677,8 @@ void init(void) {
 
 
 int main (int argc, char* argv[], char* envp[]) {
-
     init();
-
-    clear_screen();
-    draw_street();
-    draw_lights(lights);
-    draw_walk(RED);
-
     OSStart();
-
     return 0;
-
 }
 

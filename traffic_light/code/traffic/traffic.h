@@ -84,6 +84,13 @@ enum cross_walk_states {
     WALK_RED
 };
 
+enum emergency_states {
+    CHECK_EMERGENCY,
+    FLASH_RED_ON,
+    FLASH_RED_OFF
+};
+
+
 // task e
 enum broken_states {
     CHECK_BROKEN,
@@ -99,9 +106,10 @@ enum light_states {
     OFF         // used for flashing
 };
 
-// we need to draw indicaters next to the currently selected lights
+extern int lights[];
 extern int manual_mode;
 extern int selected_light;
+extern int emergency_duration;
 
 // helper functions to make code more readable
 extern inline void pend(OS_EVENT *pevent);

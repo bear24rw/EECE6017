@@ -52,11 +52,14 @@
 #define clear_screen()      printf("\e[2J")
 #define reset_color()       printf("\e[0m")
 
-void init_print(void);
-void draw_lights(int *lights);
+void draw_init(void);
+void draw_lights(void);
 void draw_street(void);
 void draw_car(char yes);
 void draw_status(int y, const char *msg);
 void draw_walk(int state);
+void draw_reset(void);
+void draw_background(void);
+void draw_keymap(void);
 
 #endif

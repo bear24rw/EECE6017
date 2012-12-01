@@ -56,6 +56,48 @@ const char diagram[HEIGHT][WIDTH] =
 "              |   ,   |              "
 };
 
+char pipes[6][6] = {
+    "\u250C", // 0 =  ┌
+    "\u2510", // 1 =  ┐
+    "\u2514", // 2 =  └
+    "\u2518", // 3 =  ┘
+};
+
+#define FRAME_WIDTH     95
+#define FRAME_HEIGHT    25
+const char frame[FRAME_HEIGHT][FRAME_WIDTH] =
+{
+"0---------------------------------------------------------------------------------------------1",
+"|                                                                                             |",
+"| 0-------------------------------------1  0------------------------------------------------1 |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  2------------------------------------------------3 |",
+"| |                                     |                                                     |",
+"| |                                     |  0------------------------------------------------1 |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| |                                     |  |                                                | |",
+"| 2-------------------------------------3  2------------------------------------------------3 |",
+"|                                                                                             |",
+"2---------------------------------------------------------------------------------------------3"
+};
+
+int keymap_loc[] = { 4, 45};
+int street_loc[] = { 4,  4};
+int status_loc[] = {17, 45};
+
 int light_loc[6][2] = {
     { 4, 17}, // light 0
     {11, 13}, // light 1
@@ -80,10 +122,20 @@ int walk_loc[4][2] = {
 // mutex to protect ourselves while we print out a line
 OS_EVENT *print_lock;
 
-void init_print(void) {
+void draw_init(void) {
     print_lock = OSSemCreate(1);
-    draw_street();
+    draw_reset();
 }
+
+void draw_reset(void) {
+    clear_screen();
+    draw_background(); 
+    draw_keymap();
+    draw_street();
+    draw_walk(RED);
+    draw_lights();
+}
+
 
 void set_light_color(int state) {
     switch (state) {
@@ -100,10 +152,16 @@ void draw_status(int y, const char *msg) {
     // obtain the lock so no other thread can interrupt us
     pend(print_lock);
 
-    goto_line(1, HEIGHT+1+y);
-    clear_line();
-    set_color_bold(FG_WHITE);
+    set_color(FG_BLACK);
+    set_color_bold(BG_WHITE);
+
+    goto_line(status_loc[1], status_loc[0]+y);
+    printf("                                               "); 
+
+    goto_line(status_loc[1], status_loc[0]+y);
     printf(msg);
+
+    reset_color();
 
     // we're done, release the lock
     post(print_lock);
@@ -116,7 +174,8 @@ void draw_walk(int state) {
 
     int i;
     for (i = 0; i < 4; i++) {
-        goto_line(walk_loc[i][1], walk_loc[i][0]); 
+        goto_line(street_loc[1] + walk_loc[i][1] - 1, 
+                  street_loc[0] + walk_loc[i][0] - 1); 
         set_light_color(state);
         printf("C");
     }
@@ -137,11 +196,11 @@ void draw_car(char yes) {
     if (yes) set_color_bold(BG_CYAN);
 
     // draw car 0
-    goto_line(car_loc[0][1], car_loc[0][0]);
+    goto_line(street_loc[1]+car_loc[0][1]-1, street_loc[1]+car_loc[0][0]-1);
     printf(" ");
 
     // draw car 1
-    goto_line(car_loc[1][1], car_loc[1][0]);
+    goto_line(street_loc[1]+car_loc[1][1]-1, street_loc[1]+car_loc[1][0]-1);
     printf(" ");
 
     reset_color();
@@ -156,13 +215,15 @@ void draw_street(void) {
     // obtain the lock so no other thread can interrupt us
     pend(print_lock);
 
-    clear_screen();
-    goto_line(0,0);
+    //clear_screen();
+    //goto_line(0,0);
     set_color_bold(FG_WHITE);
 
     int x, y;
     for (y = 0; y < HEIGHT; y++)
     {
+        goto_line(street_loc[1], street_loc[0]+y);
+
         for (x = 0; x < WIDTH; x++)
         {
  
@@ -188,24 +249,42 @@ void draw_street(void) {
                 default: printf("%c", diagram[y][x]);
             }
         }
-        printf("\n");
     }
 
-    // draw the keymapping
-    set_color_bold(FG_WHITE);
-    goto_line(WIDTH+1,1); printf("[c] - Car in turn lane");
-    goto_line(WIDTH+1,2); printf("[w] - Press walk button");
-    goto_line(WIDTH+1,3); printf("[b] - Toggle broken");
-    goto_line(WIDTH+1,4); printf("[m] - Toggle manual");
-    goto_line(WIDTH+1+4, 5); printf("[j/k] - Next/Prev light");
-    goto_line(WIDTH+1+4, 6); printf("[1/2/3] - Red/Yellow/Green");
+    reset_color();
 
     // we're done, release the lock
     post(print_lock);
 }
 
 
-void draw_lights(int *lights) {
+void draw_keymap(void) {
+    // obtain the lock so no other thread can interrupt us
+    pend(print_lock);
+
+    // figure out which x y to draw it at
+    int x = keymap_loc[1];
+    int y = keymap_loc[0];
+
+    // draw the keymapping
+    set_color(FG_BLACK);
+    set_color_bold(BG_WHITE);
+    goto_line(x, y+0); printf("[c] - Car in turn lane");
+    goto_line(x, y+1); printf("[w] - Press walk button");
+    goto_line(x, y+2); printf("[b] - Toggle broken");
+    goto_line(x, y+3); printf("[e] - Emergency for %d seconds", emergency_duration);
+    goto_line(x, y+4); printf("    [-/+] - Inc/Dec");
+    goto_line(x, y+5); printf("[m] - Toggle manual");
+    goto_line(x, y+6); printf("    [j/k] - Next/Prev light");
+    goto_line(x, y+7); printf("    [1/2/3] - Red/Yellow/Green");
+    goto_line(x, y+8); printf("[r] - Redraw");
+    reset_color();
+
+    // we're done, release the lock
+    post(print_lock);
+}
+
+void draw_lights(void) {
 
     // obtain the lock so no other thread can interrupt us
     pend(print_lock);
@@ -222,7 +301,7 @@ void draw_lights(int *lights) {
     int i = 0;
     for (i = 0; i < 6; i++) {
         // goto light x,y
-        goto_line(light_loc[i][1], light_loc[i][0]); 
+        goto_line(street_loc[1]+light_loc[i][1]-1, street_loc[0]+light_loc[i][0]-1); 
         
         if (manual_mode && i == selected_light) set_color_bold(BG_BLUE);
 
@@ -241,4 +320,38 @@ void draw_lights(int *lights) {
     // we're done, release the lock
     post(print_lock);
 }
+
+void draw_background(void) {
+
+
+    // obtain the lock so no other thread can interrupt us
+    pend(print_lock);
+
+    clear_screen();
+    goto_line(0,0);
+
+    set_color_bold(FG_BLACK);
+    set_color_bold(BG_WHITE);
+
+    int x, y;
+    for (y = 0; y < FRAME_HEIGHT; y++) {
+        for (x = 0; x < FRAME_WIDTH; x++) {
+
+            switch (frame[y][x]) {
+                case '-': printf("\u2500"); break;
+                case '|': printf("\u2502"); break;
+                case ' ': printf(" "); break;
+
+                default: printf("%s", pipes[frame[y][x]-'0']);
+            }
+        }
+        printf("\n");
+    }
+
+    reset_color();
+
+    // we're done, release the lock
+    post(print_lock);
+}
+
 
