@@ -116,12 +116,15 @@ void task_input(void *pdata)
     }
 }
 
-/*
-    TASK A
-
-    Primary Street is a main thoroughfare, with heavy traffic. Secondary Street is used by fewer vehicles.
-    This difference should be reflected in the relative times that traffic on each street has a green signal.
-*/
+//=============================================================================
+//
+//  TASK A
+//
+//  Primary Street is a main thoroughfare, with heavy traffic. Secondary Street
+//  is used by fewer vehicles.  This difference should be reflected in the
+//  relative times that traffic on each street has a green signal.
+//
+//=============================================================================
 void task_a(void *pdata) 
 {
 
@@ -211,14 +214,17 @@ void task_a(void *pdata)
     }
 }
 
-/*
-    TASK B
-
-    Primary Street also has left turn lanes onto Secondary Street (in both directions). If there is a vehicle in
-    either of these lanes when it is time for Primary Street to have a green signal, there should first be a task
-    run to enable these vehicles to make left turns, while the other traffic on Primary Street and Secondary
-    Street gets a stop signal.
-*/
+//=============================================================================
+//
+//  TASK B
+//
+//  Primary Street also has left turn lanes onto Secondary Street (in both
+//  directions). If there is a vehicle in either of these lanes when it is time
+//  for Primary Street to have a green signal, there should first be a task run
+//  to enable these vehicles to make left turns, while the other traffic on
+//  Primary Street and Secondary Street gets a stop signal.
+//
+//=============================================================================
 void task_b(void *pdata) 
 {
 
@@ -332,14 +338,18 @@ void task_b(void *pdata)
     }
 }
 
+//=============================================================================
+//
+//  TASK C
+//
+//  There are also pedestrian buttons for crossing both Primary Street and
+//  Secondary Street. If any of these buttons is pushed, a task to make all
+//  vehicles stop and allow for pedestrians to cross the streets should be run.
+//
+//=============================================================================
 void task_c(void *pdata) 
 {
 
-    /*
-       There are also pedestrian buttons for crossing both Primary Street and Secondary Street. If any of these
-       buttons is pushed, a task to make all vehicles stop and allow for pedestrians to cross the streets should be
-       run.
-    */
 
     int walk_state = CHECK_WALK;
 
@@ -348,7 +358,6 @@ void task_c(void *pdata)
 
         switch(walk_state) 
         {
-
             case CHECK_WALK:
 
                 if (key_pressed('w')) 
@@ -365,10 +374,8 @@ void task_c(void *pdata)
                 // TODO: check logic
                 if (traffic_state == PRI_GREEN || traffic_state == SEC_GREEN) 
                 {
-
                     draw_status(2, "All lights red. Taking control of lights");
 
-                    // take control of lights
                     pend(light_lock);
 
                     draw_status(2, "Walk in progress");
@@ -409,14 +416,18 @@ void task_c(void *pdata)
     }
 }
 
+//=============================================================================
+//
+//  TASK D
+//
+//  There is also an emergency setting, which sets lights in all directions to
+//  flashing red. This setting is triggered by a special signal which includes
+//  a specific duration to be in this state. At the end of this time, the
+//  system should return to task A.
+//
+//=============================================================================
 void task_d(void *pdata) 
 {
-
-    /*
-       There is also an emergency setting, which sets lights in all directions to flashing red. This setting is
-       triggered by a special signal which includes a specific duration to be in this state. At the end of this
-       time, the system should return to task A.
-    */
 
     int emergency_state = CHECK_EMERGENCY;
     int flash_count = 0;
@@ -507,14 +518,18 @@ void task_d(void *pdata)
 }
 
 
+//=============================================================================
+//
+//  TASK E
+//
+//  There is also a “broken” setting which is activated when there is a power
+//  outage, e.g., and which sets the signals on Primary Street to flashing
+//  YELLOW and the signals on Secondary Street to flashing RED.  This setting
+//  is deactivated manually, with a return to task A.
+//
+//=============================================================================
 void task_e(void *pdata) 
 {
-
-    /*
-       There is also a “broken” setting which is activated when there is a power outage, e.g., and which sets the
-       signals on Primary Street to flashing YELLOW and the signals on Secondary Street to flashing RED.
-       This setting is deactivated manually, with a return to task A.
-    */
 
     int broken = 0;
     int broken_state = CHECK_BROKEN;
@@ -615,14 +630,17 @@ void task_e(void *pdata)
 }
 
 
+//=============================================================================
+//
+//  TASK F
+//
+//  And finally there is a manual setting in which the signals are switched by
+//  hand. This task is triggered by a switch operated by a human and is turned
+//  off by another switch, at which time the system should return to task A.
+//
+//=============================================================================
 void task_f(void *pdata) 
 {
-
-    /*
-       And finally there is a manual setting in which the signals are switched by hand. This task is triggered by
-       a switch operated by a human and is turned off by another switch, at which time the system should
-       return to task A.
-    */
 
     while(1) 
     {
