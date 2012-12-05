@@ -26,7 +26,7 @@
 #include <unistd.h>
 #include <string.h>
 #include "traffic.h"
-#include "print.h"
+#include "draw.h"
 
 // task stacks
 OS_STK stack_a[TASK_STACKSIZE];
@@ -648,7 +648,7 @@ void task_f(void *pdata) {
 
 void init(void) {
 
-    // initialize print function
+    // initialize draw function
     draw_init();
 
     // initialize the input mutex

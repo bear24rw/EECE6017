@@ -143,7 +143,7 @@ ELF := readers_writers.elf
 
 # Paths to C, C++, and assembly source files.
 C_SRCS += alt_ucosii_simple_error_check.c
-C_SRCS += print.c
+C_SRCS += draw.c
 C_SRCS += traffic.c
 CXX_SRCS :=
 ASM_SRCS :=
