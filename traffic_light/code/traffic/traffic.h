@@ -49,12 +49,12 @@
 
 
 // light indexes
-#define PRI_STRAIGHT_1      2
-#define PRI_STRAIGHT_2      5
-#define PRI_TURN_1          1
-#define PRI_TURN_2          4
-#define SEC_1               0
-#define SEC_2               3
+#define PRI_1       2
+#define PRI_2       5
+#define TURN_1      1
+#define TURN_2      4
+#define SEC_1       0
+#define SEC_2       3
 
 // task a
 enum traffic_states {

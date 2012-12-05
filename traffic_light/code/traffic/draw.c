@@ -56,13 +56,6 @@ const char diagram[HEIGHT][WIDTH] =
 "              |   ,   |              "
 };
 
-char pipes[6][6] = {
-    "\u250C", // 0 =  ┌
-    "\u2510", // 1 =  ┐
-    "\u2514", // 2 =  └
-    "\u2518", // 3 =  ┘
-};
-
 #define FRAME_WIDTH     95
 #define FRAME_HEIGHT    25
 const char frame[FRAME_HEIGHT][FRAME_WIDTH] =
@@ -94,6 +87,13 @@ const char frame[FRAME_HEIGHT][FRAME_WIDTH] =
 "2---------------------------------------------------------------------------------------------3"
 };
 
+char pipes[6][6] = {
+    "\u250C", // 0 =  ┌
+    "\u2510", // 1 =  ┐
+    "\u2514", // 2 =  └
+    "\u2518", // 3 =  ┘
+};
+
 int keymap_loc[] = { 4, 45};
 int street_loc[] = { 4,  4};
 int status_loc[] = {16, 45};
@@ -122,22 +122,26 @@ int walk_loc[4][2] = {
 // mutex to protect ourselves while we draw
 OS_EVENT *draw_lock;
 
-void draw_init(void) {
+void draw_init(void) 
+{
     draw_lock = OSSemCreate(1);
     draw_reset();
 }
 
-void draw_reset(void) {
+void draw_reset(void) 
+{
     clear_screen();
-    draw_background(); 
+    draw_frame(); 
     draw_keymap();
     draw_street();
     draw_walk(RED);
     draw_lights();
 }
 
-void set_light_color(int state) {
-    switch (state) {
+void set_light_color(int state) 
+{
+    switch (state) 
+    {
         case RED:       set_color_bold(FG_RED);     break;
         case YELLOW:    set_color_bold(FG_YELLOW);  break;
         case GREEN:     set_color_bold(FG_GREEN);   break;
@@ -146,7 +150,8 @@ void set_light_color(int state) {
     }
 }
 
-void draw_status(int y, const char *msg) {
+void draw_status(int y, const char *msg) 
+{
     // obtain the lock so no other thread can interrupt us
     pend(draw_lock);
 
@@ -165,13 +170,14 @@ void draw_status(int y, const char *msg) {
     post(draw_lock);
 }
 
-void draw_walk(int state) {
-
+void draw_walk(int state) 
+{
     // obtain the lock so no other thread can interrupt us
     pend(draw_lock);
 
     int i;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 4; i++) 
+    {
         goto_line(street_loc[1] + walk_loc[i][1] - 1, 
                   street_loc[0] + walk_loc[i][0] - 1); 
         set_light_color(state);
@@ -182,7 +188,8 @@ void draw_walk(int state) {
     post(draw_lock);
 }
 
-void draw_car(char yes) {
+void draw_car(char yes) 
+{
 
     // obtain the lock so no other thread can interrupt us
     pend(draw_lock);
@@ -208,7 +215,8 @@ void draw_car(char yes) {
 }
 
 
-void draw_street(void) {
+void draw_street(void) 
+{
 
     // obtain the lock so no other thread can interrupt us
     pend(draw_lock);
@@ -255,7 +263,8 @@ void draw_street(void) {
 }
 
 
-void draw_keymap(void) {
+void draw_keymap(void) 
+{
     // obtain the lock so no other thread can interrupt us
     pend(draw_lock);
 
@@ -281,7 +290,8 @@ void draw_keymap(void) {
     post(draw_lock);
 }
 
-void draw_lights(void) {
+void draw_lights(void) 
+{
 
     // obtain the lock so no other thread can interrupt us
     pend(draw_lock);
@@ -296,7 +306,8 @@ void draw_lights(void) {
     };
 
     int i = 0;
-    for (i = 0; i < 6; i++) {
+    for (i = 0; i < 6; i++) 
+    {
         // goto light x,y
         goto_line(street_loc[1]+light_loc[i][1]-1, street_loc[0]+light_loc[i][0]-1); 
         
@@ -318,7 +329,8 @@ void draw_lights(void) {
     post(draw_lock);
 }
 
-void draw_background(void) {
+void draw_frame(void) 
+{
 
 
     // obtain the lock so no other thread can interrupt us
@@ -331,10 +343,12 @@ void draw_background(void) {
     set_color_bold(BG_WHITE);
 
     int x, y;
-    for (y = 0; y < FRAME_HEIGHT; y++) {
-        for (x = 0; x < FRAME_WIDTH; x++) {
-
-            switch (frame[y][x]) {
+    for (y = 0; y < FRAME_HEIGHT; y++) 
+    {
+        for (x = 0; x < FRAME_WIDTH; x++) 
+        {
+            switch (frame[y][x]) 
+            {
                 case '-': printf("\u2500"); break;
                 case '|': printf("\u2502"); break;
                 case ' ': printf(" "); break;
