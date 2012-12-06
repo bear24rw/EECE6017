@@ -214,7 +214,6 @@ void draw_car(char yes)
     post(draw_lock);
 }
 
-
 void draw_street(void) 
 {
 
@@ -261,7 +260,6 @@ void draw_street(void)
     // we're done, release the lock
     post(draw_lock);
 }
-
 
 void draw_keymap(void) 
 {

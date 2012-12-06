@@ -49,18 +49,32 @@ char key_down[256];
 // keyboard input lock
 OS_EVENT *input_lock;
 
-// state of the whole system
+// state of the lights in task a
 int traffic_state = PRI_GREEN;
 
+// flag indicating if we are in manual mode or not
+// 1 - Manual mode enabled
+// 0 - Manual mode disabled
 int manual_mode = 0;
+
+// when in manual mode this value keeps track of which light is currently selected
 int selected_light = 0;
 
+// number of cycles to stay in the emergency state
 int emergency_duration = 5;
 
 // helper functions to make code more readable
 inline void pend(OS_EVENT *pevent) { INT8U rt;  OSSemPend(pevent, 0, &rt); alt_ucosii_check_return_code(rt);}
 inline void post(OS_EVENT *pevent) { INT8U rt = OSSemPost(pevent);         alt_ucosii_check_return_code(rt);}
 
+//=============================================================================
+//
+//  KEY PRESSED
+//
+//  Lookup 'key' in the key_down array and return 1 if the flag for that key is
+//  set, 0 if it's not.
+//
+//=============================================================================
 int key_pressed(char key) 
 {
     // flag to signal if 'key' has been pressed or not
@@ -83,6 +97,14 @@ int key_pressed(char key)
     return pressed;
 }
 
+//=============================================================================
+//
+//  TASK INPUT
+//
+//  Continually monitor the jtag uart for received bytes and set a flag in
+//  key_down[ ] indexed by that characters ascii code.
+//
+//=============================================================================
 void task_input(void *pdata) 
 {
     FILE* fp = fopen("/dev/jtag_uart_0", "r+");
@@ -233,7 +255,6 @@ void task_b(void *pdata)
 
     while(1) 
     {
-   
         // figure out which state of the turn we are in
         switch (turn_state) 
         {
@@ -315,6 +336,7 @@ void task_b(void *pdata)
                 break;
 
             case TURN_RED:
+
                 // turn lights are now red
                 lights[TURN_1] = RED;
                 lights[TURN_2] = RED;
@@ -349,7 +371,6 @@ void task_b(void *pdata)
 //=============================================================================
 void task_c(void *pdata) 
 {
-
 
     int walk_state = CHECK_WALK;
 
@@ -517,7 +538,6 @@ void task_d(void *pdata)
     }
 }
 
-
 //=============================================================================
 //
 //  TASK E
@@ -629,7 +649,6 @@ void task_e(void *pdata)
     }
 }
 
-
 //=============================================================================
 //
 //  TASK F
@@ -684,7 +703,6 @@ void task_f(void *pdata)
 
         }
 
-
         // if we're in manual mode handle the key presses
         if (manual_mode) 
         {
@@ -726,10 +744,8 @@ void task_f(void *pdata)
     }
 }
 
-
 void init(void) 
 {
-
     // initialize draw function
     draw_init();
 
@@ -756,7 +772,6 @@ void init(void)
     rt = OSTaskCreate(task_f, NULL, (void*)&stack_f[TASK_STACKSIZE-1], 1); alt_ucosii_check_return_code(rt);
     rt = OSTaskCreate(task_input, NULL, (void*)&stack_input[TASK_STACKSIZE-1], 0); alt_ucosii_check_return_code(rt);
 }
-
 
 int main (int argc, char* argv[], char* envp[]) 
 {
