@@ -47,8 +47,8 @@
 
 #define FLASH_TIME          1
 
-
-// light indexes
+// light indexes. order based on
+// how they get drawn in draw.c
 #define PRI_1       2
 #define PRI_2       5
 #define TURN_1      1
@@ -84,12 +84,12 @@ enum cross_walk_states {
     WALK_RED
 };
 
+// task d
 enum emergency_states {
     CHECK_EMERGENCY,
     FLASH_RED_ON,
     FLASH_RED_OFF
 };
-
 
 // task e
 enum broken_states {

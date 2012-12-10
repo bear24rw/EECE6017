@@ -264,7 +264,8 @@ void task_b(void *pdata)
                 // check if there is a car in the turn lane
                 if (key_pressed('c')) 
                 {
-                    // there is so draw it, display a message, and then wait for green
+                    // there is a car so draw it
+                    // display a message, and then wait for green
                     draw_car(1);
                     draw_status(1, "Car waiting");
                     turn_state = WAIT_FOR_GREEN;
@@ -277,14 +278,13 @@ void task_b(void *pdata)
                 // is the primary street about to turn green?
                 if (traffic_state == PRI_GREEN) 
                 {
-
-                    draw_status(1, "Primary street turning green");
-
                     // take control of the lights
                     pend(light_lock);
 
+                    // indicate our the current traffic state
                     draw_status(1, "Turn in progress");
-                    
+                   
+                    // turn light is now green
                     turn_state = TURN_GREEN;
                 }
 
@@ -305,12 +305,12 @@ void task_b(void *pdata)
                 lights[PRI_1] = RED;
                 lights[PRI_2] = RED;
                
-                // update the diagram with new light values
+                // update the drawing with new light values
                 draw_lights();
 
                 draw_status(0, "Turn green");
 
-                // wait for green light
+                // turn green light duration
                 delay(TURN_GREEN_TIME);
 
                 turn_state = TURN_YELLOW;
@@ -328,7 +328,7 @@ void task_b(void *pdata)
                 // update the diagram with new light values
                 draw_lights();
 
-                // wait for yellow light
+                // turn yellow duration
                 delay(TURN_YELLOW_TIME);
 
                 turn_state = TURN_RED;
@@ -392,15 +392,16 @@ void task_c(void *pdata)
 
             case WAIT_FOR_RED:
 
-                // TODO: check logic
+                // are the lights about to turn red?
                 if (traffic_state == PRI_GREEN || traffic_state == SEC_GREEN) 
                 {
-                    draw_status(2, "All lights red. Taking control of lights");
-
+                    // try to get control of the lights
                     pend(light_lock);
 
+                    // indicate a walk is in progress
                     draw_status(2, "Walk in progress");
 
+                    // turn the walk signal green
                     walk_state = WALK_GREEN;
                 }
 
@@ -430,7 +431,6 @@ void task_c(void *pdata)
                 post(light_lock);
 
                 break;
-                
         }
 
         delay_ms(10);
@@ -463,6 +463,8 @@ void task_d(void *pdata)
 
                 if (key_pressed('-')) 
                 {
+                    // decrement the emergency duration and update the
+                    // display to show its current value
                     emergency_duration--;
                     if (emergency_duration < 0) emergency_duration = 0;
                     draw_keymap();
@@ -470,6 +472,8 @@ void task_d(void *pdata)
 
                 if (key_pressed('+')) 
                 {
+                    // increment the emergency duration and update the
+                    // display to show its current value
                     emergency_duration++;
                     if (emergency_duration > 9) emergency_duration = 9;
                     draw_keymap();
@@ -499,17 +503,19 @@ void task_d(void *pdata)
                 draw_lights();
                 delay(FLASH_TIME);
 
+                // we only want to flash a ceratin number of times
                 flash_count++;
                 if (flash_count == emergency_duration) 
                 {
+                    // we're done flashing, go back and check the button again
                     emergency_state = CHECK_EMERGENCY;
 
-                    // release the lights
+                    // release control of the lights
                     post(light_lock);
-
                 } 
                 else 
                 {
+                    // we're not done flashing yet, flash them again
                     emergency_state = FLASH_RED_OFF;
                 }
 
@@ -542,7 +548,7 @@ void task_d(void *pdata)
 //
 //  TASK E
 //
-//  There is also a “broken” setting which is activated when there is a power
+//  There is also a broken setting which is activated when there is a power
 //  outage, e.g., and which sets the signals on Primary Street to flashing
 //  YELLOW and the signals on Secondary Street to flashing RED.  This setting
 //  is deactivated manually, with a return to task A.
@@ -565,39 +571,28 @@ void task_e(void *pdata)
                 // check to see if the toggle key was pressed
                 if (key_pressed('b')) 
                 {
-
                     // check if we are already broken
                     if (broken) 
                     {
-
-                        // we not now not broken
+                        // we not broken anymore
                         broken = 0;
                         draw_status(0, "Lights not broken");
 
-                        // set all lights to red before we exit
-                        lights[PRI_1] = RED;
-                        lights[PRI_2] = RED;
-                        lights[TURN_1] = RED;
-                        lights[TURN_2] = RED;
-                        lights[SEC_1] = RED;
-                        lights[SEC_2] = RED;
-                        draw_lights();
-
                         // release the lights
                         post(light_lock);
-
                     } 
                     else 
                     {
                         // lights are now broken
                         broken = 1;
                         draw_status(0, "Lights broken!");
+
                         // wait to gain control of them
                         pend(light_lock);
+
                         // flash them
                         broken_state = FLASH_ON;
                     }
-
                 } 
                 else 
                 { 
@@ -667,11 +662,9 @@ void task_f(void *pdata)
         // check for manual mode key press
         if (key_pressed('m')) 
         {
-
             // we are already in manual mode
             if (manual_mode) 
             {
-
                 // come out of manual mode
                 manual_mode = 0;
 
@@ -690,7 +683,6 @@ void task_f(void *pdata)
             } 
             else 
             {
-
                 // we are now in manual mode
                 manual_mode = 1;
 
@@ -700,7 +692,6 @@ void task_f(void *pdata)
                 draw_status(0, "Manual mode");
                 draw_lights();
             }
-
         }
 
         // if we're in manual mode handle the key presses
