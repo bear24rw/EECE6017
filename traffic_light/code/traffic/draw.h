@@ -60,7 +60,9 @@ void draw_car(char yes);
 void draw_status(int y, const char *msg);
 void draw_walk(int state);
 void draw_reset(void);
+void draw_frame(void);
 void draw_background(void);
 void draw_keymap(void);
+void hide_cursor(void);
 
 #endif

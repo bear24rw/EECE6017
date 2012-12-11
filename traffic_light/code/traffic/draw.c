@@ -136,6 +136,12 @@ void draw_reset(void)
     draw_street();
     draw_walk(RED);
     draw_lights();
+    hide_cursor();
+}
+
+void hide_cursor(void)
+{
+    goto_line(1, FRAME_HEIGHT);
 }
 
 void set_light_color(int state) 
@@ -165,6 +171,7 @@ void draw_status(int y, const char *msg)
     printf(msg);
 
     reset_color();
+    hide_cursor();
 
     // we're done, release the lock
     post(draw_lock);
@@ -184,13 +191,15 @@ void draw_walk(int state)
         printf("C");
     }
 
+    reset_color();
+    hide_cursor();
+
     // we're done, release the lock
     post(draw_lock);
 }
 
 void draw_car(char yes) 
 {
-
     // obtain the lock so no other thread can interrupt us
     pend(draw_lock);
 
@@ -209,6 +218,7 @@ void draw_car(char yes)
     printf(" ");
 
     reset_color();
+    hide_cursor();
 
     // we're done, release the lock
     post(draw_lock);
@@ -216,12 +226,9 @@ void draw_car(char yes)
 
 void draw_street(void) 
 {
-
     // obtain the lock so no other thread can interrupt us
     pend(draw_lock);
 
-    //clear_screen();
-    //goto_line(0,0);
     set_color_bold(FG_WHITE);
 
     int x, y;
@@ -256,6 +263,7 @@ void draw_street(void)
     }
 
     reset_color();
+    hide_cursor();
 
     // we're done, release the lock
     post(draw_lock);
@@ -282,7 +290,9 @@ void draw_keymap(void)
     goto_line(x, y+6); printf("    [j/k] - Next/Prev light");
     goto_line(x, y+7); printf("    [1/2/3] - Red/Yellow/Green");
     goto_line(x, y+8); printf("[r] - Redraw");
+
     reset_color();
+    hide_cursor();
 
     // we're done, release the lock
     post(draw_lock);
@@ -290,7 +300,6 @@ void draw_keymap(void)
 
 void draw_lights(void) 
 {
-
     // obtain the lock so no other thread can interrupt us
     pend(draw_lock);
    
@@ -320,8 +329,8 @@ void draw_lights(void)
         reset_color();
     }
 
-    // move cursor to bottom
-    goto_line(1, HEIGHT);
+    reset_color();
+    hide_cursor();
 
     // we're done, release the lock
     post(draw_lock);
@@ -329,8 +338,6 @@ void draw_lights(void)
 
 void draw_frame(void) 
 {
-
-
     // obtain the lock so no other thread can interrupt us
     pend(draw_lock);
 
@@ -358,6 +365,7 @@ void draw_frame(void)
     }
 
     reset_color();
+    hide_cursor();
 
     // we're done, release the lock
     post(draw_lock);
