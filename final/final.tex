@@ -328,7 +328,7 @@ endmodule
         \end{bytefield}
         
         \begin{bytefield}{21}
-            \begin{rightwordgroup}{Parity Bit 15 = ODD}
+            \begin{rightwordgroup}{Parity Bit 16 = ODD}
             \colorbitbox {white} {1} {} &
             \colorbitbox {white}   {1} {} &
             \colorbitbox {white}   {1} {1} &
@@ -391,131 +391,108 @@ endmodule
 
 \textbf{B) Suppose the received message has one error, in the right most bit position. Show how this error will be detected.}
 \\\\
-    The error can be detected by recalculating the parity bits and summing the indexes of those which are wrong.
+The error can be detected by recalculating the parity bits and summing the indexes of those which are wrong.
+Using our answer for part A we can show how we'd go about detecting an error if the last bit was incorrect
 \begin{enumerate}
-\item Encoded message (replacing . with 1 and - with 0)
+\item Encoded message from part A with an error in right-most bit
 
     \begin{figure}[H]
         \centering
-        \begin{bytefield}{15}
+        \begin{bytefield}{21}
 
-            \bitbox{1}{0} &
-            \bitbox{1}{0} &
-            \bitbox{1}{0} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{0} &
-            \bitbox{1}{0} &
-            \bitbox{1}{0}\\
-
-            \bitheader{0-14}
-        \end{bytefield}
-    \end{figure}
-
-\item Encoded message supposing the right more bit is incorrect
-
-    \begin{figure}[H]
-        \centering
-        \begin{bytefield}{15}
-
-            \bitbox{1}{0} &
-            \bitbox{1}{0} &
-            \bitbox{1}{0} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{0} &
-            \bitbox{1}{0} &
-            \bitbox{1}{1}\\
-
-            \bitheader{0-14}
-        \end{bytefield}
-    \end{figure}
-
-\item Remove parity bits at every $2^{n}$
-
-    \begin{figure}[H]
-        \centering
-        \begin{bytefield}[endianness=big]{15}
-
-            \bitbox{1}{\gb} &
-            \bitbox{1}{\gb} &
-            \bitbox{1}{0} &
-            \bitbox{1}{\gb} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{\gb} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{1} &
-            \bitbox{1}{0} &
-            \bitbox{1}{0} &
-            \bitbox{1}{1} \\
-
-            \bitheader{0-14}
-        \end{bytefield}
-    \end{figure}
-
-\item Recalculate parity bits using method in part A and compare with origin bits
-
-    \begin{figure}[H]
-        \centering
-        \begin{bytefield}{15}
-            \begin{rightwordgroup}{Old Parity Bits}
             \colorbitbox{lightgray}{1}{0} &
-            \colorbitbox{lightgray}{1}{0}
+            \colorbitbox{lightgray}{1}{0} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{lightgray}{1}{0} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{lightgray}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{0} &
             \colorbitbox{white}{1}{0} &
             \colorbitbox{lightgray}{1}{1} &
             \colorbitbox{white}{1}{1} &
             \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{lightgray}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{0} &
             \colorbitbox{white}{1}{0} &
             \colorbitbox{white}{1}{1} &
-            \end{rightwordgroup}\\
-            \bitheader{0-14}
-        \end{bytefield}\\
-        \begin{bytefield}{15}
-            \begin{rightwordgroup}{New Parity Bits}
-            \colorbitbox{lightgray}{1}{1} &
-            \colorbitbox{lightgray}{1}{1}
-            \colorbitbox{white}{1}{0} &
-            \colorbitbox{lightgray}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{lightgray}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{1} &
-            \colorbitbox{white}{1}{0} &
-            \colorbitbox{white}{1}{0} &
-            \colorbitbox{white}{1}{0} &
-            \end{rightwordgroup}\\
-            \bitheader{0-14}
-        \end{bytefield}\\
+            \colorbitbox{white}{1}{1}\\
+            \bitheader[lsb=1]{1-21}
+        \end{bytefield}
     \end{figure}
+
+\item Remove received parity bits at every $2^{n}$
+
+    \begin{figure}[H]
+        \centering
+        \begin{bytefield}{21}
+
+            \colorbitbox{lightgray}{1}{} &
+            \colorbitbox{lightgray}{1}{} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{lightgray}{1}{} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{lightgray}{1}{} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{lightgray}{1}{} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{1}\\
+            \bitheader[lsb=1]{1-21}
+        \end{bytefield}
+    \end{figure}
+
+\item Calculate new parity bits using the method shown in part A
+
+    \begin{figure}[H]
+        \centering
+        \begin{bytefield}{21}
+
+            \colorbitbox{lightgray}{1}{1} &
+            \colorbitbox{lightgray}{1}{0} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{lightgray}{1}{1} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{lightgray}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{lightgray}{1}{0} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{0} &
+            \colorbitbox{white}{1}{1} &
+            \colorbitbox{white}{1}{0}\\
+            \bitheader[lsb=1]{1-21}
+        \end{bytefield}
+    \end{figure}
+
+\item Add up the parity bit positions whose calculated value does not match the received value
+    \begin{center}
+    $P_{1}+P_{4}+P{16}=Bit_{21}$
+    \end{center}
+
+    The newly calculated parity shows that Bit 21, the right-most bit, is incorrect.
 
 \end{enumerate}
 
